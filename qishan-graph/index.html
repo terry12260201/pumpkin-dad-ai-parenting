@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>旗山 知識圖譜</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#F5F2ED;font-family:"Noto Serif TC","Georgia",serif;overflow:hidden}
+#wrap{width:100vw;height:100vh;position:relative;overflow:hidden}
+canvas{display:block;width:100%;height:100%;cursor:grab}
+canvas.drag{cursor:grabbing}
+#header{position:absolute;top:18px;left:24px;pointer-events:none}
+#header h1{font-size:22px;font-weight:700;color:#3a2e20;letter-spacing:.05em}
+#header p{font-size:12px;color:#9a8a70;margin-top:2px}
+#tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .15s;
+  background:#fff;border:0.5px solid rgba(120,100,70,.2);
+  border-radius:10px;padding:10px 14px;max-width:200px;line-height:1.6;font-size:12px;
+  box-shadow:0 4px 16px rgba(60,40,10,.08)}
+#panel{position:absolute;bottom:0;left:0;right:0;
+  background:#fff;border-top:1px solid rgba(160,130,80,.15);
+  padding:16px 22px 20px;transform:translateY(100%);transition:transform .3s ease;
+  border-radius:16px 16px 0 0;box-shadow:0 -4px 24px rgba(60,40,10,.1)}
+#panel.open{transform:translateY(0)}
+#panel-title{font-size:17px;font-weight:700;color:#3a2e20;margin-bottom:6px}
+#panel-desc{font-size:13px;color:#6a5a40;line-height:1.8;margin-bottom:12px}
+#panel-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:8px}
+.tag{font-size:11px;padding:4px 10px;border-radius:20px;letter-spacing:.03em}
+#panel-close{position:absolute;top:14px;right:18px;background:none;border:none;
+  font-size:20px;cursor:pointer;color:#aaa;line-height:1}
+#hint{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+  font-size:11px;color:#a09070;pointer-events:none;
+  background:rgba(255,255,255,.7);padding:4px 12px;border-radius:20px;
+  border:0.5px solid rgba(160,130,80,.2)}
+#legend{position:absolute;top:18px;right:18px;background:rgba(255,255,255,.85);
+  border:0.5px solid rgba(160,130,80,.2);border-radius:10px;padding:10px 14px;font-size:11px}
+#legend div{display:flex;align-items:center;gap:7px;margin-bottom:5px;color:#6a5a40}
+#legend div:last-child{margin-bottom:0}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="cvs"></canvas>
+  <div id="header">
+    <h1>旗山 — 地方文化知識樹</h1>
+    <p>拖曳節點 · 點擊展開 · 滾輪縮放</p>
+  </div>
+  <div id="legend">
+    <div><span class="dot" style="background:#C07830"></span>中心地點</div>
+    <div><span class="dot" style="background:#4A9A2A"></span>飲食物產</div>
+    <div><span class="dot" style="background:#8060C0"></span>文化民俗</div>
+    <div><span class="dot" style="background:#B06030"></span>歷史建築</div>
+    <div><span class="dot" style="background:#3080B0"></span>自然地景</div>
+    <div><span class="dot" style="background:#C05040"></span>生活日常</div>
+  </div>
+  <div id="tip"></div>
+  <div id="panel">
+    <button id="panel-close">×</button>
+    <div id="panel-title"></div>
+    <div id="panel-desc"></div>
+    <div id="panel-tags"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+const C = {
+  bg:'#F5F2ED',
+  link:'rgba(120,105,80,.15)',
+  linkHL:'rgba(100,80,50,.5)',
+  center:  {fill:'#FFF3E0',stroke:'#C07830',text:'#7A4A10'},
+  food:    {fill:'#EAF5E0',stroke:'#4A9A2A',text:'#2A6A10'},
+  culture: {fill:'#F0EAFA',stroke:'#8060C0',text:'#5030A0'},
+  history: {fill:'#FAF0E8',stroke:'#B06030',text:'#704020'},
+  nature:  {fill:'#E5F3FA',stroke:'#3080B0',text:'#105080'},
+  life:    {fill:'#FAE8E5',stroke:'#C05040',text:'#802030'},
+};
+
+const NODES=[
+  {id:'qishan',label:'旗山',emoji:'🏘',type:'center',r:44,
+   desc:'高雄旗山區，百年老街、香蕉王國，兼具日式風情與農業文化的小鎮。',
+   tags:['探索景點','品嚐美食','了解歷史']},
+  {id:'banana',label:'香蕉',emoji:'🍌',type:'food',r:30,
+   desc:'旗山最具代表性的農產品，曾是台灣重要的出口作物，香蕉冰、香蕉蛋糕聞名全台。',
+   tags:['香蕉冰','香蕉蛋糕','產業歷史']},
+  {id:'oldstreet_food',label:'老街小吃',emoji:'🥢',type:'food',r:26,
+   desc:'旗山老街集結在地傳統小吃：旗山肉圓、碗粿、蕃薯餅等古早味。',
+   tags:['肉圓','碗粿','蕃薯餅']},
+  {id:'ice',label:'旗山冰品',emoji:'🍧',type:'food',r:24,
+   desc:'以香蕉為基底的各式冰品，夏日必訪，香蕉船、香蕉冰淇淋最受歡迎。',
+   tags:['香蕉冰','消暑','夏日必訪']},
+  {id:'sugar',label:'甘蔗文化',emoji:'🎋',type:'food',r:22,
+   desc:'旗山曾有製糖所，甘蔗產業帶動地方經濟，留有糖業文化遺跡。',
+   tags:['糖業歷史','舊鐵道','製糖所']},
+  {id:'oldstreet',label:'老街建築',emoji:'🏛',type:'culture',r:30,
+   desc:'旗山老街保存完整的巴洛克式立面，仿西洋亭仔腳建築，是台灣少見的歷史街景。',
+   tags:['巴洛克建築','日治遺跡','攝影景點']},
+  {id:'temple',label:'廟宇信仰',emoji:'🏮',type:'culture',r:24,
+   desc:'旗山天后宮、旗山武廟等傳統廟宇，記錄著在地居民的信仰生活與常民文化。',
+   tags:['天后宮','民俗信仰','祭典活動']},
+  {id:'hakka',label:'客家文化',emoji:'🎎',type:'culture',r:22,
+   desc:'旗山鄰近美濃，深受客家文化影響，客家飲食、語言和傳統工藝在此流傳。',
+   tags:['客家飲食','紙傘工藝','美濃']},
+  {id:'japan',label:'日治時代',emoji:'⛩',type:'history',r:28,
+   desc:'日治時期旗山因農業開發而繁榮，留下車站、糖廠等大量日式建築與都市規劃痕跡。',
+   tags:['舊火車站','糖業','都市規劃']},
+  {id:'station',label:'旗山車站',emoji:'🚉',type:'history',r:24,
+   desc:'1913年建造的木造八角形車站，是台灣少見的特殊站體建築，現為文化資產。',
+   tags:['八角形車站','1913年','文化資產']},
+  {id:'migration',label:'移民聚落',emoji:'👥',type:'history',r:22,
+   desc:'清代漢人移民從府城沿旗山溪開墾，形成農業聚落，奠定今日旗山的人文基底。',
+   tags:['清代開墾','旗山溪','農業聚落']},
+  {id:'river',label:'旗山溪',emoji:'🌊',type:'nature',r:26,
+   desc:'旗山溪（楠梓仙溪）流經旗山，孕育農業用水，也是居民休閒與生態觀察的好去處。',
+   tags:['生態觀察','農業灌溉','親水活動']},
+  {id:'farm',label:'農業景觀',emoji:'🌾',type:'nature',r:24,
+   desc:'旗山四周丘陵農田遍佈，香蕉園、荔枝園、龍眼園構成獨特的農村田野風光。',
+   tags:['香蕉園','荔枝','農村風景']},
+  {id:'mountain',label:'旗尾山',emoji:'⛰',type:'nature',r:22,
+   desc:'旗尾山海拔約362公尺，是旗山的地標山頭，步道親民，登頂可俯瞰旗山全景。',
+   tags:['步道健行','展望台','親子登山']},
+  {id:'market',label:'傳統市場',emoji:'🛒',type:'life',r:24,
+   desc:'旗山市場是在地人日常生活的核心，早市熱鬧非凡，能買到最新鮮的本地農產品。',
+   tags:['早市','本地農產','生活日常']},
+  {id:'school',label:'百年學校',emoji:'📚',type:'life',r:22,
+   desc:'旗山國小等百年學校承載了數代旗山人的記憶，校園內保留日式建築風格。',
+   tags:['百年校園','日式建築','地方記憶']},
+];
+
+const LINKS=[
+  {s:'qishan',t:'banana'},{s:'qishan',t:'oldstreet_food'},{s:'qishan',t:'oldstreet'},
+  {s:'qishan',t:'japan'},{s:'qishan',t:'river'},{s:'qishan',t:'market'},
+  {s:'qishan',t:'temple'},{s:'qishan',t:'farm'},{s:'qishan',t:'mountain'},
+  {s:'banana',t:'ice'},{s:'banana',t:'farm'},{s:'banana',t:'sugar'},
+  {s:'oldstreet',t:'japan'},{s:'oldstreet',t:'station'},
+  {s:'japan',t:'station'},{s:'japan',t:'sugar'},
+  {s:'river',t:'farm'},{s:'river',t:'migration'},
+  {s:'oldstreet_food',t:'market'},{s:'temple',t:'hakka'},
+  {s:'hakka',t:'migration'},{s:'school',t:'japan'},
+  {s:'market',t:'oldstreet_food'},{s:'mountain',t:'river'},
+];
+
+const wrap=document.getElementById('wrap');
+const cvs=document.getElementById('cvs');
+const ctx=cvs.getContext('2d');
+const tip=document.getElementById('tip');
+const panel=document.getElementById('panel');
+let W,H,dpr;
+
+function resize(){
+  dpr=devicePixelRatio||1;W=wrap.clientWidth;H=wrap.clientHeight;
+  cvs.width=W*dpr;cvs.height=H*dpr;
+  cvs.style.width=W+'px';cvs.style.height=H+'px';
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.scale(dpr,dpr);
+}
+resize();window.addEventListener('resize',()=>{resize();sim.alpha(.3).restart();});
+
+const typeAngle={food:-.5,culture:.9,history:1.9,nature:2.9,life:-1.1};
+NODES.forEach(n=>{
+  if(n.type==='center'){n.x=W/2;n.y=H/2;}
+  else{const a=typeAngle[n.type]||0,j=(Math.random()-.5)*.6;
+    n.x=W/2+Math.cos(a+j)*190;n.y=H/2+Math.sin(a+j)*155;}
+});
+
+const simLinks=LINKS.map(l=>({source:l.s,target:l.t}));
+const sim=d3.forceSimulation(NODES)
+  .force('link',d3.forceLink(simLinks).id(d=>d.id)
+    .distance(d=>(d.source.id==='qishan'||d.target.id==='qishan')?155:82)
+    .strength(.55))
+  .force('charge',d3.forceManyBody().strength(-450))
+  .force('center',d3.forceCenter(W/2,H/2))
+  .force('collide',d3.forceCollide(d=>d.r+14))
+  .on('tick',draw);
+
+let tf={x:0,y:0,k:1};
+let dragging=null,dox=0,doy=0,panning=false,panStart=null;
+let hovered=null,selected=null;
+
+function s2w(sx,sy){return[(sx-tf.x)/tf.k,(sy-tf.y)/tf.k];}
+function nodeAt(sx,sy){
+  const[wx,wy]=s2w(sx,sy);
+  for(let i=NODES.length-1;i>=0;i--){
+    const n=NODES[i],dx=wx-n.x,dy=wy-n.y;
+    if(Math.sqrt(dx*dx+dy*dy)<n.r+8)return n;
+  }
+  return null;
+}
+function colorOf(t){return C[t]||C.life;}
+function isLinked(a,b){return simLinks.some(l=>(l.source===a&&l.target===b)||(l.target===a&&l.source===b));}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  ctx.save();
+  ctx.translate(tf.x,tf.y);ctx.scale(tf.k,tf.k);
+  ctx.fillStyle=C.bg;ctx.fillRect(-tf.x/tf.k,-tf.y/tf.k,W/tf.k,H/tf.k);
+
+  simLinks.forEach(l=>{
+    const s=l.source,t=l.target;
+    const hi=selected&&(s===selected||t===selected);
+    const fade=selected&&!hi;
+    ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(t.x,t.y);
+    ctx.strokeStyle=hi?colorOf(t.type==='center'?s.type:t.type).stroke:C.link;
+    ctx.lineWidth=hi?2:.7;ctx.globalAlpha=fade?.08:1;ctx.stroke();ctx.globalAlpha=1;
+  });
+
+  NODES.forEach(n=>{
+    const isHov=n===hovered,isSel=n===selected;
+    const fade=selected&&n!==selected&&!isLinked(selected,n);
+    ctx.globalAlpha=fade?.18:1;
+    const c=n.type==='center'?C.center:colorOf(n.type);
+    if(isSel||n.type==='center'){
+      ctx.beginPath();ctx.arc(n.x,n.y,n.r+(isSel?11:7),0,Math.PI*2);
+      ctx.fillStyle=c.stroke+'22';ctx.fill();
+    }
+    if(isHov&&!isSel){
+      ctx.beginPath();ctx.arc(n.x,n.y,n.r+6,0,Math.PI*2);
+      ctx.fillStyle=c.stroke+'18';ctx.fill();
+    }
+    ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+    ctx.fillStyle=c.fill;ctx.fill();
+    ctx.strokeStyle=c.stroke;ctx.lineWidth=isSel?2.5:isHov?1.8:.8;ctx.stroke();
+    const es=n.r*.85;
+    ctx.font=`${es}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillStyle=c.text;ctx.fillText(n.emoji,n.x,n.y-(n.type==='center'?5:3));
+    const fs=Math.max(10,n.r*.36);
+    ctx.font=`500 ${fs}px "Noto Serif TC",serif`;
+    ctx.fillStyle=c.text;ctx.fillText(n.label,n.x,n.y+n.r+fs+3);
+    ctx.globalAlpha=1;
+  });
+  ctx.restore();
+}
+
+function openPanel(node){
+  selected=node;
+  document.getElementById('panel-title').textContent=node.emoji+' '+node.label;
+  document.getElementById('panel-desc').textContent=node.desc;
+  const tagsEl=document.getElementById('panel-tags');tagsEl.innerHTML='';
+  const c=node.type==='center'?C.center:colorOf(node.type);
+  node.tags.forEach(t=>{
+    const s=document.createElement('span');s.className='tag';s.textContent='# '+t;
+    s.style.background=c.fill;s.style.color=c.text;s.style.border=`0.5px solid ${c.stroke}66`;
+    tagsEl.appendChild(s);
+  });
+  panel.classList.add('open');draw();
+}
+function closePanel(){panel.classList.remove('open');selected=null;draw();}
+document.getElementById('panel-close').addEventListener('click',closePanel);
+
+function getXY(e){const r=cvs.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];}
+let mdNode=null,mdPos=null;
+cvs.addEventListener('mousedown',e=>{
+  const[sx,sy]=getXY(e);
+  const n=nodeAt(sx,sy);
+  mdNode=n;mdPos=[sx,sy];
+  if(n){dragging=n;const[wx,wy]=s2w(sx,sy);dox=wx-n.x;doy=wy-n.y;n.fx=n.x;n.fy=n.y;sim.alphaTarget(.1).restart();cvs.classList.add('drag');}
+  else{panning=true;panStart={x:e.clientX-tf.x,y:e.clientY-tf.y};cvs.classList.add('drag');}
+});
+cvs.addEventListener('mouseup',e=>{
+  const[sx,sy]=getXY(e);
+  const n=nodeAt(sx,sy);
+  const moved=mdPos&&(Math.abs(sx-mdPos[0])+Math.abs(sy-mdPos[1])>5);
+  if(!moved&&n&&n===mdNode){if(selected===n)closePanel();else openPanel(n);}
+  if(dragging){dragging.fx=null;dragging.fy=null;dragging=null;sim.alphaTarget(0);cvs.classList.remove('drag');}
+  if(panning){panning=false;panStart=null;cvs.classList.remove('drag');}
+});
+cvs.addEventListener('mousemove',e=>{
+  const[sx,sy]=getXY(e);
+  if(dragging){const[wx,wy]=s2w(sx,sy);dragging.fx=wx-dox;dragging.fy=wy-doy;return;}
+  if(panning&&panStart){tf.x=e.clientX-panStart.x;tf.y=e.clientY-panStart.y;draw();return;}
+  const n=nodeAt(sx,sy);
+  if(n!==hovered){
+    hovered=n;draw();
+    if(n){
+      tip.style.opacity='1';
+      tip.innerHTML=`<strong style="color:#3a2e20;font-size:13px">${n.emoji} ${n.label}</strong><br><span style="color:#a09070;font-size:11px">點擊展開詳情</span>`;
+      tip.style.left=Math.min(sx+14,W-215)+'px';tip.style.top=Math.max(sy-55,4)+'px';
+    } else tip.style.opacity='0';
+  }
+});
+cvs.addEventListener('mouseleave',()=>{hovered=null;tip.style.opacity='0';draw();if(dragging){dragging.fx=null;dragging.fy=null;dragging=null;sim.alphaTarget(0);}if(panning){panning=false;panStart=null;}cvs.classList.remove('drag');});
+cvs.addEventListener('wheel',e=>{
+  e.preventDefault();
+  const[sx,sy]=getXY(e);
+  const delta=e.deltaY>0?.87:1.15;
+  const nk=Math.max(.25,Math.min(4,tf.k*delta));
+  tf.x=sx-(sx-tf.x)*(nk/tf.k);tf.y=sy-(sy-tf.y)*(nk/tf.k);tf.k=nk;draw();
+},{passive:false});
+
+let lt=null;
+cvs.addEventListener('touchstart',e=>{
+  e.preventDefault();
+  const t=e.touches[0],r=cvs.getBoundingClientRect();
+  const sx=t.clientX-r.left,sy=t.clientY-r.top,n=nodeAt(sx,sy);
+  if(n){dragging=n;const[wx,wy]=s2w(sx,sy);dox=wx-n.x;doy=wy-n.y;n.fx=n.x;n.fy=n.y;sim.alphaTarget(.1).restart();}
+  else{panning=true;panStart={x:t.clientX-tf.x,y:t.clientY-tf.y};}
+  lt={x:t.clientX,y:t.clientY,node:n};
+},{passive:false});
+cvs.addEventListener('touchmove',e=>{
+  e.preventDefault();
+  const t=e.touches[0],r=cvs.getBoundingClientRect();
+  const sx=t.clientX-r.left,sy=t.clientY-r.top;
+  if(dragging){const[wx,wy]=s2w(sx,sy);dragging.fx=wx-dox;dragging.fy=wy-doy;}
+  else if(panning&&panStart){tf.x=t.clientX-panStart.x;tf.y=t.clientY-panStart.y;draw();}
+},{passive:false});
+cvs.addEventListener('touchend',e=>{
+  const t=e.changedTouches[0];
+  const moved=lt&&(Math.abs(t.clientX-lt.x)+Math.abs(t.clientY-lt.y)>8);
+  if(!moved&&lt&&lt.node){if(selected===lt.node)closePanel();else openPanel(lt.node);}
+  if(dragging){dragging.fx=null;dragging.fy=null;dragging=null;sim.alphaTarget(0);}
+  panning=false;panStart=null;lt=null;
+});
+</script>
+</body>
+</html>

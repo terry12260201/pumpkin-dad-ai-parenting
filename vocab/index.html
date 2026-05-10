@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>取出英文單字 · 南瓜爸爸版</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #f7f7fb;
+  --card:      #ffffff;
+  --border:    #e5e7eb;
+  --text:      #0f172a;
+  --text-sub:  #475569;
+  --text-mute: #94a3b8;
+  --primary:   #6366f1;
+  --primary-dk:#4f46e5;
+  --accent:    #ede9fe;
+  --shadow:    0 1px 2px rgba(15,23,42,.06), 0 4px 18px rgba(15,23,42,.04);
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family:'Inter','Noto Sans TC',-apple-system,sans-serif;
+  background:var(--bg); color:var(--text);
+  line-height:1.5; min-height:100vh;
+}
+header {
+  background:#fff; border-bottom:1px solid var(--border);
+  padding:14px 28px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:50;
+}
+.logo {
+  display:flex; align-items:center; gap:10px;
+  font-weight:700; font-size:1.1rem;
+}
+.logo-icon {
+  width:34px; height:34px; border-radius:8px;
+  background:linear-gradient(135deg, #6366f1, #a855f7);
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:1.1rem;
+}
+.tagline {
+  font-size:.78rem; color:var(--text-mute); font-weight:500;
+}
+.btn-key {
+  background:#fff; border:1px solid var(--border);
+  padding:8px 14px; border-radius:8px;
+  font:inherit; font-size:.82rem; font-weight:500;
+  color:var(--text-sub); cursor:pointer;
+  transition:all .15s ease;
+  display:flex; align-items:center; gap:6px;
+}
+.btn-key:hover { border-color:var(--primary); color:var(--primary); }
+.btn-key.set { color:#16a34a; border-color:#86efac; background:#f0fdf4; }
+
+main {
+  max-width:1100px; margin:0 auto;
+  padding:24px clamp(16px,3vw,32px);
+  display:flex; flex-direction:column; gap:20px;
+}
+.card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:16px; padding:clamp(18px,3vw,28px);
+  box-shadow:var(--shadow);
+}
+.card-head {
+  display:flex; justify-content:space-between; align-items:flex-start;
+  margin-bottom:8px; flex-wrap:wrap; gap:8px;
+}
+.card-eyebrow {
+  font-size:.78rem; color:var(--text-sub); font-weight:600;
+  letter-spacing:.05em;
+}
+.tag-badge {
+  font-size:.7rem; font-weight:600; padding:4px 10px;
+  border-radius:999px; background:var(--accent); color:var(--primary-dk);
+}
+.card h2 {
+  font-size:clamp(1.2rem,2.2vw,1.6rem); font-weight:700;
+  letter-spacing:-.01em; margin-top:4px;
+}
+.card-sub {
+  color:var(--text-sub); font-size:.92rem; margin-top:4px;
+}
+
+/* Upload zone */
+.dropzone {
+  margin-top:18px;
+  border:2px dashed #c7d2fe; border-radius:12px;
+  padding:48px 20px; text-align:center;
+  background:#fafaff; cursor:pointer;
+  transition:all .2s ease;
+  position:relative; min-height:240px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+}
+.dropzone:hover, .dropzone.dragover {
+  border-color:var(--primary); background:#f5f3ff;
+}
+.dropzone-icon {
+  width:56px; height:56px; border-radius:50%;
+  background:#fff; box-shadow:var(--shadow);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.6rem;
+}
+.dropzone-text {
+  font-size:1.05rem; font-weight:600; color:var(--text);
+}
+.dropzone-sub {
+  font-size:.82rem; color:var(--text-mute);
+}
+.dropzone input { display:none; }
+.dropzone-preview {
+  position:relative; width:100%; max-width:560px;
+  border-radius:8px; overflow:hidden;
+  background:#fff;
+}
+.dropzone-preview img { width:100%; height:auto; display:block; }
+.dropzone-preview .label-pin {
+  position:absolute;
+  width:30px; height:30px; border-radius:50%;
+  background:var(--primary); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:.85rem;
+  transform:translate(-50%,-50%);
+  box-shadow:0 2px 8px rgba(99,102,241,.5);
+  border:2px solid #fff;
+  cursor:pointer;
+  animation:pinPop .4s ease backwards;
+}
+@keyframes pinPop {
+  from { opacity:0; transform:translate(-50%,-50%) scale(.3); }
+  to   { opacity:1; transform:translate(-50%,-50%) scale(1); }
+}
+
+.actions { margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; }
+.btn {
+  flex:1; min-width:140px;
+  padding:14px 18px; border-radius:10px;
+  border:1px solid var(--border); background:#fff;
+  font:inherit; font-size:.95rem; font-weight:600;
+  cursor:pointer; color:var(--text-sub);
+  transition:all .15s ease;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.btn:hover { border-color:var(--primary); color:var(--primary); }
+.btn:disabled { opacity:.5; cursor:not-allowed; }
+.btn-primary {
+  background:var(--primary); color:#fff; border-color:var(--primary);
+}
+.btn-primary:hover { background:var(--primary-dk); border-color:var(--primary-dk); color:#fff; }
+.btn-primary:disabled { background:#a5b4fc; border-color:#a5b4fc; color:#fff; }
+
+.btn-demo {
+  width:100%; margin-top:10px;
+  padding:10px 14px; border-radius:8px;
+  border:1px dashed #c7d2fe; background:transparent;
+  font:inherit; font-size:.85rem; font-weight:500;
+  color:var(--primary); cursor:pointer;
+  transition:all .15s ease;
+}
+.btn-demo:hover { background:var(--accent); }
+
+/* Results */
+.results-empty {
+  padding:60px 20px; text-align:center;
+  color:var(--text-mute);
+}
+.results-empty .icon {
+  font-size:2.4rem; margin-bottom:10px; opacity:.5;
+}
+.results-empty .title { font-size:1.05rem; font-weight:600; color:var(--text-sub); }
+.results-empty .sub { font-size:.85rem; margin-top:4px; }
+
+.vocab-table {
+  margin-top:14px; width:100%; border-collapse:collapse;
+}
+.vocab-table thead th {
+  font-size:.74rem; font-weight:600; text-transform:uppercase;
+  letter-spacing:.06em; color:var(--text-mute);
+  text-align:left; padding:10px 8px;
+  border-bottom:1px solid var(--border);
+}
+.vocab-table tbody tr {
+  border-bottom:1px solid #f1f5f9;
+  transition:background .15s;
+}
+.vocab-table tbody tr:hover { background:#fafaff; }
+.vocab-table td { padding:14px 8px; vertical-align:middle; }
+.label-cell {
+  width:42px;
+}
+.label-dot {
+  width:32px; height:32px; border-radius:50%;
+  background:#eef2ff; color:var(--primary-dk);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:.85rem;
+}
+.word-cell { font-weight:600; font-size:1rem; display:flex; align-items:center; gap:8px; }
+.word-cell .speak {
+  width:28px; height:28px; border-radius:50%;
+  background:#fff; border:1px solid var(--border);
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  font-size:.85rem; color:var(--text-sub);
+  transition:all .15s ease;
+}
+.word-cell .speak:hover { background:var(--primary); color:#fff; border-color:var(--primary); transform:scale(1.05); }
+.word-cell .speak.playing { background:var(--primary); color:#fff; border-color:var(--primary); animation:pulse 1s ease infinite; }
+@keyframes pulse {
+  0%,100% { box-shadow:0 0 0 0 rgba(99,102,241,.5); }
+  50%     { box-shadow:0 0 0 8px rgba(99,102,241,0); }
+}
+.pos-badge {
+  display:inline-block;
+  font-size:.72rem; font-weight:600; padding:3px 8px;
+  border-radius:6px; background:#eef2ff; color:var(--primary-dk);
+  text-transform:uppercase;
+}
+.zh-cell { color:var(--text-sub); font-size:.95rem; }
+
+/* Loading */
+.loading {
+  display:flex; align-items:center; gap:10px;
+  padding:60px 20px; justify-content:center;
+  color:var(--primary); font-weight:500;
+}
+.spinner {
+  width:24px; height:24px; border:3px solid #e0e7ff;
+  border-top-color:var(--primary); border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* Modal */
+.modal-bg {
+  position:fixed; inset:0; background:rgba(15,23,42,.5);
+  display:none; align-items:center; justify-content:center; z-index:200;
+  padding:20px;
+}
+.modal-bg.on { display:flex; }
+.modal {
+  background:#fff; border-radius:14px; padding:28px;
+  max-width:520px; width:100%; box-shadow:0 20px 50px rgba(0,0,0,.2);
+}
+.modal h3 { font-size:1.2rem; font-weight:700; margin-bottom:8px; }
+.modal p { color:var(--text-sub); font-size:.92rem; margin-bottom:14px; }
+.modal p code, .modal p a {
+  background:#f1f5f9; padding:2px 6px; border-radius:4px;
+  font-size:.85em; color:var(--primary-dk); text-decoration:none;
+}
+.modal p a:hover { text-decoration:underline; }
+.modal input {
+  width:100%; padding:12px 14px; border:1px solid var(--border);
+  border-radius:8px; font:inherit; font-size:.95rem;
+}
+.modal input:focus { outline:none; border-color:var(--primary); }
+.modal-actions { margin-top:16px; display:flex; gap:8px; justify-content:flex-end; }
+
+/* Toast */
+.toast {
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+  background:var(--text); color:#fff;
+  padding:12px 22px; border-radius:24px;
+  font-size:.88rem; font-weight:500;
+  box-shadow:0 8px 30px rgba(0,0,0,.2); z-index:300;
+  opacity:0; transition:opacity .25s, transform .25s;
+  pointer-events:none;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(-6px); }
+.toast.error { background:#dc2626; }
+
+@media (max-width:640px) {
+  header { padding:12px 16px; }
+  .tagline { display:none; }
+  .vocab-table thead th:nth-child(2),
+  .vocab-table tbody td:nth-child(2) { display:none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">📖</div>
+    <div>
+      <div>取出英文單字</div>
+      <div class="tagline">南瓜爸爸的 AI 育兒範例</div>
+    </div>
+  </div>
+  <button class="btn-key" id="btnKey" onclick="openKeyModal()">
+    <span id="keyIcon">🔑</span>
+    <span id="keyLabel">設定 API Key</span>
+  </button>
+</header>
+
+<main>
+  <!-- Upload Card -->
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <div class="card-eyebrow">影像分析</div>
+        <h2>從周遭環境中學習</h2>
+        <div class="card-sub">上傳照片，AI 會找出物品並列出英文單字、詞性、中文翻譯，按喇叭可聽發音。</div>
+      </div>
+      <div class="tag-badge">Gemini 多模態 API</div>
+    </div>
+
+    <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+      <input type="file" id="fileInput" accept="image/*">
+      <div id="uploadHint">
+        <div class="dropzone-icon">☁️</div>
+        <div class="dropzone-text">點擊或拖曳圖片至此處上傳</div>
+        <div class="dropzone-sub">支援 JPG · PNG · WEBP</div>
+      </div>
+      <div class="dropzone-preview" id="preview" style="display:none;"></div>
+    </div>
+
+    <button class="btn-demo" onclick="loadDemo()">▶ 試試看：載入「睿寶搭乘飛機」示範圖</button>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="analyzeBtn" onclick="analyze()" disabled>提取單字</button>
+      <button class="btn" id="clearBtn" onclick="clearImage()" disabled>🗑 移除圖片</button>
+    </div>
+  </section>
+
+  <!-- Results Card -->
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <div class="card-eyebrow">學習結果</div>
+        <h2 id="resultsTitle">單字清單</h2>
+      </div>
+    </div>
+    <div id="resultsBody">
+      <div class="results-empty">
+        <div class="icon">🖼️</div>
+        <div class="title">尚無單字</div>
+        <div class="sub">上傳圖片並點擊「提取單字」，即可看見轉換後的單字清單</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- API Key Modal -->
+<div class="modal-bg" id="keyModal">
+  <div class="modal">
+    <h3>🔑 設定 Gemini API Key</h3>
+    <p>到 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> 申請（免費），複製貼上即可。Key 只會存在你的瀏覽器（localStorage），不會上傳到任何地方。</p>
+    <input type="password" id="keyInput" placeholder="AIzaSy... 或 ya29...">
+    <div class="modal-actions">
+      <button class="btn" onclick="closeKeyModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveKey()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ========================================================
+   STATE
+   ======================================================== */
+let currentImageBase64 = null;   // base64 (without prefix)
+let currentImageMime  = null;
+let currentImageUrl   = null;    // for preview
+let isDemoMode = false;
+
+/* ========================================================
+   API KEY
+   南瓜爸爸講座預設 Key（localStorage 設定值優先，可覆寫）
+   ======================================================== */
+const DEFAULT_KEY = 'AIzaSyDGsbgwhiLL96isTCe58Bl4psCkuI9f0Z8';
+function getKey() { return localStorage.getItem('GEMINI_API_KEY') || DEFAULT_KEY; }
+function refreshKeyButton() {
+  const k = getKey();
+  const isCustom = !!localStorage.getItem('GEMINI_API_KEY');
+  const btn = document.getElementById('btnKey');
+  document.getElementById('keyLabel').textContent = isCustom ? '使用自訂 Key' : 'API Key 已就緒';
+  document.getElementById('keyIcon').textContent  = '✓';
+  btn.classList.toggle('set', !!k);
+}
+function openKeyModal()  { document.getElementById('keyInput').value = getKey(); document.getElementById('keyModal').classList.add('on'); }
+function closeKeyModal() { document.getElementById('keyModal').classList.remove('on'); }
+function saveKey() {
+  const v = document.getElementById('keyInput').value.trim();
+  if (v) localStorage.setItem('GEMINI_API_KEY', v);
+  else localStorage.removeItem('GEMINI_API_KEY');
+  refreshKeyButton(); closeKeyModal();
+  toast(v ? 'API Key 已儲存' : 'API Key 已清除');
+}
+refreshKeyButton();
+
+/* ========================================================
+   FILE UPLOAD
+   ======================================================== */
+const fileInput = document.getElementById('fileInput');
+const dropzone  = document.getElementById('dropzone');
+const preview   = document.getElementById('preview');
+const uploadHint= document.getElementById('uploadHint');
+
+fileInput.addEventListener('change', e => {
+  if (e.target.files[0]) handleFile(e.target.files[0]);
+});
+['dragover','dragenter'].forEach(ev =>
+  dropzone.addEventListener(ev, e => { e.preventDefault(); dropzone.classList.add('dragover'); })
+);
+['dragleave','drop'].forEach(ev =>
+  dropzone.addEventListener(ev, e => { e.preventDefault(); dropzone.classList.remove('dragover'); })
+);
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+
+function handleFile(file) {
+  if (!file.type.startsWith('image/')) { toast('請上傳圖片檔', true); return; }
+  isDemoMode = false;
+  const reader = new FileReader();
+  reader.onload = e => {
+    currentImageUrl = e.target.result;
+    currentImageMime = file.type;
+    currentImageBase64 = e.target.result.split(',')[1];
+    showPreview(currentImageUrl);
+    document.getElementById('analyzeBtn').disabled = false;
+    document.getElementById('clearBtn').disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+
+function showPreview(src, pins = []) {
+  uploadHint.style.display = 'none';
+  preview.style.display = 'block';
+  preview.innerHTML = `<img src="${src}" alt="預覽">`;
+  pins.forEach(p => {
+    const pin = document.createElement('div');
+    pin.className = 'label-pin';
+    pin.style.left = (p.x * 100) + '%';
+    pin.style.top  = (p.y * 100) + '%';
+    pin.textContent = p.label;
+    pin.style.animationDelay = (p.idx * .08) + 's';
+    pin.onclick = (e) => { e.stopPropagation(); speak(p.word); };
+    preview.appendChild(pin);
+  });
+}
+
+function clearImage() {
+  currentImageBase64 = currentImageMime = currentImageUrl = null;
+  isDemoMode = false;
+  preview.style.display = 'none'; preview.innerHTML = '';
+  uploadHint.style.display = 'flex';
+  fileInput.value = '';
+  document.getElementById('analyzeBtn').disabled = true;
+  document.getElementById('clearBtn').disabled = true;
+  document.getElementById('resultsBody').innerHTML = `
+    <div class="results-empty">
+      <div class="icon">🖼️</div>
+      <div class="title">尚無單字</div>
+      <div class="sub">上傳圖片並點擊「提取單字」，即可看見轉換後的單字清單</div>
+    </div>`;
+  document.getElementById('resultsTitle').textContent = '單字清單';
+}
+
+/* ========================================================
+   DEMO MODE — 預先準備好的「睿寶搭乘飛機」範例
+   ======================================================== */
+const DEMO_DATA = {
+  imageUrl: './demo-flight.jpg',
+  pins: [
+    { label:'A', word:'Girl',              pos:'noun', zh:'女孩',     x:.46, y:.62 },
+    { label:'B', word:'Stuffed animal',    pos:'noun', zh:'填充玩偶', x:.50, y:.55 },
+    { label:'C', word:'Airplane seat',     pos:'noun', zh:'飛機座椅', x:.42, y:.62 },
+    { label:'D', word:'Pillow',            pos:'noun', zh:'枕頭',     x:.40, y:.58 },
+    { label:'E', word:'Blanket',           pos:'noun', zh:'毯子',     x:.50, y:.72 },
+    { label:'F', word:'Airplane window',   pos:'noun', zh:'飛機窗',   x:.55, y:.46 },
+    { label:'G', word:'Entertainment screen', pos:'noun', zh:'娛樂螢幕', x:.62, y:.44 }
+  ]
+};
+
+function loadDemo() {
+  isDemoMode = true;
+  currentImageUrl = DEMO_DATA.imageUrl;
+  showPreview(DEMO_DATA.imageUrl);
+  document.getElementById('analyzeBtn').disabled = false;
+  document.getElementById('clearBtn').disabled = false;
+  toast('已載入示範圖片，按「提取單字」開始');
+}
+
+/* ========================================================
+   ANALYZE
+   ======================================================== */
+async function analyze() {
+  if (isDemoMode) {
+    showLoading();
+    setTimeout(() => renderResults(DEMO_DATA.pins, true), 900);
+    return;
+  }
+  if (!currentImageBase64) { toast('請先上傳圖片', true); return; }
+  const key = getKey();
+  if (!key) { toast('請先設定 API Key', true); openKeyModal(); return; }
+
+  showLoading();
+  try {
+    const prompt = `Analyze this image. Identify 5 to 10 most prominent visible objects.
+For each object, return:
+- "word": the English word/short phrase (e.g. "Stuffed animal", "Airplane seat")
+- "pos": part of speech in lowercase (e.g. "noun", "verb")
+- "zh": Traditional Chinese translation (繁體中文)
+- "x": horizontal position 0-1 (where to label on the image)
+- "y": vertical position 0-1
+Return ONLY a valid JSON array, no markdown fences, no commentary.
+Example: [{"word":"Girl","pos":"noun","zh":"女孩","x":0.5,"y":0.5}]`;
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`;
+    const body = {
+      contents: [{
+        parts: [
+          { text: prompt },
+          { inline_data: { mime_type: currentImageMime, data: currentImageBase64 } }
+        ]
+      }],
+      generationConfig: { responseMimeType: 'application/json', temperature: 0.3 }
+    };
+    const res = await fetch(url, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error('API 錯誤 ' + res.status + ': ' + err.slice(0,200));
+    }
+    const data = await res.json();
+    const txt = data.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
+    let items = JSON.parse(txt);
+    items = items.map((it, i) => ({
+      label: String.fromCharCode(65 + i),
+      word:  it.word,
+      pos:   it.pos || 'noun',
+      zh:    it.zh,
+      x:     Math.max(.05, Math.min(.95, it.x ?? .5)),
+      y:     Math.max(.05, Math.min(.95, it.y ?? .5)),
+      idx:   i
+    }));
+    renderResults(items);
+  } catch (err) {
+    console.error(err);
+    toast('分析失敗：' + err.message, true);
+    document.getElementById('resultsBody').innerHTML = `
+      <div class="results-empty">
+        <div class="icon">⚠️</div>
+        <div class="title">分析失敗</div>
+        <div class="sub">${err.message}</div>
+      </div>`;
+  }
+}
+
+function showLoading() {
+  document.getElementById('resultsTitle').textContent = '正在分析…';
+  document.getElementById('resultsBody').innerHTML = `
+    <div class="loading"><div class="spinner"></div>Gemini 正在識別物品...</div>`;
+}
+
+function renderResults(items, isDemo = false) {
+  showPreview(currentImageUrl, items.map((it,i) => ({...it, idx:i})));
+  document.getElementById('resultsTitle').textContent =
+    `單字清單 ${isDemo ? '（示範）' : ''}（共 ${items.length} 個）`;
+
+  const rows = items.map(it => `
+    <tr>
+      <td class="label-cell"><div class="label-dot">${it.label}</div></td>
+      <td class="word-cell">
+        <span>${it.word}</span>
+        <button class="speak" onclick="speak('${it.word.replace(/'/g,"\\'")}', this)" title="發音">🔊</button>
+      </td>
+      <td><span class="pos-badge">${it.pos}</span></td>
+      <td class="zh-cell">${it.zh}</td>
+    </tr>`).join('');
+
+  document.getElementById('resultsBody').innerHTML = `
+    <table class="vocab-table">
+      <thead><tr><th>標籤</th><th>英文單字</th><th>詞性</th><th>中文翻譯</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+/* ========================================================
+   TEXT-TO-SPEECH (browser native, free)
+   挑選好聽的英文女聲：Samantha (US) / Karen (AU) / Serena
+   ======================================================== */
+let voicesReady = false;
+function pickVoice() {
+  const voices = speechSynthesis.getVoices();
+  const prefer = ['Samantha','Karen','Serena','Moira','Tessa','Ava','Allison','Susan','Kate'];
+  for (const name of prefer) {
+    const v = voices.find(x => x.name === name && x.lang.startsWith('en'));
+    if (v) return v;
+  }
+  return voices.find(v => v.lang === 'en-US')
+      || voices.find(v => v.lang.startsWith('en'))
+      || voices[0];
+}
+speechSynthesis.onvoiceschanged = () => { voicesReady = true; };
+// trigger initial load
+speechSynthesis.getVoices();
+
+function speak(text, btn) {
+  if (!('speechSynthesis' in window)) { toast('此瀏覽器不支援語音', true); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  const voice = pickVoice();
+  if (voice) u.voice = voice;
+  u.lang = 'en-US'; u.rate = 0.9; u.pitch = 1; u.volume = 1;
+  if (btn) {
+    btn.classList.add('playing');
+    u.onend = u.onerror = () => btn.classList.remove('playing');
+  }
+  speechSynthesis.speak(u);
+}
+
+/* ========================================================
+   TOAST
+   ======================================================== */
+let toastTimer;
+function toast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.toggle('error', isError);
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+</script>
+</body>
+</html>

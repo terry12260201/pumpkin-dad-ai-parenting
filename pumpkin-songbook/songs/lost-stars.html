@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<title>Lost Stars — 南瓜家學習本</title>
+<style>
+  @page { size: A4; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+    background: #fff9ef; color: #2a1805;
+    padding: 10px; max-width: 210mm; margin: 0 auto; line-height: 1.5;
+  }
+  ruby { ruby-position: inter-character; ruby-align: center; margin-right: 3px; }
+  rt { font-size: 0.55em; color: #8a3a2a; font-weight: 400; letter-spacing: 0;
+       font-family: "Noto Sans TC", "PingFang TC", sans-serif; }
+  .lyric-zh, .col-box p, .hero-subtitle { line-height: 2.1; }
+  .w-zh { line-height: 2.0; }
+
+  .hero {
+    display: flex; align-items: stretch; gap: 14px;
+    background: linear-gradient(135deg, #ffb347 0%, #ff7a59 55%, #e25d7c 100%);
+    border-radius: 16px; padding: 14px;
+    color: #fff; box-shadow: 0 4px 0 #cf4c3a;
+    margin-bottom: 12px;
+  }
+  .cover-box {
+    width: 110px; height: 110px; border-radius: 12px; overflow: hidden;
+    flex-shrink: 0; border: 3px solid #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,.3);
+    background: rgba(0,0,0,.1);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cover-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cover-placeholder {
+    font-size: 10px; text-align: center; padding: 8px;
+    color: rgba(255,255,255,.9); line-height: 1.4;
+  }
+  .hero-meta { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+  .hero-title { font-size: 22px; font-weight: 900; letter-spacing: .02em; line-height: 1.1; }
+  .hero-subtitle { font-size: 13px; opacity: .95; margin-top: 4px; }
+  .hero-artist { font-size: 14px; margin-top: 6px; opacity: .95; }
+  .owner-pill {
+    display: inline-block; background: #fff; color: #cf4c3a;
+    padding: 3px 12px; border-radius: 12px;
+    font-size: 12px; font-weight: 700; margin-top: 6px;
+  }
+
+  .info-card {
+    background: #fff; border: 2px solid #ffd8c5; border-radius: 12px;
+    padding: 10px 14px; margin-bottom: 10px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 14px;
+  }
+  .info-row { font-size: 12px; }
+  .info-label { color: #cf4c3a; font-weight: 700; font-size: 11px; display: block; }
+  .info-value { color: #2a1805; font-weight: 600; }
+
+  .sh {
+    font-size: 15px; font-weight: 900; color: #cf4c3a;
+    margin: 12px 0 6px; padding: 4px 10px;
+    background: linear-gradient(90deg, #fff4ec 0%, transparent 100%);
+    border-left: 4px solid #cf4c3a; border-radius: 4px;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .col-box {
+    background: #fff; border: 2px solid #ffd8c5; border-radius: 12px;
+    padding: 10px 12px;
+  }
+  .col-box .ct { font-size: 13px; font-weight: 900; color: #cf4c3a; margin-bottom: 4px; }
+  .col-box p { font-size: 12.5px; color: #3d1f08; }
+
+  .lyric-block {
+    background: #fff4ec; border-left: 5px solid #cf4c3a; border-radius: 10px;
+    padding: 10px 14px; margin-bottom: 6px;
+  }
+  .lyric-label {
+    display: inline-block;
+    margin-bottom: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.78);
+    color: #cf4c3a;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .lyric-label-zh {
+    margin-top: 8px;
+    margin-bottom: 2px;
+    background: rgba(61,31,8,0.08);
+    color: #6b5b4a;
+    text-transform: none;
+  }
+  .lyric-en {
+    font-size: 14px; font-weight: 700; color: #cf4c3a; line-height: 1.5;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+  }
+  .lyric-zh { font-size: 12.5px; color: #3d1f08; margin-top: 3px; }
+
+  .full-lyrics { margin-top: 4px; }
+  .full-lyric-block {
+    background: #fff;
+    border: 2px solid #ffd8c5;
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+  }
+  .full-lyric-line {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #2a1805;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+  }
+
+  .word-section-label {
+    font-size: 11px; font-weight: 700; color: #cf4c3a;
+    margin: 8px 0 4px; padding-left: 4px;
+    letter-spacing: .05em;
+  }
+  .word-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;
+  }
+  .word-card {
+    background: #fff; border: 1px solid #ffd8c5; border-radius: 8px;
+    padding: 5px 8px 6px;
+  }
+  .word-card.basic    { border-left: 4px solid #cf4c3a; background: #fff; }
+  .word-card.advanced { border-left: 4px solid #cf4c3a; background: #fff4ec; }
+  .word-card .row1 {
+    display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+  }
+  .w-en { font-weight: 800; color: #cf4c3a; font-size: 13px;
+          font-family: 'Comic Sans MS', 'Arial', sans-serif; }
+  .w-type { font-size: 9.5px; color: #fff; background: #cf4c3a; padding: 1px 5px; border-radius: 4px; font-weight: 700; }
+  .w-ph { font-size: 9.5px; color: #888; }
+  .w-zh { font-size: 11.5px; color: #3d1f08; margin-top: 2px; }
+  .w-ex { font-size: 10px; color: #5a3a1a; font-style: italic; margin-top: 2px; line-height: 1.35; }
+
+  .mission {
+    background: linear-gradient(135deg, #fff4ec 0%, #ffd8c5 100%);
+    border-radius: 12px; padding: 10px 14px; margin-top: 10px;
+    font-size: 12.5px; color: #3d1f08; line-height: 1.7;
+  }
+  .mission .t { font-weight: 900; color: #cf4c3a; }
+
+  @media print { body { background: #fff; padding: 0; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="cover-box">
+    <img src="file:///Users/chennanhong/Desktop/AI%20%E8%82%B2%E5%85%92/%E8%8B%B1%E6%96%87%E6%AD%8C%E6%9B%B2/Lost%20Stars.jpg" alt="Lost Stars cover"
+      onerror="this.style.display='none';this.parentNode.innerHTML='<div class=&quot;cover-placeholder&quot;>封面圖<br>Lost Stars</div>'">
+  </div>
+  <div class="hero-meta">
+    <div>
+      <div class="hero-title">Lost Stars</div>
+      <div class="hero-subtitle"><ruby>迷<rt>ㄇㄧˊ</rt></ruby><ruby>路<rt>ㄌㄨˋ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>星<rt>ㄒㄧㄥ</rt></ruby><ruby>星<rt>˙ㄒㄧㄥ</rt></ruby></div>
+      <div class="hero-artist">— Adam Levine</div>
+    </div>
+    <div><span class="owner-pill">南瓜爸爸選的歌</span></div>
+  </div>
+</div>
+
+<div class="info-card">
+  <div class="info-row"><span class="info-label">創作人</span><span class="info-value">Gregg Alexander / Danielle Brisebois</span></div>
+  <div class="info-row"><span class="info-label">發行年份</span><span class="info-value">2013 年</span></div>
+  <div class="info-row"><span class="info-label">收錄專輯</span><span class="info-value">Begin Again 電影原聲帶</span></div>
+  <div class="info-row"><span class="info-label">演唱者</span><span class="info-value">Adam Levine</span></div>
+</div>
+
+<div class="two-col">
+  <div class="col-box">
+    <div class="ct">🎼 曲風</div>
+    <p><ruby>民<rt>ㄇㄧㄣˊ</rt></ruby><ruby>謠<rt>ㄧㄠˊ</rt></ruby><ruby>流<rt>ㄌㄧㄡˊ</rt></ruby><ruby>行<rt>ㄒㄧㄥˊ</rt></ruby>(Folk Pop)。<ruby>吉<rt>ㄐㄧˊ</rt></ruby><ruby>他<rt>˙ㄊㄚ</rt></ruby><ruby>輕<rt>ㄑㄧㄥ</rt></ruby><ruby>輕<rt>˙ㄑㄧㄥ</rt></ruby><ruby>刷<rt>ㄕㄨㄚ</rt></ruby>著<ruby>弦<rt>ㄒㄧㄢˊ</rt></ruby>，<ruby>像<rt>ㄒㄧㄤˋ</rt></ruby><ruby>夜<rt>ㄧㄝˋ</rt></ruby><ruby>空<rt>ㄎㄨㄥ</rt></ruby><ruby>下<rt>ㄒㄧㄚˋ</rt></ruby><ruby>自<rt>ㄗˋ</rt></ruby><ruby>言<rt>ㄧㄢˊ</rt></ruby><ruby>自<rt>ㄗˋ</rt></ruby><ruby>語<rt>ㄩˇ</rt></ruby>。</p>
+  </div>
+  <div class="col-box">
+    <div class="ct">💡 歌曲意境</div>
+    <p><ruby>歌<rt>ㄍㄜ</rt></ruby><ruby>裡<rt>ㄌㄧˇ</rt></ruby><ruby>把<rt>ㄅㄚˇ</rt></ruby><ruby>人<rt>ㄖㄣˊ</rt></ruby><ruby>比<rt>ㄅㄧˇ</rt></ruby><ruby>喻<rt>ㄩˋ</rt></ruby><ruby>成<rt>ㄔㄥˊ</rt></ruby><ruby>星<rt>ㄒㄧㄥ</rt></ruby><ruby>星<rt>˙ㄒㄧㄥ</rt></ruby>。<ruby>就<rt>ㄐㄧㄡˋ</rt></ruby><ruby>算<rt>ㄙㄨㄢˋ</rt></ruby><ruby>有<rt>ㄧㄡˇ</rt></ruby><ruby>時<rt>ㄕˊ</rt></ruby><ruby>候<rt>˙ㄏㄡ</rt></ruby><ruby>會<rt>ㄏㄨㄟˋ</rt></ruby><ruby>迷<rt>ㄇㄧˊ</rt></ruby><ruby>路<rt>ㄌㄨˋ</rt></ruby>，<ruby>還<rt>ㄏㄞˊ</rt></ruby><ruby>是<rt>ㄕˋ</rt></ruby><ruby>可<rt>ㄎㄜˇ</rt></ruby><ruby>以<rt>ㄧˇ</rt></ruby><ruby>在<rt>ㄗㄞˋ</rt></ruby><ruby>黑<rt>ㄏㄟ</rt></ruby><ruby>夜<rt>ㄧㄝˋ</rt></ruby><ruby>裡<rt>ㄌㄧˇ</rt></ruby><ruby>慢<rt>ㄇㄢˋ</rt></ruby><ruby>慢<rt>˙ㄇㄢ</rt></ruby><ruby>發<rt>ㄈㄚ</rt></ruby><ruby>光<rt>ㄍㄨㄤ</rt></ruby>。</p>
+  </div>
+</div>
+
+<div class="sh">🎵 英文歌詞重點片段（英文原句 + 中文注音）</div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">Please don't see just a boy caught up in dreams.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>請<rt>ㄑㄧㄥˇ</rt></ruby><ruby>不<rt>ㄅㄨˊ</rt></ruby><ruby>要<rt>ㄧㄠˋ</rt></ruby><ruby>只<rt>ㄓˇ</rt></ruby><ruby>看<rt>ㄎㄢˋ</rt></ruby><ruby>到<rt>ㄉㄠˋ</rt></ruby><ruby>一<rt>ㄧˊ</rt></ruby><ruby>個<rt>˙ㄍㄜ</rt></ruby><ruby>在<rt>ㄗㄞˋ</rt></ruby><ruby>做<rt>ㄗㄨㄛˋ</rt></ruby><ruby>夢<rt>ㄇㄥˋ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>男<rt>ㄋㄢˊ</rt></ruby><ruby>孩<rt>ㄏㄞˊ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">I thought I saw you out there crying.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>以<rt>ㄧˇ</rt></ruby><ruby>為<rt>ㄨㄟˊ</rt></ruby><ruby>看<rt>ㄎㄢˋ</rt></ruby><ruby>見<rt>ㄐㄧㄢˋ</rt></ruby><ruby>你<rt>ㄋㄧˇ</rt></ruby><ruby>在<rt>ㄗㄞˋ</rt></ruby><ruby>遠<rt>ㄩㄢˇ</rt></ruby><ruby>方<rt>ㄈㄤ</rt></ruby><ruby>哭<rt>ㄎㄨ</rt></ruby><ruby>泣<rt>ㄑㄧˋ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">Are we all lost stars trying to light up the dark?</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>們<rt>˙ㄇㄣ</rt></ruby><ruby>是<rt>ㄕˋ</rt></ruby><ruby>不<rt>ㄅㄨˊ</rt></ruby><ruby>是<rt>ㄕˋ</rt></ruby><ruby>都<rt>ㄉㄡ</rt></ruby><ruby>是<rt>ㄕˋ</rt></ruby><ruby>迷<rt>ㄇㄧˊ</rt></ruby><ruby>路<rt>ㄌㄨˋ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>星<rt>ㄒㄧㄥ</rt></ruby><ruby>星<rt>˙ㄒㄧㄥ</rt></ruby>，<ruby>想<rt>ㄒㄧㄤˇ</rt></ruby><ruby>把<rt>ㄅㄚˇ</rt></ruby><ruby>黑<rt>ㄏㄟ</rt></ruby><ruby>夜<rt>ㄧㄝˋ</rt></ruby><ruby>點<rt>ㄉㄧㄢˇ</rt></ruby><ruby>亮<rt>ㄌㄧㄤˋ</rt></ruby>？</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">God, give us the reason, youth is wasted on the young.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>神<rt>ㄕㄣˊ</rt></ruby><ruby>啊<rt>˙ㄚ</rt></ruby>，<ruby>給<rt>ㄍㄟˇ</rt></ruby><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>們<rt>˙ㄇㄣ</rt></ruby><ruby>一<rt>ㄧˊ</rt></ruby><ruby>個<rt>˙ㄍㄜ</rt></ruby><ruby>理<rt>ㄌㄧˇ</rt></ruby><ruby>由<rt>ㄧㄡˊ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">Who are we? Just a speck of dust within the galaxy.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>們<rt>˙ㄇㄣ</rt></ruby><ruby>是<rt>ㄕˋ</rt></ruby><ruby>誰<rt>ㄕㄟˊ</rt></ruby>？<ruby>只<rt>ㄓˇ</rt></ruby><ruby>是<rt>ㄕˋ</rt></ruby><ruby>銀<rt>ㄧㄣˊ</rt></ruby><ruby>河<rt>ㄏㄜˊ</rt></ruby><ruby>裡<rt>ㄌㄧˇ</rt></ruby><ruby>一<rt>ㄧˋ</rt></ruby><ruby>粒<rt>ㄌㄧˋ</rt></ruby><ruby>小<rt>ㄒㄧㄠˇ</rt></ruby><ruby>小<rt>˙ㄒㄧㄠ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>灰<rt>ㄏㄨㄟ</rt></ruby><ruby>塵<rt>ㄔㄣˊ</rt></ruby>。</div>
+    </div>
+
+<div class="sh">🎤 完整英文歌詞</div>
+<div class="full-lyrics">
+  <div class="full-lyric-block"><div class="full-lyric-line">Please, don't see</div><div class="full-lyric-line">Just a boy caught up in dreams and fantasies</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Please, see me</div><div class="full-lyric-line">Reaching out for someone I can't see</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Take my hand</div><div class="full-lyric-line">Let's see where we wake up tomorrow</div><div class="full-lyric-line">Best laid plans</div><div class="full-lyric-line">Sometimes are just a one night stand</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">I'll be damned</div><div class="full-lyric-line">Cupid's demanding back it's arrow</div><div class="full-lyric-line">So let's get drunk on our tears</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">And God, tell us the reason</div><div class="full-lyric-line">Youth is wasted on the young</div><div class="full-lyric-line">It's hunting season</div><div class="full-lyric-line">And the lambs are on the run</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Searching for meaning</div><div class="full-lyric-line">But are we all lost stars</div><div class="full-lyric-line">Trying to light up the dark</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Who are we?</div><div class="full-lyric-line">Just a speck of dust</div><div class="full-lyric-line">Within the galaxy?</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Woe, is me</div><div class="full-lyric-line">If we're not careful</div><div class="full-lyric-line">Turns into reality</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">But don't you dare</div><div class="full-lyric-line">Let our best memories bring you sorrow</div><div class="full-lyric-line">Yesterday I saw a lion kiss a deer</div><div class="full-lyric-line">Turn the page</div><div class="full-lyric-line">Maybe we'll find a brand new ending</div><div class="full-lyric-line">Where we're dancing in our tears</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">And God, tell us the reason</div><div class="full-lyric-line">Youth is wasted on the young</div><div class="full-lyric-line">It's hunting season</div><div class="full-lyric-line">And the lambs are on the run</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Searching for meaning</div><div class="full-lyric-line">But are we all lost stars</div><div class="full-lyric-line">Trying to light up the dark</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">I thought I saw you out there crying</div><div class="full-lyric-line">I thought I heard you call my name</div><div class="full-lyric-line">I thought I heard you out there crying</div><div class="full-lyric-line">But just the same</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">And God, tell us the reason</div><div class="full-lyric-line">Youth is wasted on the young</div><div class="full-lyric-line">It's hunting season</div><div class="full-lyric-line">And this lamb is on the run</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Searching for meaning</div><div class="full-lyric-line">But are we all lost stars</div><div class="full-lyric-line">Trying to light (light up the dark)</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">I thought I saw you out there crying</div><div class="full-lyric-line">I thought I heard you call my name</div><div class="full-lyric-line">I thought I heard you out there crying</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">But are we all lost stars</div><div class="full-lyric-line">Trying to light up the dark</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">But are we all lost stars</div><div class="full-lyric-line">Trying to light up the dark</div></div>
+</div>
+
+<div class="sh">📚 精選單字 20 個（基礎 12 + 進階 8）</div>
+
+<div class="word-section-label">🟡 基礎 12 個 — 睿寶一定要會</div>
+<div class="word-grid">
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">star</span><span class="w-type">名詞</span><span class="w-ph">/stɑːr/</span></div>
+    <div class="w-zh"><ruby>星<rt>ㄒㄧㄥ</rt></ruby><ruby>星<rt>˙ㄒㄧㄥ</rt></ruby></div>
+    <div class="w-ex">Lost stars.（迷路的星星）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">light</span><span class="w-type">名詞</span><span class="w-ph">/laɪt/</span></div>
+    <div class="w-zh"><ruby>光<rt>ㄍㄨㄤ</rt></ruby></div>
+    <div class="w-ex">Light up.（點亮）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">dark</span><span class="w-type">名詞</span><span class="w-ph">/dɑːrk/</span></div>
+    <div class="w-zh"><ruby>黑<rt>ㄏㄟ</rt></ruby><ruby>暗<rt>ㄢˋ</rt></ruby></div>
+    <div class="w-ex">In the dark.（在黑暗中）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">sky</span><span class="w-type">名詞</span><span class="w-ph">/skaɪ/</span></div>
+    <div class="w-zh"><ruby>天<rt>ㄊㄧㄢ</rt></ruby><ruby>空<rt>ㄎㄨㄥ</rt></ruby></div>
+    <div class="w-ex">Blue sky.（藍天）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">find</span><span class="w-type">動詞</span><span class="w-ph">/faɪnd/</span></div>
+    <div class="w-zh"><ruby>找<rt>ㄓㄠˇ</rt></ruby></div>
+    <div class="w-ex">Find you.（找到你）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">lost</span><span class="w-type">形容詞</span><span class="w-ph">/lɔːst/</span></div>
+    <div class="w-zh"><ruby>迷<rt>ㄇㄧˊ</rt></ruby><ruby>路<rt>ㄌㄨˋ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby></div>
+    <div class="w-ex">I'm lost.（我迷路了）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">shine</span><span class="w-type">動詞</span><span class="w-ph">/ʃaɪn/</span></div>
+    <div class="w-zh"><ruby>發<rt>ㄈㄚ</rt></ruby><ruby>光<rt>ㄍㄨㄤ</rt></ruby></div>
+    <div class="w-ex">Stars shine.（星星發光）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">night</span><span class="w-type">名詞</span><span class="w-ph">/naɪt/</span></div>
+    <div class="w-zh"><ruby>夜<rt>ㄧㄝˋ</rt></ruby><ruby>晚<rt>ㄨㄢˇ</rt></ruby></div>
+    <div class="w-ex">Dark night.（黑夜）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">dream</span><span class="w-type">名詞</span><span class="w-ph">/driːm/</span></div>
+    <div class="w-zh"><ruby>夢<rt>ㄇㄥˋ</rt></ruby></div>
+    <div class="w-ex">Sweet dream.（甜夢）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">sing</span><span class="w-type">動詞</span><span class="w-ph">/sɪŋ/</span></div>
+    <div class="w-zh"><ruby>唱<rt>ㄔㄤˋ</rt></ruby><ruby>歌<rt>ㄍㄜ</rt></ruby></div>
+    <div class="w-ex">Sing along.（一起唱）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">young</span><span class="w-type">形容詞</span><span class="w-ph">/jʌŋ/</span></div>
+    <div class="w-zh"><ruby>年<rt>ㄋㄧㄢˊ</rt></ruby><ruby>輕<rt>ㄑㄧㄥ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby></div>
+    <div class="w-ex">Young heart.（年輕的心）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">free</span><span class="w-type">形容詞</span><span class="w-ph">/friː/</span></div>
+    <div class="w-zh"><ruby>自<rt>ㄗˋ</rt></ruby><ruby>由<rt>ㄧㄡˊ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby></div>
+    <div class="w-ex">Feel free.（感到自由）</div>
+  </div>
+</div>
+
+<div class="word-section-label">🟠 進階 8 個 — 爸媽一起學</div>
+<div class="word-grid">
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">galaxy</span><span class="w-type">名詞</span><span class="w-ph">/ˈɡæləksi/</span></div>
+    <div class="w-zh"><ruby>銀<rt>ㄧㄣˊ</rt></ruby><ruby>河<rt>ㄏㄜˊ</rt></ruby></div>
+    <div class="w-ex">Our galaxy.（我們的銀河）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">fantasies</span><span class="w-type">名詞</span><span class="w-ph">/ˈfæntəsiz/</span></div>
+    <div class="w-zh"><ruby>幻<rt>ㄏㄨㄢˋ</rt></ruby><ruby>想<rt>ㄒㄧㄤˇ</rt></ruby></div>
+    <div class="w-ex">Sweet fantasies.（甜美的幻想）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">searching</span><span class="w-type">動詞</span><span class="w-ph">/ˈsɜːrtʃɪŋ/</span></div>
+    <div class="w-zh"><ruby>尋<rt>ㄒㄩㄣˊ</rt></ruby><ruby>找<rt>ㄓㄠˇ</rt></ruby></div>
+    <div class="w-ex">Searching for light.（尋找光）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">meaning</span><span class="w-type">名詞</span><span class="w-ph">/ˈmiːnɪŋ/</span></div>
+    <div class="w-zh"><ruby>意<rt>ㄧˋ</rt></ruby><ruby>義<rt>ㄧˋ</rt></ruby></div>
+    <div class="w-ex">Find meaning.（找到意義）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">reality</span><span class="w-type">名詞</span><span class="w-ph">/riˈæləti/</span></div>
+    <div class="w-zh"><ruby>現<rt>ㄒㄧㄢˋ</rt></ruby><ruby>實<rt>ㄕˊ</rt></ruby></div>
+    <div class="w-ex">Harsh reality.（殘酷現實）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">youth</span><span class="w-type">名詞</span><span class="w-ph">/juːθ/</span></div>
+    <div class="w-zh"><ruby>青<rt>ㄑㄧㄥ</rt></ruby><ruby>春<rt>ㄔㄨㄣ</rt></ruby></div>
+    <div class="w-ex">My youth.（我的青春）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">sorrow</span><span class="w-type">名詞</span><span class="w-ph">/ˈsɑːroʊ/</span></div>
+    <div class="w-zh"><ruby>悲<rt>ㄅㄟ</rt></ruby><ruby>傷<rt>ㄕㄤ</rt></ruby></div>
+    <div class="w-ex">Deep sorrow.（深深的悲傷）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">careful</span><span class="w-type">形容詞</span><span class="w-ph">/ˈkerfəl/</span></div>
+    <div class="w-zh"><ruby>小<rt>ㄒㄧㄠˇ</rt></ruby><ruby>心<rt>ㄒㄧㄣ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby></div>
+    <div class="w-ex">Be careful.（小心）</div>
+  </div>
+</div>
+
+<div class="mission">
+  <span class="t">🎯 親子任務：</span>聽到 <b>star</b> 雙手舉高做星星 ⭐；聽到 <b>dark</b> 把手蓋在眼睛上 🌙；唱到 <b>lost stars</b> 一家人手牽手一起搖擺。
+</div>
+
+</body>
+</html>

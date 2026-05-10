@@ -1,0 +1,7 @@
+node_modules/
+pumpkin-dad-remotion/
+*.backup*
+*.backup-*
+.DS_Store
+*.zip
+archive/

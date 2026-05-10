@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<title>A Thousand Years — 南瓜家學習本</title>
+<style>
+  @page { size: A4; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+    background: #f5fbf9; color: #2a1805;
+    padding: 10px; max-width: 210mm; margin: 0 auto; line-height: 1.5;
+  }
+  ruby { ruby-position: inter-character; ruby-align: center; margin-right: 3px; }
+  rt { font-size: 0.55em; color: #1f6f66; font-weight: 400; letter-spacing: 0;
+       font-family: "Noto Sans TC", "PingFang TC", sans-serif; }
+  .lyric-zh, .col-box p, .hero-subtitle { line-height: 2.1; }
+  .w-zh { line-height: 2.0; }
+
+  .hero {
+    display: flex; align-items: stretch; gap: 14px;
+    background: linear-gradient(135deg, #7ed1c4 0%, #2a9d8f 55%, #1f6f66 100%);
+    border-radius: 16px; padding: 14px;
+    color: #fff; box-shadow: 0 4px 0 #1f6f66;
+    margin-bottom: 12px;
+  }
+  .cover-box {
+    width: 110px; height: 110px; border-radius: 12px; overflow: hidden;
+    flex-shrink: 0; border: 3px solid #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,.3);
+    background: rgba(0,0,0,.1);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cover-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cover-placeholder {
+    font-size: 10px; text-align: center; padding: 8px;
+    color: rgba(255,255,255,.9); line-height: 1.4;
+  }
+  .hero-meta { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+  .hero-title { font-size: 22px; font-weight: 900; letter-spacing: .02em; line-height: 1.1; }
+  .hero-subtitle { font-size: 13px; opacity: .95; margin-top: 4px; }
+  .hero-artist { font-size: 14px; margin-top: 6px; opacity: .95; }
+  .owner-pill {
+    display: inline-block; background: #fff; color: #1f6f66;
+    padding: 3px 12px; border-radius: 12px;
+    font-size: 12px; font-weight: 700; margin-top: 6px;
+  }
+
+  .info-card {
+    background: #fff; border: 2px solid #a9d7d1; border-radius: 12px;
+    padding: 10px 14px; margin-bottom: 10px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 14px;
+  }
+  .info-row { font-size: 12px; }
+  .info-label { color: #1f6f66; font-weight: 700; font-size: 11px; display: block; }
+  .info-value { color: #2a1805; font-weight: 600; }
+
+  .sh {
+    font-size: 15px; font-weight: 900; color: #1f6f66;
+    margin: 12px 0 6px; padding: 4px 10px;
+    background: linear-gradient(90deg, #e8f5f3 0%, transparent 100%);
+    border-left: 4px solid #1f6f66; border-radius: 4px;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .col-box {
+    background: #fff; border: 2px solid #a9d7d1; border-radius: 12px;
+    padding: 10px 12px;
+  }
+  .col-box .ct { font-size: 13px; font-weight: 900; color: #1f6f66; margin-bottom: 4px; }
+  .col-box p { font-size: 12.5px; color: #3d1f08; }
+
+  .lyric-block {
+    background: #e8f5f3; border-left: 5px solid #1f6f66; border-radius: 10px;
+    padding: 10px 14px; margin-bottom: 6px;
+  }
+  .lyric-label {
+    display: inline-block;
+    margin-bottom: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.78);
+    color: #1f6f66;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .lyric-label-zh {
+    margin-top: 8px;
+    margin-bottom: 2px;
+    background: rgba(61,31,8,0.08);
+    color: #6b5b4a;
+    text-transform: none;
+  }
+  .lyric-en {
+    font-size: 14px; font-weight: 700; color: #1f6f66; line-height: 1.5;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+  }
+  .lyric-zh { font-size: 12.5px; color: #3d1f08; margin-top: 3px; }
+
+  .full-lyrics { margin-top: 4px; }
+  .full-lyric-block {
+    background: #fff;
+    border: 2px solid #a9d7d1;
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+  }
+  .full-lyric-line {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #2a1805;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+  }
+
+  .word-section-label {
+    font-size: 11px; font-weight: 700; color: #1f6f66;
+    margin: 8px 0 4px; padding-left: 4px;
+    letter-spacing: .05em;
+  }
+  .word-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;
+  }
+  .word-card {
+    background: #fff; border: 1px solid #a9d7d1; border-radius: 8px;
+    padding: 5px 8px 6px;
+  }
+  .word-card.basic    { border-left: 4px solid #1f6f66; background: #fff; }
+  .word-card.advanced { border-left: 4px solid #1f6f66; background: #e8f5f3; }
+  .word-card .row1 {
+    display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+  }
+  .w-en { font-weight: 800; color: #1f6f66; font-size: 13px;
+          font-family: 'Comic Sans MS', 'Arial', sans-serif; }
+  .w-type { font-size: 9.5px; color: #fff; background: #1f6f66; padding: 1px 5px; border-radius: 4px; font-weight: 700; }
+  .w-ph { font-size: 9.5px; color: #888; }
+  .w-zh { font-size: 11.5px; color: #3d1f08; margin-top: 2px; }
+  .w-ex { font-size: 10px; color: #5a3a1a; font-style: italic; margin-top: 2px; line-height: 1.35; }
+
+  .mission {
+    background: linear-gradient(135deg, #e8f5f3 0%, #bfe1dc 100%);
+    border-radius: 12px; padding: 10px 14px; margin-top: 10px;
+    font-size: 12.5px; color: #3d1f08; line-height: 1.7;
+  }
+  .mission .t { font-weight: 900; color: #1f6f66; }
+
+  @media print { body { background: #fff; padding: 0; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="cover-box">
+    <img src="file:///Users/chennanhong/Desktop/AI%20%E8%82%B2%E5%85%92/%E8%8B%B1%E6%96%87%E6%AD%8C%E6%9B%B2/a%20thousand%20years%20.jpg" alt="A Thousand Years cover"
+      onerror="this.style.display='none';this.parentNode.innerHTML='<div class=&quot;cover-placeholder&quot;>封面圖<br>A Thousand Years</div>'">
+  </div>
+  <div class="hero-meta">
+    <div>
+      <div class="hero-title">A Thousand Years</div>
+      <div class="hero-subtitle"><ruby>一<rt>ㄧˋ</rt></ruby><ruby>千<rt>ㄑㄧㄢ</rt></ruby><ruby>年<rt>ㄋㄧㄢˊ</rt></ruby></div>
+      <div class="hero-artist">— Christina Perri</div>
+    </div>
+    <div><span class="owner-pill">Ann 媽媽選的歌</span></div>
+  </div>
+</div>
+
+<div class="info-card">
+  <div class="info-row"><span class="info-label">創作人</span><span class="info-value">Christina Perri / David Hodges</span></div>
+  <div class="info-row"><span class="info-label">發行年份</span><span class="info-value">2011 年</span></div>
+  <div class="info-row"><span class="info-label">收錄專輯</span><span class="info-value">The Twilight Saga: Breaking Dawn 電影原聲帶</span></div>
+  <div class="info-row"><span class="info-label">演唱者</span><span class="info-value">Christina Perri</span></div>
+</div>
+
+<div class="two-col">
+  <div class="col-box">
+    <div class="ct">🎼 曲風</div>
+    <p><ruby>抒<rt>ㄕㄨ</rt></ruby><ruby>情<rt>ㄑㄧㄥˊ</rt></ruby><ruby>慢<rt>ㄇㄢˋ</rt></ruby><ruby>歌<rt>ㄍㄜ</rt></ruby>(Ballad)。<ruby>鋼<rt>ㄍㄤ</rt></ruby><ruby>琴<rt>ㄑㄧㄣˊ</rt></ruby><ruby>加<rt>ㄐㄧㄚ</rt></ruby><ruby>弦<rt>ㄒㄧㄢˊ</rt></ruby><ruby>樂<rt>ㄩㄝˋ</rt></ruby>，<ruby>聽<rt>ㄊㄧㄥ</rt></ruby><ruby>了<rt>˙ㄌㄜ</rt></ruby><ruby>心<rt>ㄒㄧㄣ</rt></ruby><ruby>裡<rt>ㄌㄧˇ</rt></ruby><ruby>會<rt>ㄏㄨㄟˋ</rt></ruby><ruby>暖<rt>ㄋㄨㄢˇ</rt></ruby><ruby>暖<rt>˙ㄋㄨㄢ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby>。</p>
+  </div>
+  <div class="col-box">
+    <div class="ct">💡 歌曲意境</div>
+    <p><ruby>這<rt>ㄓㄜˋ</rt></ruby><ruby>首<rt>ㄕㄡˇ</rt></ruby><ruby>歌<rt>ㄍㄜ</rt></ruby><ruby>很<rt>ㄏㄣˇ</rt></ruby><ruby>溫<rt>ㄨㄣ</rt></ruby><ruby>柔<rt>ㄖㄡˊ</rt></ruby>，<ruby>像<rt>ㄒㄧㄤˋ</rt></ruby><ruby>一<rt>ㄧˋ</rt></ruby><ruby>個<rt>˙ㄍㄜ</rt></ruby><ruby>長<rt>ㄔㄤˊ</rt></ruby><ruby>長<rt>˙ㄔㄤ</rt></ruby><ruby>久<rt>ㄐㄧㄡˇ</rt></ruby><ruby>久<rt>˙ㄐㄧㄡ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>陪<rt>ㄆㄟˊ</rt></ruby><ruby>伴<rt>ㄅㄢˋ</rt></ruby>。<ruby>就<rt>ㄐㄧㄡˋ</rt></ruby><ruby>算<rt>ㄙㄨㄢˋ</rt></ruby><ruby>等<rt>ㄉㄥˇ</rt></ruby><ruby>很<rt>ㄏㄣˇ</rt></ruby><ruby>久<rt>ㄐㄧㄡˇ</rt></ruby>，<ruby>也<rt>ㄧㄝˇ</rt></ruby><ruby>願<rt>ㄩㄢˋ</rt></ruby><ruby>意<rt>ㄧˋ</rt></ruby><ruby>勇<rt>ㄩㄥˇ</rt></ruby><ruby>敢<rt>ㄍㄢˇ</rt></ruby><ruby>靠<rt>ㄎㄠˋ</rt></ruby><ruby>近<rt>ㄐㄧㄣˋ</rt></ruby><ruby>重<rt>ㄓㄨㄥˋ</rt></ruby><ruby>要<rt>ㄧㄠˋ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>人<rt>ㄖㄣˊ</rt></ruby>。</p>
+  </div>
+</div>
+
+<div class="sh">🎵 英文歌詞重點片段（英文原句 + 中文注音）</div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">Heart beats fast.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>心<rt>ㄒㄧㄣ</rt></ruby><ruby>跳<rt>ㄊㄧㄠˋ</rt></ruby><ruby>加<rt>ㄐㄧㄚ</rt></ruby><ruby>速<rt>ㄙㄨˋ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">One step closer.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>再<rt>ㄗㄞˋ</rt></ruby><ruby>靠<rt>ㄎㄠˋ</rt></ruby><ruby>近<rt>ㄐㄧㄣˋ</rt></ruby><ruby>一<rt>ㄧˋ</rt></ruby><ruby>步<rt>ㄅㄨˋ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">I have loved you for a thousand years.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>愛<rt>ㄞˋ</rt></ruby><ruby>你<rt>ㄋㄧˇ</rt></ruby><ruby>一<rt>ㄧˋ</rt></ruby><ruby>千<rt>ㄑㄧㄢ</rt></ruby><ruby>年<rt>ㄋㄧㄢˊ</rt></ruby><ruby>了<rt>˙ㄌㄜ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">I'll love you for a thousand more.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>還<rt>ㄏㄞˊ</rt></ruby><ruby>會<rt>ㄏㄨㄟˋ</rt></ruby><ruby>再<rt>ㄗㄞˋ</rt></ruby><ruby>愛<rt>ㄞˋ</rt></ruby><ruby>你<rt>ㄋㄧˇ</rt></ruby><ruby>一<rt>ㄧˋ</rt></ruby><ruby>千<rt>ㄑㄧㄢ</rt></ruby><ruby>年<rt>ㄋㄧㄢˊ</rt></ruby>。</div>
+    </div>
+
+<div class="sh">🎤 完整英文歌詞</div>
+<div class="full-lyrics">
+  <div class="full-lyric-block"><div class="full-lyric-line">Heart beats fast</div><div class="full-lyric-line">Colors and promises</div><div class="full-lyric-line">How to be brave?</div><div class="full-lyric-line">How can I love when I'm afraid to fall</div><div class="full-lyric-line">But watching you stand alone?</div><div class="full-lyric-line">All of my doubt suddenly goes away somehow</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">One step closer</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">I have died everyday waiting for you</div><div class="full-lyric-line">Darling don't be afraid I have loved you</div><div class="full-lyric-line">For a thousand years</div><div class="full-lyric-line">I'll love you for a thousand more</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Time stands still</div><div class="full-lyric-line">Beauty in all she is</div><div class="full-lyric-line">I will be brave</div><div class="full-lyric-line">I will not let anything take away</div><div class="full-lyric-line">What's standing in front of me</div><div class="full-lyric-line">Every breath</div><div class="full-lyric-line">Every hour has come to this</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">One step closer</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">I have died everyday waiting for you</div><div class="full-lyric-line">Darling don't be afraid I have loved you</div><div class="full-lyric-line">For a thousand years</div><div class="full-lyric-line">I'll love you for a thousand more</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">And all along I believed I would find you</div><div class="full-lyric-line">Time has brought your heart to me</div><div class="full-lyric-line">I have loved you for a thousand years</div><div class="full-lyric-line">I'll love you for a thousand more</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">One step closer</div><div class="full-lyric-line">One step closer</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">I have died everyday waiting for you</div><div class="full-lyric-line">Darling don't be afraid I have loved you</div><div class="full-lyric-line">For a thousand years</div><div class="full-lyric-line">I'll love you for a thousand more</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">And all along I believed I would find you</div><div class="full-lyric-line">Time has brought your heart to me</div><div class="full-lyric-line">I have loved you for a thousand years</div><div class="full-lyric-line">I'll love you for a thousand more</div></div>
+</div>
+
+<div class="sh">📚 精選單字 20 個（基礎 12 + 進階 8）</div>
+
+<div class="word-section-label">🟡 基礎 12 個 — 睿寶一定要會</div>
+<div class="word-grid">
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">year</span><span class="w-type">名詞</span><span class="w-ph">/jɪr/</span></div>
+    <div class="w-zh"><ruby>年<rt>ㄋㄧㄢˊ</rt></ruby></div>
+    <div class="w-ex">A new year.（新的一年）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">day</span><span class="w-type">名詞</span><span class="w-ph">/deɪ/</span></div>
+    <div class="w-zh"><ruby>日<rt>ㄖˋ</rt></ruby><ruby>子<rt>˙ㄗ</rt></ruby></div>
+    <div class="w-ex">Every day.（每天）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">heart</span><span class="w-type">名詞</span><span class="w-ph">/hɑːrt/</span></div>
+    <div class="w-zh"><ruby>心<rt>ㄒㄧㄣ</rt></ruby></div>
+    <div class="w-ex">Warm heart.（溫暖的心）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">love</span><span class="w-type">動詞</span><span class="w-ph">/lʌv/</span></div>
+    <div class="w-zh"><ruby>愛<rt>ㄞˋ</rt></ruby></div>
+    <div class="w-ex">I love you.（我愛你）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">wait</span><span class="w-type">動詞</span><span class="w-ph">/weɪt/</span></div>
+    <div class="w-zh"><ruby>等<rt>ㄉㄥˇ</rt></ruby><ruby>待<rt>ㄉㄞˋ</rt></ruby></div>
+    <div class="w-ex">Wait for me.（等我）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">time</span><span class="w-type">名詞</span><span class="w-ph">/taɪm/</span></div>
+    <div class="w-zh"><ruby>時<rt>ㄕˊ</rt></ruby><ruby>間<rt>ㄐㄧㄢ</rt></ruby></div>
+    <div class="w-ex">Time goes fast.（時間過得快）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">stand</span><span class="w-type">動詞</span><span class="w-ph">/stænd/</span></div>
+    <div class="w-zh"><ruby>站<rt>ㄓㄢˋ</rt></ruby><ruby>立<rt>ㄌㄧˋ</rt></ruby></div>
+    <div class="w-ex">Stand up.（站起來）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">close</span><span class="w-type">形容詞</span><span class="w-ph">/kloʊs/</span></div>
+    <div class="w-zh"><ruby>靠<rt>ㄎㄠˋ</rt></ruby><ruby>近<rt>ㄐㄧㄣˋ</rt></ruby></div>
+    <div class="w-ex">So close.（好近）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">brave</span><span class="w-type">形容詞</span><span class="w-ph">/breɪv/</span></div>
+    <div class="w-zh"><ruby>勇<rt>ㄩㄥˇ</rt></ruby><ruby>敢<rt>ㄍㄢˇ</rt></ruby></div>
+    <div class="w-ex">Be brave.（要勇敢）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">hold</span><span class="w-type">動詞</span><span class="w-ph">/hoʊld/</span></div>
+    <div class="w-zh"><ruby>握<rt>ㄨㄛˋ</rt></ruby><ruby>住<rt>ㄓㄨˋ</rt></ruby></div>
+    <div class="w-ex">Hold on.（抓緊）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">step</span><span class="w-type">名詞</span><span class="w-ph">/step/</span></div>
+    <div class="w-zh"><ruby>步<rt>ㄅㄨˋ</rt></ruby><ruby>伐<rt>ㄈㄚˊ</rt></ruby></div>
+    <div class="w-ex">One step.（一步）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">fall</span><span class="w-type">動詞</span><span class="w-ph">/fɔːl/</span></div>
+    <div class="w-zh"><ruby>跌<rt>ㄉㄧㄝˊ</rt></ruby><ruby>倒<rt>ㄉㄠˇ</rt></ruby></div>
+    <div class="w-ex">Don't fall.（不要跌倒）</div>
+  </div>
+</div>
+
+<div class="word-section-label">🟠 進階 8 個 — 爸媽一起學</div>
+<div class="word-grid">
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">promises</span><span class="w-type">名詞</span><span class="w-ph">/ˈprɑːmɪsɪz/</span></div>
+    <div class="w-zh"><ruby>承<rt>ㄔㄥˊ</rt></ruby><ruby>諾<rt>ㄋㄨㄛˋ</rt></ruby></div>
+    <div class="w-ex">Keep promises.（守承諾）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">afraid</span><span class="w-type">形容詞</span><span class="w-ph">/əˈfreɪd/</span></div>
+    <div class="w-zh"><ruby>害<rt>ㄏㄞˋ</rt></ruby><ruby>怕<rt>ㄆㄚˋ</rt></ruby></div>
+    <div class="w-ex">Don't be afraid.（別害怕）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">doubt</span><span class="w-type">名詞</span><span class="w-ph">/daʊt/</span></div>
+    <div class="w-zh"><ruby>懷<rt>ㄏㄨㄞˊ</rt></ruby><ruby>疑<rt>ㄧˊ</rt></ruby></div>
+    <div class="w-ex">No doubt.（毫無疑問）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">suddenly</span><span class="w-type">副詞</span><span class="w-ph">/ˈsʌdənli/</span></div>
+    <div class="w-zh"><ruby>突<rt>ㄊㄨˊ</rt></ruby><ruby>然<rt>ㄖㄢˊ</rt></ruby></div>
+    <div class="w-ex">Suddenly rain.（突然下雨）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">beauty</span><span class="w-type">名詞</span><span class="w-ph">/ˈbjuːti/</span></div>
+    <div class="w-zh"><ruby>美<rt>ㄇㄟˇ</rt></ruby><ruby>麗<rt>ㄌㄧˋ</rt></ruby></div>
+    <div class="w-ex">True beauty.（真正的美）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">breath</span><span class="w-type">名詞</span><span class="w-ph">/breθ/</span></div>
+    <div class="w-zh"><ruby>呼<rt>ㄏㄨ</rt></ruby><ruby>吸<rt>ㄒㄧ</rt></ruby></div>
+    <div class="w-ex">Take a breath.（深呼吸）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">thousand</span><span class="w-type">數詞</span><span class="w-ph">/ˈθaʊzənd/</span></div>
+    <div class="w-zh"><ruby>一<rt>ㄧˋ</rt></ruby><ruby>千<rt>ㄑㄧㄢ</rt></ruby></div>
+    <div class="w-ex">A thousand years.（一千年）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">believed</span><span class="w-type">動詞</span><span class="w-ph">/bɪˈliːvd/</span></div>
+    <div class="w-zh"><ruby>相<rt>ㄒㄧㄤ</rt></ruby><ruby>信<rt>ㄒㄧㄣˋ</rt></ruby><ruby>過<rt>ㄍㄨㄛˋ</rt></ruby></div>
+    <div class="w-ex">I believed you.（我相信過你）</div>
+  </div>
+</div>
+
+<div class="mission">
+  <span class="t">🎯 親子任務：</span>聽到 <b>heart</b> 雙手比愛心 ❤️；聽到 <b>year</b> 雙手做翻書動作；副歌 <b>thousand years</b> 全家擁抱搖擺。
+</div>
+
+</body>
+</html>

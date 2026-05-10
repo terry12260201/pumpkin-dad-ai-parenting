@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<title>Soda Pop — 南瓜家學習本</title>
+<style>
+  @page { size: A4; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+    background: #faf7ff; color: #2a1805;
+    padding: 10px; max-width: 210mm; margin: 0 auto; line-height: 1.5;
+  }
+  ruby { ruby-position: inter-character; ruby-align: center; margin-right: 3px; }
+  rt { font-size: 0.55em; color: #5a3bd4; font-weight: 400; letter-spacing: 0;
+       font-family: "Noto Sans TC", "PingFang TC", sans-serif; }
+  .lyric-zh, .col-box p, .hero-subtitle { line-height: 2.1; }
+  .w-zh { line-height: 2.0; }
+
+  .hero {
+    display: flex; align-items: stretch; gap: 14px;
+    background: linear-gradient(135deg, #a991ff 0%, #7b5cff 55%, #5a3bd4 100%);
+    border-radius: 16px; padding: 14px;
+    color: #fff; box-shadow: 0 4px 0 #5a3bd4;
+    margin-bottom: 12px;
+  }
+  .cover-box {
+    width: 110px; height: 110px; border-radius: 12px; overflow: hidden;
+    flex-shrink: 0; border: 3px solid #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,.3);
+    background: rgba(0,0,0,.1);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cover-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cover-placeholder {
+    font-size: 10px; text-align: center; padding: 8px;
+    color: rgba(255,255,255,.9); line-height: 1.4;
+  }
+  .hero-meta { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+  .hero-title { font-size: 22px; font-weight: 900; letter-spacing: .02em; line-height: 1.1; }
+  .hero-subtitle { font-size: 13px; opacity: .95; margin-top: 4px; }
+  .hero-artist { font-size: 14px; margin-top: 6px; opacity: .95; }
+  .owner-pill {
+    display: inline-block; background: #fff; color: #5a3bd4;
+    padding: 3px 12px; border-radius: 12px;
+    font-size: 12px; font-weight: 700; margin-top: 6px;
+  }
+
+  .info-card {
+    background: #fff; border: 2px solid #c4b3ff; border-radius: 12px;
+    padding: 10px 14px; margin-bottom: 10px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 14px;
+  }
+  .info-row { font-size: 12px; }
+  .info-label { color: #5a3bd4; font-weight: 700; font-size: 11px; display: block; }
+  .info-value { color: #2a1805; font-weight: 600; }
+
+  .sh {
+    font-size: 15px; font-weight: 900; color: #5a3bd4;
+    margin: 12px 0 6px; padding: 4px 10px;
+    background: linear-gradient(90deg, #f0ecff 0%, transparent 100%);
+    border-left: 4px solid #5a3bd4; border-radius: 4px;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .col-box {
+    background: #fff; border: 2px solid #c4b3ff; border-radius: 12px;
+    padding: 10px 12px;
+  }
+  .col-box .ct { font-size: 13px; font-weight: 900; color: #5a3bd4; margin-bottom: 4px; }
+  .col-box p { font-size: 12.5px; color: #3d1f08; }
+
+  .lyric-block {
+    background: #f0ecff; border-left: 5px solid #5a3bd4; border-radius: 10px;
+    padding: 10px 14px; margin-bottom: 6px;
+  }
+  .lyric-label {
+    display: inline-block;
+    margin-bottom: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.78);
+    color: #5a3bd4;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .lyric-label-zh {
+    margin-top: 8px;
+    margin-bottom: 2px;
+    background: rgba(61,31,8,0.08);
+    color: #6b5b4a;
+    text-transform: none;
+  }
+  .lyric-en {
+    font-size: 14px; font-weight: 700; color: #5a3bd4; line-height: 1.5;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+  }
+  .lyric-zh { font-size: 12.5px; color: #3d1f08; margin-top: 3px; }
+
+  .full-lyrics { margin-top: 4px; }
+  .full-lyric-block {
+    background: #fff;
+    border: 2px solid #c4b3ff;
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+  }
+  .full-lyric-line {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #2a1805;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+  }
+
+  .word-section-label {
+    font-size: 11px; font-weight: 700; color: #5a3bd4;
+    margin: 8px 0 4px; padding-left: 4px;
+    letter-spacing: .05em;
+  }
+  .word-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;
+  }
+  .word-card {
+    background: #fff; border: 1px solid #c4b3ff; border-radius: 8px;
+    padding: 5px 8px 6px;
+  }
+  .word-card.basic    { border-left: 4px solid #5a3bd4; background: #fff; }
+  .word-card.advanced { border-left: 4px solid #5a3bd4; background: #f0ecff; }
+  .word-card .row1 {
+    display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+  }
+  .w-en { font-weight: 800; color: #5a3bd4; font-size: 13px;
+          font-family: 'Comic Sans MS', 'Arial', sans-serif; }
+  .w-type { font-size: 9.5px; color: #fff; background: #5a3bd4; padding: 1px 5px; border-radius: 4px; font-weight: 700; }
+  .w-ph { font-size: 9.5px; color: #888; }
+  .w-zh { font-size: 11.5px; color: #3d1f08; margin-top: 2px; }
+  .w-ex { font-size: 10px; color: #5a3a1a; font-style: italic; margin-top: 2px; line-height: 1.35; }
+
+  .mission {
+    background: linear-gradient(135deg, #f0ecff 0%, #d0c2ff 100%);
+    border-radius: 12px; padding: 10px 14px; margin-top: 10px;
+    font-size: 12.5px; color: #3d1f08; line-height: 1.7;
+  }
+  .mission .t { font-weight: 900; color: #5a3bd4; }
+
+  @media print { body { background: #fff; padding: 0; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="cover-box">
+    <img src="file:///Users/chennanhong/Desktop/AI%20%E8%82%B2%E5%85%92/%E8%8B%B1%E6%96%87%E6%AD%8C%E6%9B%B2/Soda%20Pop.jpg" alt="Soda Pop cover"
+      onerror="this.style.display='none';this.parentNode.innerHTML='<div class=&quot;cover-placeholder&quot;>封面圖<br>Soda Pop</div>'">
+  </div>
+  <div class="hero-meta">
+    <div>
+      <div class="hero-title">Soda Pop</div>
+      <div class="hero-subtitle"><ruby>汽<rt>ㄑㄧˋ</rt></ruby><ruby>水<rt>ㄕㄨㄟˇ</rt></ruby></div>
+      <div class="hero-artist">— Saja Boys (KPop Demon Hunters)</div>
+    </div>
+    <div><span class="owner-pill">睿寶選的歌</span></div>
+  </div>
+</div>
+
+<div class="info-card">
+  <div class="info-row"><span class="info-label">創作人</span><span class="info-value">EJAE / Teddy Park</span></div>
+  <div class="info-row"><span class="info-label">發行年份</span><span class="info-value">2025 年</span></div>
+  <div class="info-row"><span class="info-label">收錄專輯</span><span class="info-value">KPop Demon Hunters 原聲帶</span></div>
+  <div class="info-row"><span class="info-label">演唱者</span><span class="info-value">Saja Boys (KPop Demon Hunters)</span></div>
+</div>
+
+<div class="two-col">
+  <div class="col-box">
+    <div class="ct">🎼 曲風</div>
+    <p><ruby>舞<rt>ㄨˇ</rt></ruby><ruby>曲<rt>ㄑㄩˇ</rt></ruby><ruby>流<rt>ㄌㄧㄡˊ</rt></ruby><ruby>行<rt>ㄒㄧㄥˊ</rt></ruby>。<ruby>像<rt>ㄒㄧㄤˋ</rt></ruby><ruby>汽<rt>ㄑㄧˋ</rt></ruby><ruby>水<rt>ㄕㄨㄟˇ</rt></ruby><ruby>一<rt>ㄧˊ</rt></ruby><ruby>樣<rt>ㄧㄤˋ</rt></ruby><ruby>甜<rt>ㄊㄧㄢˊ</rt></ruby><ruby>甜<rt>˙ㄊㄧㄢ</rt></ruby>、<ruby>冒<rt>ㄇㄠˋ</rt></ruby><ruby>泡<rt>ㄆㄠˋ</rt></ruby><ruby>泡<rt>˙ㄆㄠ</rt></ruby>、<ruby>很<rt>ㄏㄣˇ</rt></ruby><ruby>跳<rt>ㄊㄧㄠˋ</rt></ruby>。</p>
+  </div>
+  <div class="col-box">
+    <div class="ct">💡 歌曲意境</div>
+    <p><ruby>像<rt>ㄒㄧㄤˋ</rt></ruby><ruby>汽<rt>ㄑㄧˋ</rt></ruby><ruby>水<rt>ㄕㄨㄟˇ</rt></ruby><ruby>一<rt>ㄧˊ</rt></ruby><ruby>樣<rt>ㄧㄤˋ</rt></ruby>，<ruby>有<rt>ㄧㄡˇ</rt></ruby><ruby>甜<rt>ㄊㄧㄢˊ</rt></ruby><ruby>甜<rt>˙ㄊㄧㄢ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>感<rt>ㄍㄢˇ</rt></ruby><ruby>覺<rt>ㄐㄩㄝˊ</rt></ruby>，<ruby>也<rt>ㄧㄝˇ</rt></ruby><ruby>有<rt>ㄧㄡˇ</rt></ruby><ruby>冒<rt>ㄇㄠˋ</rt></ruby><ruby>泡<rt>ㄆㄠˋ</rt></ruby><ruby>泡<rt>˙ㄆㄠ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>活<rt>ㄏㄨㄛˊ</rt></ruby><ruby>力<rt>ㄌㄧˋ</rt></ruby>。<ruby>很<rt>ㄏㄣˇ</rt></ruby><ruby>適<rt>ㄕˋ</rt></ruby><ruby>合<rt>ㄏㄜˊ</rt></ruby><ruby>讓<rt>ㄖㄤˋ</rt></ruby><ruby>孩<rt>ㄏㄞˊ</rt></ruby><ruby>子<rt>˙ㄗ</rt></ruby><ruby>用<rt>ㄩㄥˋ</rt></ruby><ruby>身<rt>ㄕㄣ</rt></ruby><ruby>體<rt>ㄊㄧˇ</rt></ruby><ruby>感<rt>ㄍㄢˇ</rt></ruby><ruby>受<rt>ㄕㄡˋ</rt></ruby><ruby>節<rt>ㄐㄧㄝˊ</rt></ruby><ruby>奏<rt>ㄗㄡˋ</rt></ruby>。</p>
+  </div>
+</div>
+
+<div class="sh">🎵 英文歌詞重點片段（英文原句 + 中文注音）</div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">Fill me up like a soda pop.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>把<rt>ㄅㄚˇ</rt></ruby><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>填<rt>ㄊㄧㄢˊ</rt></ruby><ruby>滿<rt>ㄇㄢˇ</rt></ruby>，<ruby>像<rt>ㄒㄧㄤˋ</rt></ruby><ruby>一<rt>ㄧˋ</rt></ruby><ruby>瓶<rt>ㄆㄧㄥˊ</rt></ruby><ruby>汽<rt>ㄑㄧˋ</rt></ruby><ruby>水<rt>ㄕㄨㄟˇ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">Every sip makes me want more.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>每<rt>ㄇㄟˇ</rt></ruby><ruby>喝<rt>ㄏㄜ</rt></ruby><ruby>一<rt>ㄧˋ</rt></ruby><ruby>口<rt>ㄎㄡˇ</rt></ruby><ruby>都<rt>ㄉㄡ</rt></ruby><ruby>想<rt>ㄒㄧㄤˇ</rt></ruby><ruby>再<rt>ㄗㄞˋ</rt></ruby><ruby>來<rt>ㄌㄞˊ</rt></ruby><ruby>更<rt>ㄍㄥˋ</rt></ruby><ruby>多<rt>ㄉㄨㄛ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">Cool me down.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>讓<rt>ㄖㄤˋ</rt></ruby><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>涼<rt>ㄌㄧㄤˊ</rt></ruby><ruby>下<rt>ㄒㄧㄚˋ</rt></ruby><ruby>來<rt>˙ㄌㄞ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">Every little drip and drop, fizz and pop.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>每<rt>ㄇㄟˇ</rt></ruby><ruby>一<rt>ㄧˋ</rt></ruby><ruby>滴<rt>ㄉㄧ</rt></ruby><ruby>每<rt>ㄇㄟˇ</rt></ruby><ruby>一<rt>ㄧˋ</rt></ruby><ruby>滴<rt>ㄉㄧ</rt></ruby>，<ruby>冒<rt>ㄇㄠˋ</rt></ruby><ruby>泡<rt>ㄆㄠˋ</rt></ruby><ruby>又<rt>ㄧㄡˋ</rt></ruby><ruby>爆<rt>ㄅㄠˋ</rt></ruby><ruby>開<rt>ㄎㄞ</rt></ruby>。</div>
+    </div>
+
+<div class="sh">🎤 完整英文歌詞</div>
+<div class="full-lyrics">
+  <div class="full-lyric-block"><div class="full-lyric-line">My little soda pop</div><div class="full-lyric-line">Uh, make me wanna flip the top</div><div class="full-lyric-line">한 모금에 you hit the spot</div><div class="full-lyric-line">Every little drip and drop, fizz and pop, ah</div><div class="full-lyric-line">소름 돋아 it's gettin' hot</div><div class="full-lyric-line">Yes, I'm sippin' when it's drippin' now</div><div class="full-lyric-line">It's done? I need a second round</div><div class="full-lyric-line">And pour a lot and don't you stop</div><div class="full-lyric-line">'Til my soda pop fizzles out</div><div class="full-lyric-line">꿈 속에 그려왔던 너</div><div class="full-lyric-line">난 절대 놓칠 수 없어</div><div class="full-lyric-line">널 원해 꼭</div><div class="full-lyric-line">I waited so long for a taste of soda</div><div class="full-lyric-line">So, the wait is over, baby</div><div class="full-lyric-line">Come and fill me up</div><div class="full-lyric-line">Just can't get enough</div><div class="full-lyric-line">Oh</div><div class="full-lyric-line">You're all I can think of</div><div class="full-lyric-line">Every drop I drink up</div><div class="full-lyric-line">You're my soda pop</div><div class="full-lyric-line">My little soda pop (Yeah, yeah)</div><div class="full-lyric-line">Cool me down, you're so hot</div><div class="full-lyric-line">Pour me up, I won't stop (Oh, oh)</div><div class="full-lyric-line">You're my soda pop</div><div class="full-lyric-line">My little soda pop</div><div class="full-lyric-line">Ooh, ooh</div><div class="full-lyric-line">Ooh, ooh</div><div class="full-lyric-line">You're my soda pop</div><div class="full-lyric-line">Gotta drink every drop</div></div>
+</div>
+
+<div class="sh">📚 精選單字 20 個（基礎 12 + 進階 8）</div>
+
+<div class="word-section-label">🟡 基礎 12 個 — 睿寶一定要會</div>
+<div class="word-grid">
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">soda</span><span class="w-type">名詞</span><span class="w-ph">/ˈsoʊdə/</span></div>
+    <div class="w-zh"><ruby>汽<rt>ㄑㄧˋ</rt></ruby><ruby>水<rt>ㄕㄨㄟˇ</rt></ruby></div>
+    <div class="w-ex">Cold soda.（冰汽水）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">pop</span><span class="w-type">名詞</span><span class="w-ph">/pɑːp/</span></div>
+    <div class="w-zh"><ruby>爆<rt>ㄅㄠˋ</rt></ruby><ruby>開<rt>ㄎㄞ</rt></ruby></div>
+    <div class="w-ex">Pop sound.（爆開的聲音）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">drink</span><span class="w-type">名詞</span><span class="w-ph">/drɪŋk/</span></div>
+    <div class="w-zh"><ruby>飲<rt>ㄧㄣˇ</rt></ruby><ruby>料<rt>ㄌㄧㄠˋ</rt></ruby></div>
+    <div class="w-ex">Cold drink.（冷飲）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">sweet</span><span class="w-type">形容詞</span><span class="w-ph">/swiːt/</span></div>
+    <div class="w-zh"><ruby>甜<rt>ㄊㄧㄢˊ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby></div>
+    <div class="w-ex">Sweet taste.（甜味）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">bubble</span><span class="w-type">名詞</span><span class="w-ph">/ˈbʌbl/</span></div>
+    <div class="w-zh"><ruby>泡<rt>ㄆㄠˋ</rt></ruby><ruby>泡<rt>˙ㄆㄠ</rt></ruby></div>
+    <div class="w-ex">Many bubbles.（很多泡泡）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">cool</span><span class="w-type">形容詞</span><span class="w-ph">/kuːl/</span></div>
+    <div class="w-zh"><ruby>涼<rt>ㄌㄧㄤˊ</rt></ruby><ruby>爽<rt>ㄕㄨㄤˇ</rt></ruby></div>
+    <div class="w-ex">Cool air.（涼爽空氣）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">hot</span><span class="w-type">形容詞</span><span class="w-ph">/hɑːt/</span></div>
+    <div class="w-zh"><ruby>熱<rt>ㄖㄜˋ</rt></ruby></div>
+    <div class="w-ex">Hot day.（熱天）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">taste</span><span class="w-type">名詞</span><span class="w-ph">/teɪst/</span></div>
+    <div class="w-zh"><ruby>味<rt>ㄨㄟˋ</rt></ruby><ruby>道<rt>ㄉㄠˋ</rt></ruby></div>
+    <div class="w-ex">Good taste.（好味道）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">cup</span><span class="w-type">名詞</span><span class="w-ph">/kʌp/</span></div>
+    <div class="w-zh"><ruby>杯<rt>ㄅㄟ</rt></ruby><ruby>子<rt>˙ㄗ</rt></ruby></div>
+    <div class="w-ex">My cup.（我的杯子）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">pour</span><span class="w-type">動詞</span><span class="w-ph">/pɔːr/</span></div>
+    <div class="w-zh"><ruby>倒<rt>ㄉㄠˋ</rt></ruby><ruby>出<rt>ㄔㄨ</rt></ruby></div>
+    <div class="w-ex">Pour water.（倒水）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">more</span><span class="w-type">形容詞</span><span class="w-ph">/mɔːr/</span></div>
+    <div class="w-zh"><ruby>更<rt>ㄍㄥˋ</rt></ruby><ruby>多<rt>ㄉㄨㄛ</rt></ruby></div>
+    <div class="w-ex">One more.（再一個）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">drop</span><span class="w-type">名詞</span><span class="w-ph">/drɑːp/</span></div>
+    <div class="w-zh"><ruby>一<rt>ㄧˋ</rt></ruby><ruby>滴<rt>ㄉㄧ</rt></ruby></div>
+    <div class="w-ex">A water drop.（一滴水）</div>
+  </div>
+</div>
+
+<div class="word-section-label">🟠 進階 8 個 — 爸媽一起學</div>
+<div class="word-grid">
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">refreshing</span><span class="w-type">形容詞</span><span class="w-ph">/rɪˈfreʃɪŋ/</span></div>
+    <div class="w-zh"><ruby>清<rt>ㄑㄧㄥ</rt></ruby><ruby>爽<rt>ㄕㄨㄤˇ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby></div>
+    <div class="w-ex">So refreshing.（好清爽）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">sip</span><span class="w-type">名詞</span><span class="w-ph">/sɪp/</span></div>
+    <div class="w-zh"><ruby>一<rt>ㄧˋ</rt></ruby><ruby>小<rt>ㄒㄧㄠˇ</rt></ruby><ruby>口<rt>ㄎㄡˇ</rt></ruby></div>
+    <div class="w-ex">Take a sip.（喝一小口）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">flip</span><span class="w-type">動詞</span><span class="w-ph">/flɪp/</span></div>
+    <div class="w-zh"><ruby>掀<rt>ㄒㄧㄢ</rt></ruby><ruby>開<rt>ㄎㄞ</rt></ruby></div>
+    <div class="w-ex">Flip the top.（掀開蓋子）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">drip</span><span class="w-type">動詞</span><span class="w-ph">/drɪp/</span></div>
+    <div class="w-zh"><ruby>滴<rt>ㄉㄧ</rt></ruby><ruby>下<rt>ㄒㄧㄚˋ</rt></ruby></div>
+    <div class="w-ex">Drip, drop.（一滴一滴）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">fizz</span><span class="w-type">動詞</span><span class="w-ph">/fɪz/</span></div>
+    <div class="w-zh"><ruby>冒<rt>ㄇㄠˋ</rt></ruby><ruby>泡<rt>ㄆㄠˋ</rt></ruby></div>
+    <div class="w-ex">Soda fizz.（汽水冒泡）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">empty</span><span class="w-type">形容詞</span><span class="w-ph">/ˈempti/</span></div>
+    <div class="w-zh"><ruby>空<rt>ㄎㄨㄥ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby></div>
+    <div class="w-ex">Empty cup.（空杯子）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">enough</span><span class="w-type">副詞</span><span class="w-ph">/ɪˈnʌf/</span></div>
+    <div class="w-zh"><ruby>足<rt>ㄗㄨˊ</rt></ruby><ruby>夠<rt>ㄍㄡˋ</rt></ruby></div>
+    <div class="w-ex">Enough!（夠了！）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">snacks</span><span class="w-type">名詞</span><span class="w-ph">/snæks/</span></div>
+    <div class="w-zh"><ruby>零<rt>ㄌㄧㄥˊ</rt></ruby><ruby>食<rt>ㄕˊ</rt></ruby></div>
+    <div class="w-ex">Tasty snacks.（好吃零食）</div>
+  </div>
+</div>
+
+<div class="mission">
+  <span class="t">🎯 親子任務：</span>聽到 <b>pop</b> 雙手拍手一次 👏；聽到 <b>bubble</b> 做吐泡泡動作；副歌 <b>fizz and pop</b> 全家轉圈圈！
+</div>
+
+</body>
+</html>

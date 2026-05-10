@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>冰箱有什麼，今天吃什麼 · 南瓜爸爸 AI 食譜</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #fff8f1;
+  --card:      #ffffff;
+  --border:    #ead8c2;
+  --border-md: #d4b896;
+  --text:      #2d1b0e;
+  --text-sub:  #6b5544;
+  --text-mute: #998472;
+  --primary:   #c2410c;        /* 暖橘 */
+  --primary-dk:#9a3412;
+  --accent:    #fed7aa;
+  --green:     #15803d;
+  --shadow:    0 1px 3px rgba(60,30,10,.06), 0 6px 24px rgba(60,30,10,.05);
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family:'Inter','Noto Sans TC',-apple-system,sans-serif;
+  background:linear-gradient(135deg, var(--bg), #fef3e2 100%);
+  color:var(--text); line-height:1.55; min-height:100vh;
+}
+header {
+  background:#fff; border-bottom:1px solid var(--border);
+  padding:14px 24px; display:flex; align-items:center; gap:14px;
+  position:sticky; top:0; z-index:50;
+}
+.logo-icon {
+  width:38px; height:38px; border-radius:10px;
+  background:linear-gradient(135deg, #f97316, #ea580c);
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:1.3rem;
+}
+.logo-text { display:flex; flex-direction:column; }
+.logo-text .t1 { font-weight:700; font-size:1.05rem; }
+.logo-text .t2 { font-size:.74rem; color:var(--text-mute); font-weight:500; }
+
+main {
+  max-width:1080px; margin:0 auto;
+  padding:24px clamp(14px,2.5vw,28px);
+}
+
+/* Steps progress */
+.stepper {
+  display:flex; align-items:center; gap:6px;
+  background:#fff; border:1px solid var(--border);
+  border-radius:14px; padding:14px 18px;
+  margin-bottom:18px; box-shadow:var(--shadow);
+  overflow-x:auto;
+}
+.stepper-item {
+  display:flex; align-items:center; gap:8px; flex-shrink:0;
+  font-size:.85rem; color:var(--text-mute); font-weight:500;
+}
+.stepper-num {
+  width:26px; height:26px; border-radius:50%;
+  background:#f3e9da; color:var(--text-sub);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.78rem; font-weight:700;
+  transition:all .25s ease;
+}
+.stepper-item.done .stepper-num { background:var(--green); color:#fff; }
+.stepper-item.active .stepper-num { background:var(--primary); color:#fff; }
+.stepper-item.active { color:var(--text); font-weight:600; }
+.stepper-arrow { color:var(--border-md); font-size:.85rem; }
+
+/* Card */
+.card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:16px; padding:clamp(18px,3vw,28px);
+  box-shadow:var(--shadow); margin-bottom:16px;
+}
+.card-eyebrow {
+  font-size:.72rem; font-weight:700; letter-spacing:.16em;
+  color:var(--primary); text-transform:uppercase;
+}
+.card h2 {
+  font-size:clamp(1.15rem,2.1vw,1.45rem); font-weight:700;
+  letter-spacing:-.005em; margin-top:4px;
+}
+.card-sub {
+  color:var(--text-sub); font-size:.9rem; margin-top:6px; line-height:1.65;
+}
+
+/* Pain point hint */
+.pain {
+  background:#fef3c7; border:1px solid #fcd34d;
+  border-left:4px solid #d97706;
+  padding:10px 14px; border-radius:8px;
+  font-size:.85rem; color:#78350f; margin-top:12px;
+  display:flex; gap:10px; align-items:flex-start;
+}
+.pain .icon { font-size:1.1rem; flex-shrink:0; }
+
+/* Chip group */
+.chip-section { margin-top:18px; }
+.chip-section + .chip-section { margin-top:22px; }
+.chip-section .label {
+  font-size:.85rem; font-weight:600; color:var(--text-sub);
+  margin-bottom:10px; display:flex; align-items:center; gap:6px;
+}
+.chip-section .label .req {
+  font-size:.68rem; padding:2px 8px; border-radius:4px;
+  background:#fef2f2; color:#b91c1c; font-weight:600;
+}
+.chip-section .label .opt {
+  font-size:.68rem; padding:2px 8px; border-radius:4px;
+  background:#f3f4f6; color:var(--text-mute); font-weight:600;
+}
+.chips { display:flex; flex-wrap:wrap; gap:8px; }
+.chip {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:9px 14px; border-radius:999px;
+  border:1.5px solid var(--border-md); background:#fff;
+  font:inherit; font-size:.88rem; font-weight:500;
+  color:var(--text-sub); cursor:pointer;
+  transition:all .15s ease;
+  user-select:none;
+}
+.chip:hover { border-color:var(--primary); color:var(--primary); }
+.chip.on {
+  background:var(--primary); color:#fff; border-color:var(--primary);
+}
+.chip-add {
+  border-style:dashed;
+  border-color:var(--border-md); color:var(--text-mute);
+}
+.chip-add:hover { color:var(--primary); border-color:var(--primary); }
+
+/* Custom input */
+.custom-add {
+  display:flex; gap:6px; margin-top:10px;
+}
+.custom-add input {
+  flex:1; padding:9px 14px; border:1.5px solid var(--border);
+  border-radius:999px; font:inherit; font-size:.88rem;
+  background:#fff; color:var(--text);
+}
+.custom-add input:focus { outline:none; border-color:var(--primary); }
+.custom-add button {
+  padding:9px 18px; border-radius:999px;
+  background:var(--primary); color:#fff; border:none;
+  font:inherit; font-size:.88rem; font-weight:600; cursor:pointer;
+  transition:background .15s;
+}
+.custom-add button:hover { background:var(--primary-dk); }
+
+/* Selected items pills */
+.selected-list {
+  display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;
+  min-height:40px;
+  padding:10px; border-radius:10px;
+  background:linear-gradient(135deg, #fff8ed, #fef0e0);
+  border:1px dashed var(--border-md);
+}
+.selected-list:empty::after {
+  content:'尚未選擇 — 點上方標籤或自己輸入';
+  color:var(--text-mute); font-size:.82rem; font-style:italic;
+}
+.selected-pill {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:5px 10px; border-radius:999px;
+  background:#fff; border:1px solid var(--accent);
+  font-size:.8rem; color:var(--text);
+}
+.selected-pill .x {
+  cursor:pointer; color:var(--text-mute);
+  font-size:1rem; line-height:1;
+}
+.selected-pill .x:hover { color:#b91c1c; }
+
+/* Photo upload (optional) */
+.photo-upload {
+  margin-top:12px;
+  border:1.5px dashed var(--border-md); border-radius:10px;
+  padding:14px; cursor:pointer;
+  display:flex; align-items:center; gap:12px;
+  background:#fff; transition:all .15s;
+}
+.photo-upload:hover { border-color:var(--primary); background:#fffaf3; }
+.photo-upload input { display:none; }
+.photo-upload .icon { font-size:1.5rem; }
+.photo-upload .text { flex:1; }
+.photo-upload .text strong { display:block; color:var(--text); font-size:.9rem; }
+.photo-upload .text small { color:var(--text-mute); font-size:.78rem; }
+.photo-thumb {
+  display:none; width:60px; height:60px; border-radius:8px;
+  object-fit:cover; border:1px solid var(--border);
+}
+.photo-thumb.show { display:block; }
+
+/* Generate button */
+.generate-section {
+  position:sticky; bottom:18px;
+  background:rgba(255,248,241,.92); backdrop-filter:blur(10px);
+  margin:18px -10px 0;
+  padding:14px 18px; border-radius:16px;
+  border:1px solid var(--border);
+  box-shadow:0 -2px 20px rgba(60,30,10,.08);
+  display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+}
+.generate-summary {
+  flex:1; min-width:200px; font-size:.85rem; color:var(--text-sub);
+}
+.generate-summary strong { color:var(--text); }
+.btn-generate {
+  padding:14px 26px; border-radius:12px;
+  background:var(--primary); color:#fff; border:none;
+  font:inherit; font-size:1rem; font-weight:700;
+  cursor:pointer; transition:all .15s;
+  display:flex; align-items:center; gap:8px;
+  box-shadow:0 4px 12px rgba(194,65,12,.25);
+}
+.btn-generate:hover { background:var(--primary-dk); transform:translateY(-1px); }
+.btn-generate:disabled {
+  background:#d6c4b3; color:#fff; cursor:not-allowed; box-shadow:none;
+  transform:none;
+}
+
+/* Recipe output */
+.recipe-output { display:none; }
+.recipe-output.show { display:block; }
+.recipe-card {
+  background:#fff; border:1px solid var(--border); border-radius:16px;
+  padding:clamp(18px,3vw,32px); box-shadow:var(--shadow);
+  white-space:pre-wrap; word-break:break-word;
+  font-size:.95rem; line-height:1.85; color:var(--text);
+}
+.recipe-card h1, .recipe-card h2, .recipe-card h3 {
+  margin:14px 0 6px; line-height:1.3; color:var(--primary-dk);
+}
+.recipe-card h1 { font-size:1.6rem; }
+.recipe-card h2 { font-size:1.25rem; padding-bottom:6px; border-bottom:2px solid var(--accent); }
+.recipe-card h3 { font-size:1.05rem; }
+.recipe-card ul, .recipe-card ol { padding-left:1.6em; margin:8px 0; }
+.recipe-card li { margin:4px 0; }
+.recipe-card strong { color:var(--primary-dk); }
+.recipe-card hr { border:none; border-top:1px dashed var(--border); margin:14px 0; }
+.recipe-actions {
+  display:flex; gap:10px; flex-wrap:wrap;
+  margin-top:14px;
+}
+.btn-secondary {
+  padding:10px 18px; border-radius:10px;
+  background:#fff; border:1.5px solid var(--border-md);
+  font:inherit; font-size:.88rem; font-weight:600;
+  color:var(--text-sub); cursor:pointer;
+  transition:all .15s;
+}
+.btn-secondary:hover { border-color:var(--primary); color:var(--primary); }
+
+/* Loading */
+.loading {
+  display:flex; align-items:center; gap:12px;
+  padding:50px 20px; justify-content:center;
+  color:var(--primary); font-weight:500;
+}
+.spinner {
+  width:24px; height:24px; border:3px solid var(--accent);
+  border-top-color:var(--primary); border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* Toast */
+.toast {
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+  background:var(--text); color:#fff;
+  padding:12px 22px; border-radius:24px;
+  font-size:.88rem; font-weight:500;
+  box-shadow:0 8px 30px rgba(0,0,0,.2); z-index:300;
+  opacity:0; transition:opacity .25s, transform .25s;
+  pointer-events:none;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(-6px); }
+.toast.error { background:#dc2626; }
+
+@media (max-width:640px) {
+  .stepper { font-size:.78rem; padding:10px 12px; }
+  .stepper-num { width:22px; height:22px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">🍳</div>
+  <div class="logo-text">
+    <div class="t1">冰箱有什麼，今天吃什麼</div>
+    <div class="t2">南瓜爸爸的 AI 食譜助理</div>
+  </div>
+</header>
+
+<main>
+  <!-- Stepper -->
+  <div class="stepper" id="stepper">
+    <div class="stepper-item active" data-step="1"><div class="stepper-num">1</div>食材</div>
+    <span class="stepper-arrow">›</span>
+    <div class="stepper-item" data-step="2"><div class="stepper-num">2</div>調味料 / 工具</div>
+    <span class="stepper-arrow">›</span>
+    <div class="stepper-item" data-step="3"><div class="stepper-num">3</div>料理偏好</div>
+    <span class="stepper-arrow">›</span>
+    <div class="stepper-item" data-step="4"><div class="stepper-num">4</div>食譜</div>
+  </div>
+
+  <!-- STEP 1: 食材 -->
+  <section class="card">
+    <div class="card-eyebrow">STEP 1 · 食材</div>
+    <h2>冰箱裡有什麼？</h2>
+    <div class="card-sub">點下方常見食材按鈕快選，或自己打字輸入。<strong>不需要拍照</strong>——文字輸入更精準，對「塑膠袋包好的冷凍肉」最方便。</div>
+
+    <div class="pain">
+      <div class="icon">💡</div>
+      <div><strong>南瓜爸爸的小提醒：</strong>很多人冰箱裡的食物都用塑膠袋分裝，AI 拍照看不清楚。所以這裡用「點選＋輸入」的方式，比拍照可靠 100 倍。</div>
+    </div>
+
+    <div class="chip-section">
+      <div class="label">🥬 蔬菜類 <span class="opt">點選</span></div>
+      <div class="chips" data-group="ingredients">
+        <button class="chip">高麗菜</button>
+        <button class="chip">青江菜</button>
+        <button class="chip">紅蘿蔔</button>
+        <button class="chip">洋蔥</button>
+        <button class="chip">青椒</button>
+        <button class="chip">玉米</button>
+        <button class="chip">番茄</button>
+        <button class="chip">馬鈴薯</button>
+        <button class="chip">蘑菇</button>
+        <button class="chip">蔥</button>
+        <button class="chip">蒜頭</button>
+        <button class="chip">薑</button>
+      </div>
+    </div>
+
+    <div class="chip-section">
+      <div class="label">🍖 蛋白質類 <span class="opt">點選</span></div>
+      <div class="chips" data-group="ingredients">
+        <button class="chip">雞蛋</button>
+        <button class="chip">雞胸肉</button>
+        <button class="chip">雞腿肉</button>
+        <button class="chip">豬絞肉</button>
+        <button class="chip">豬肉片</button>
+        <button class="chip">牛絞肉</button>
+        <button class="chip">牛肉片</button>
+        <button class="chip">鮭魚</button>
+        <button class="chip">蝦仁</button>
+        <button class="chip">豆腐</button>
+        <button class="chip">起司</button>
+      </div>
+    </div>
+
+    <div class="chip-section">
+      <div class="label">🌾 主食 / 其他 <span class="opt">點選</span></div>
+      <div class="chips" data-group="ingredients">
+        <button class="chip">白飯</button>
+        <button class="chip">麵條</button>
+        <button class="chip">義大利麵</button>
+        <button class="chip">吐司</button>
+        <button class="chip">水餃</button>
+        <button class="chip">冬粉</button>
+      </div>
+    </div>
+
+    <div class="chip-section">
+      <div class="label">✏️ 自己加（最重要）</div>
+      <div class="custom-add">
+        <input type="text" id="customIngredient" placeholder="例：蝦仁、鮭魚片、剩半顆紅蘿蔔..." onkeydown="if(event.key==='Enter')addCustom('ingredients','customIngredient')">
+        <button onclick="addCustom('ingredients','customIngredient')">＋ 加入</button>
+      </div>
+      <div class="selected-list" id="selectedIngredients"></div>
+    </div>
+  </section>
+
+  <!-- STEP 2: 調味料與工具 -->
+  <section class="card">
+    <div class="card-eyebrow">STEP 2 · 調味料 ＆ 工具</div>
+    <h2>家裡有什麼能用？</h2>
+    <div class="card-sub">勾選你家有的調味料和烹飪工具，AI 才不會給你做不出的食譜。</div>
+
+    <div class="chip-section">
+      <div class="label">🧂 常見調味料</div>
+      <div class="chips" data-group="seasonings">
+        <button class="chip on">鹽</button>
+        <button class="chip on">糖</button>
+        <button class="chip on">醬油</button>
+        <button class="chip on">胡椒粉</button>
+        <button class="chip">米酒</button>
+        <button class="chip">麻油</button>
+        <button class="chip">蠔油</button>
+        <button class="chip">醋</button>
+        <button class="chip">番茄醬</button>
+        <button class="chip">奶油</button>
+        <button class="chip">橄欖油</button>
+        <button class="chip">咖哩塊</button>
+        <button class="chip">義式香料</button>
+        <button class="chip">辣椒醬</button>
+      </div>
+    </div>
+
+    <div class="chip-section">
+      <div class="label">🍳 烹飪工具</div>
+      <div class="chips" data-group="tools">
+        <button class="chip on">瓦斯爐 / 平底鍋</button>
+        <button class="chip">電鍋</button>
+        <button class="chip">氣炸鍋</button>
+        <button class="chip">烤箱</button>
+        <button class="chip">微波爐</button>
+        <button class="chip">壓力鍋</button>
+        <button class="chip">湯鍋</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 3: 料理偏好 -->
+  <section class="card">
+    <div class="card-eyebrow">STEP 3 · 偏好</div>
+    <h2>想吃什麼風格？</h2>
+
+    <div class="chip-section">
+      <div class="label">🌎 料理類型</div>
+      <div class="chips chips-single" data-group="cuisine">
+        <button class="chip on">中式</button>
+        <button class="chip">日式</button>
+        <button class="chip">義式</button>
+        <button class="chip">韓式</button>
+        <button class="chip">東南亞</button>
+        <button class="chip">家常隨意</button>
+      </div>
+    </div>
+
+    <div class="chip-section">
+      <div class="label">⏱ 時間 / 難度</div>
+      <div class="chips chips-single" data-group="difficulty">
+        <button class="chip on">簡單（15-20 分鐘）</button>
+        <button class="chip">中等（30 分鐘）</button>
+        <button class="chip">不限時間，完整一桌</button>
+      </div>
+    </div>
+
+    <div class="chip-section">
+      <div class="label">👨‍👩‍👧 用餐對象</div>
+      <div class="chips chips-single" data-group="audience">
+        <button class="chip">大人吃就好</button>
+        <button class="chip on">有小孩，要少油少鹽</button>
+        <button class="chip">全家共享，老少咸宜</button>
+      </div>
+    </div>
+
+    <div class="chip-section">
+      <div class="label">🚫 飲食限制（可多選）</div>
+      <div class="chips" data-group="restrictions">
+        <button class="chip">無</button>
+        <button class="chip">純素</button>
+        <button class="chip">不吃辣</button>
+        <button class="chip">低油</button>
+        <button class="chip">低糖</button>
+        <button class="chip">無麩質</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Generate -->
+  <div class="generate-section">
+    <div class="generate-summary" id="summary">先選食材再開始 →</div>
+    <button class="btn-generate" id="btnGenerate" onclick="generate()" disabled>
+      ✨ 產生今晚食譜
+    </button>
+  </div>
+
+  <!-- Recipe Output -->
+  <section class="recipe-output" id="recipeOutput">
+    <div class="card">
+      <div class="card-eyebrow">STEP 4 · 食譜</div>
+      <h2 id="recipeTitle">AI 為你量身設計的食譜</h2>
+      <div class="recipe-card" id="recipeBody"></div>
+      <div class="recipe-actions">
+        <button class="btn-secondary" onclick="generate()">🔄 換一個食譜</button>
+        <button class="btn-secondary" onclick="copyRecipe()">📋 複製</button>
+        <button class="btn-secondary" onclick="window.print()">🖨 列印</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ========================================================
+   STATE
+   ======================================================== */
+const STATE = {
+  ingredients: new Set(),
+  seasonings:  new Set(['鹽','糖','醬油','胡椒粉']),
+  tools:       new Set(['瓦斯爐 / 平底鍋']),
+  cuisine:     '中式',
+  difficulty:  '簡單（15-20 分鐘）',
+  audience:    '有小孩，要少油少鹽',
+  restrictions:new Set()
+};
+
+const DEFAULT_KEY = 'AIzaSyDGsbgwhiLL96isTCe58Bl4psCkuI9f0Z8';
+function getKey() { return localStorage.getItem('GEMINI_API_KEY') || DEFAULT_KEY; }
+
+/* ========================================================
+   CHIP HANDLING
+   ======================================================== */
+document.querySelectorAll('.chips').forEach(group => {
+  const groupName = group.dataset.group;
+  const isSingle = group.classList.contains('chips-single');
+  group.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      if (isSingle) {
+        group.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+        chip.classList.add('on');
+        STATE[groupName] = chip.textContent.trim();
+      } else {
+        chip.classList.toggle('on');
+        const set = STATE[groupName];
+        const v = chip.textContent.trim();
+        if (chip.classList.contains('on')) set.add(v);
+        else set.delete(v);
+      }
+      if (groupName === 'ingredients') renderSelected();
+      updateSummary();
+    });
+  });
+});
+
+function addCustom(group, inputId) {
+  const input = document.getElementById(inputId);
+  const v = input.value.trim();
+  if (!v) return;
+  STATE[group].add(v);
+  input.value = '';
+  if (group === 'ingredients') renderSelected();
+  updateSummary();
+}
+
+function renderSelected() {
+  const list = document.getElementById('selectedIngredients');
+  // 從 chip group 蒐集已選 + 自訂
+  const all = Array.from(STATE.ingredients).concat(
+    Array.from(document.querySelectorAll('[data-group=ingredients] .chip.on'))
+      .map(c => c.textContent.trim())
+  );
+  const unique = [...new Set(all)];
+  STATE.ingredients = new Set(unique);
+  list.innerHTML = unique.map(v => `
+    <span class="selected-pill">
+      ${v}
+      <span class="x" onclick="removeIngredient('${v.replace(/'/g,"\\'")}')">&times;</span>
+    </span>`).join('');
+}
+function removeIngredient(v) {
+  STATE.ingredients.delete(v);
+  document.querySelectorAll('[data-group=ingredients] .chip').forEach(c => {
+    if (c.textContent.trim() === v) c.classList.remove('on');
+  });
+  renderSelected();
+  updateSummary();
+}
+
+/* ========================================================
+   STEPPER + SUMMARY
+   ======================================================== */
+function updateSummary() {
+  const n = STATE.ingredients.size;
+  const sumEl = document.getElementById('summary');
+  const btn = document.getElementById('btnGenerate');
+  if (n === 0) {
+    sumEl.innerHTML = '先選食材再開始 →';
+    btn.disabled = true;
+  } else {
+    const seasons = [...STATE.seasonings].slice(0,3).join('、') + (STATE.seasonings.size>3 ? '…' : '');
+    sumEl.innerHTML = `<strong>${n} 樣食材</strong> · ${STATE.cuisine} · ${STATE.difficulty.split('（')[0]} · 調味：${seasons || '無'}`;
+    btn.disabled = false;
+  }
+  // Step state
+  const steps = document.querySelectorAll('.stepper-item');
+  steps.forEach(s => s.classList.remove('done','active'));
+  const step1Done = STATE.ingredients.size > 0;
+  const step2Done = STATE.seasonings.size > 0 && STATE.tools.size > 0;
+  const step3Done = STATE.cuisine && STATE.difficulty;
+  steps[0].classList.add(step1Done ? 'done' : 'active');
+  if (step1Done) steps[1].classList.add(step2Done ? 'done' : 'active');
+  if (step2Done) steps[2].classList.add(step3Done ? 'done' : 'active');
+  if (step3Done && step1Done) steps[3].classList.add('active');
+}
+updateSummary();
+
+/* ========================================================
+   GENERATE RECIPE
+   ======================================================== */
+async function generate() {
+  if (STATE.ingredients.size === 0) { toast('請先選擇食材', true); return; }
+  const out = document.getElementById('recipeOutput');
+  const body = document.getElementById('recipeBody');
+  out.classList.add('show');
+  body.innerHTML = `<div class="loading"><div class="spinner"></div>AI 正在為你量身設計食譜…</div>`;
+  out.scrollIntoView({behavior:'smooth', block:'start'});
+
+  const prompt = buildPrompt();
+  try {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${getKey()}`;
+    const res = await fetch(url, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        contents:[{ parts:[{ text: prompt }] }],
+        generationConfig:{ temperature: 0.85 }
+      })
+    });
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error('API ' + res.status + '：' + err.slice(0,180));
+    }
+    const data = await res.json();
+    const txt = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    body.innerHTML = mdToHtml(txt);
+    document.getElementById('recipeTitle').textContent = '🍽 今晚就吃這個！';
+  } catch (err) {
+    console.error(err);
+    body.innerHTML = `<div style="color:#b91c1c;padding:20px;">
+      <strong>產生失敗</strong><br>${err.message}<br><br>
+      <small>可能是 API Key 無效或網路問題。請點右上角設定 API Key 重試。</small>
+    </div>`;
+  }
+}
+
+function buildPrompt() {
+  const ing = [...STATE.ingredients].join('、');
+  const sea = [...STATE.seasonings].join('、') || '基本';
+  const tool = [...STATE.tools].join('、');
+  const restr = [...STATE.restrictions].filter(x => x !== '無').join('、') || '無';
+
+  return `你是一位親切的家庭料理顧問。請根據以下條件，為一個台灣家庭設計「今晚一餐」的食譜。
+
+【可用食材】${ing}
+【可用調味料】${sea}
+【烹飪工具】${tool}
+【料理風格】${STATE.cuisine}
+【時間／難度】${STATE.difficulty}
+【用餐對象】${STATE.audience}
+【飲食限制】${restr}
+
+請用繁體中文回答，依下列格式輸出（用 Markdown 標題）：
+
+## 🍽 [菜名]（給菜名一個有溫度的名字）
+
+> 一句話形容這道菜的風味與適合什麼場合。
+
+### 📦 完整食材清單（含份量）
+- 食材 1 — 份量
+- 食材 2 — 份量
+（食材必須只用上面提供的；如果某個調味料沒在清單，請改用替代品並說明）
+
+### 🔪 步驟
+1. **第一步動作** — 細節說明
+2. **第二步動作** — 細節說明
+（每步驟標示時間，總時數要符合難度）
+
+### 💡 給家長的小撇步
+- 給孩子吃的調整：…
+- 怎麼讓孩子幫忙：…
+- 剩菜如何收：…
+
+### 🌟 延伸變化（給其他天用）
+用同一批食材，給 2 個其他菜的點子（一句話帶過即可）。
+
+風格要：親切、不囉嗦、有畫面感。不要寫前言，不要寫結語，直接從菜名開始。`;
+}
+
+/* ========================================================
+   MARKDOWN-LITE RENDERER
+   ======================================================== */
+function mdToHtml(md) {
+  // Sanitize
+  let h = md.replace(/[<>]/g, c => c === '<' ? '&lt;' : '&gt;');
+  // Headings
+  h = h.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  h = h.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  h = h.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+  // Bold
+  h = h.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  // Italic
+  h = h.replace(/(?<![*])\*([^*\n]+)\*(?![*])/g, '<em>$1</em>');
+  // Blockquote
+  h = h.replace(/^&gt; (.+)$/gm, '<blockquote style="border-left:3px solid #d4b896;padding:6px 12px;margin:6px 0;color:#6b5544;font-style:italic;">$1</blockquote>');
+  // Lists (numbered)
+  h = h.replace(/(?:^\d+\. .+\n?)+/gm, m => {
+    const items = m.trim().split(/\n/).map(l => l.replace(/^\d+\. /, '<li>') + '</li>').join('');
+    return `<ol>${items}</ol>`;
+  });
+  // Lists (bullet)
+  h = h.replace(/(?:^- .+\n?)+/gm, m => {
+    const items = m.trim().split(/\n/).map(l => l.replace(/^- /, '<li>') + '</li>').join('');
+    return `<ul>${items}</ul>`;
+  });
+  // Paragraphs
+  h = h.split(/\n\n+/).map(p => {
+    if (/^<(h\d|ul|ol|blockquote|hr)/.test(p.trim())) return p;
+    return p.trim() ? `<p>${p.replace(/\n/g,'<br>')}</p>` : '';
+  }).join('\n');
+  return h;
+}
+
+/* ========================================================
+   COPY
+   ======================================================== */
+function copyRecipe() {
+  const txt = document.getElementById('recipeBody').innerText;
+  navigator.clipboard.writeText(txt).then(() => toast('已複製到剪貼簿'));
+}
+
+/* ========================================================
+   TOAST
+   ======================================================== */
+let toastTimer;
+function toast(msg, isErr = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.toggle('error', isErr);
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// Initialize selected list with no items
+renderSelected();
+</script>
+</body>
+</html>

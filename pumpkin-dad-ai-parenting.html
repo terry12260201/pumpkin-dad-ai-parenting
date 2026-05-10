@@ -1,0 +1,2983 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>南瓜爸爸的 AI 育兒講座</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,600;1,9..144,700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* === THEME VARIABLES === */
+:root {
+  --bg:          #f5f3ee;
+  --text:        #1a1a1a;
+  --text-sub:    #555048;
+  --text-muted:  #8a847c;
+  --brown:       #5a4a3a;
+  --rust:        #a0522d;
+  --warm:        #e8d4c0;
+  --border:      rgba(26,26,26,0.13);
+  --border-md:   rgba(26,26,26,0.22);
+  --font-d:      'Fraunces', serif;
+  --font-b:      'Work Sans', sans-serif;
+  --ease:        cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* === RESET & BASE === */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow-x:hidden; background:var(--bg); }
+html { scroll-snap-type:y mandatory; scroll-behavior:smooth; }
+
+/* === VIEWPORT-FIT SLIDES === */
+.slide {
+  width:100vw; height:100vh; height:100dvh;
+  overflow:hidden; scroll-snap-align:start;
+  display:flex; flex-direction:column;
+  position:relative; background:var(--bg);
+}
+.slide-content {
+  flex:1; display:flex; flex-direction:column;
+  justify-content:center; max-height:100%; overflow:hidden;
+  padding:clamp(1.6rem,4.5vw,4.5rem);
+}
+
+/* === TYPOGRAPHY SCALE === */
+.t-eyebrow {
+  font:600 clamp(.55rem,.9vw,.7rem)/1 var(--font-b);
+  letter-spacing:.28em; text-transform:uppercase; color:var(--text-muted);
+}
+.t-h1 {
+  font:900 clamp(2.4rem,5.5vw,5rem)/1 var(--font-d);
+  letter-spacing:-.03em; color:var(--text);
+}
+.t-h1 em,
+.t-h2 em,
+.t-h3 em,
+.poll-q em,
+.af-name-en,
+.eng-em {
+  font-family: var(--font-d);
+  font-style: italic;
+  font-weight: 700;
+  color: var(--brown);
+  letter-spacing: -.01em;
+}
+.t-h2 {
+  font:900 clamp(1.6rem,3.5vw,3rem)/1.05 var(--font-d);
+  letter-spacing:-.02em; color:var(--text);
+}
+.t-h3 {
+  font:700 clamp(1rem,2vw,1.6rem)/1.2 var(--font-d);
+  color:var(--text);
+}
+.t-body {
+  font:300 clamp(.8rem,1.4vw,1.05rem)/1.7 var(--font-b);
+  color:var(--text-sub); max-width:64ch;
+}
+.t-italic {
+  font:italic 700 clamp(1rem,2vw,1.7rem)/1.4 var(--font-d);
+  color:var(--brown);
+}
+.t-small {
+  font:400 clamp(.65rem,1vw,.82rem)/1.5 var(--font-b);
+  color:var(--text-muted);
+}
+
+/* === LAYOUT HELPERS === */
+.col   { display:flex; flex-direction:column; }
+.row   { display:flex; flex-direction:row; flex-wrap:wrap; }
+.gap-s { gap:clamp(6px,1.2vh,12px); }
+.gap-m { gap:clamp(12px,2vh,22px); }
+.gap-l { gap:clamp(18px,3vh,32px); }
+.slide-inner { max-width:min(88vw,900px); margin:0 auto; }
+
+/* === BORDERS / CALLOUTS === */
+.box {
+  border:1.5px solid var(--border-md);
+  padding:clamp(10px,1.8vh,20px) clamp(14px,2.2vw,26px);
+}
+.box-accent { border-color:var(--brown); }
+.box::before {
+  content:''; display:block;
+  width:clamp(24px,4vw,40px); height:3px;
+  background:var(--brown); margin-bottom:clamp(8px,1.2vh,14px);
+}
+
+/* === TAGS / BADGES === */
+.tag {
+  display:inline-flex; align-items:center;
+  border:1.5px solid var(--border-md);
+  padding:clamp(4px,.8vh,8px) clamp(10px,1.6vw,18px);
+  font:500 clamp(.6rem,1vw,.78rem)/1 var(--font-b);
+  letter-spacing:.18em; text-transform:uppercase; color:var(--text-sub);
+}
+.tag-row { display:flex; flex-wrap:wrap; gap:8px; }
+
+/* === BULLET LIST === */
+.blist { list-style:none; }
+.blist li {
+  font:300 clamp(.8rem,1.4vw,1.05rem)/1.55 var(--font-b);
+  color:var(--text-sub); display:flex; gap:10px; align-items:flex-start;
+}
+.blist li::before { content:'—'; color:var(--text-muted); flex-shrink:0; }
+
+/* === STEPS === */
+.step { display:flex; gap:clamp(10px,1.5vw,16px); align-items:flex-start; }
+.step-n {
+  font:700 clamp(.85rem,1.4vw,1.1rem)/1 var(--font-d);
+  color:var(--brown); flex-shrink:0; padding-top:2px; min-width:1.4em;
+}
+.step-t {
+  font:400 clamp(.8rem,1.4vw,1.05rem)/1.55 var(--font-b);
+  color:var(--text-sub);
+}
+
+/* === TWO-COL === */
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,3vw,40px); }
+@media(max-width:600px){ .two-col { grid-template-columns:1fr; } }
+
+/* === GEO DECORATIONS === */
+.geo {
+  position:absolute; border-radius:50%;
+  border:1px solid var(--border);
+  pointer-events:none;
+}
+.geo-lg { width:clamp(260px,36vw,480px); height:clamp(260px,36vw,480px); }
+.geo-md { width:clamp(180px,26vw,340px); height:clamp(180px,26vw,340px); }
+.geo-sm { width:clamp(100px,16vw,200px); height:clamp(100px,16vw,200px); }
+.pos-tr  { top:-15%; right:-8%; }
+.pos-bl  { bottom:-15%; left:-8%; }
+.pos-tl  { top:-15%; left:-8%; }
+.pos-br  { bottom:-12%; right:-5%; }
+.pos-cr  { top:50%; right:-10%; transform:translateY(-50%); }
+.pos-cl  { top:50%; left:-10%; transform:translateY(-50%); }
+.geo-dot {
+  position:absolute; border-radius:50%;
+  background:var(--text); width:5px; height:5px; pointer-events:none;
+}
+.geo-line-h {
+  position:absolute; height:1px;
+  background:linear-gradient(to right,transparent,var(--border-md),transparent);
+  pointer-events:none;
+}
+.geo-line-v {
+  position:absolute; width:1px;
+  background:linear-gradient(to bottom,transparent,var(--border-md),transparent);
+  pointer-events:none;
+}
+
+/* === SLIDE NUMBER === */
+.snum {
+  position:absolute; bottom:clamp(14px,2vh,24px); left:clamp(1.6rem,4.5vw,4.5rem);
+  font:400 clamp(.55rem,.9vw,.7rem)/1 var(--font-b);
+  color:var(--text-muted); letter-spacing:.1em; pointer-events:none;
+}
+.kbhint {
+  position:absolute; bottom:clamp(14px,2vh,24px); right:clamp(36px,4.5vw,56px);
+  font:400 clamp(.55rem,.9vw,.7rem)/1 var(--font-b);
+  color:var(--text-muted); letter-spacing:.08em; pointer-events:none;
+}
+
+/* === PROGRESS BAR === */
+#pbar {
+  position:fixed; top:0; left:0; height:2px;
+  background:var(--brown); width:0%; z-index:1000;
+  transition:width .35s ease; pointer-events:none;
+}
+
+/* === NAV DOTS === */
+#ndots {
+  position:fixed; right:clamp(10px,1.8vw,22px); top:50%; transform:translateY(-50%);
+  display:flex; flex-direction:column; gap:8px; z-index:500;
+}
+.ndot {
+  width:5px; height:5px; border-radius:50%;
+  background:var(--border-md); border:none; cursor:pointer;
+  transition:all .25s ease;
+}
+.ndot.on { background:var(--brown); transform:scale(1.5); }
+
+
+/* =============================================
+   REVEAL SYSTEM
+   Elements with .rv appear on slide entry.
+   Elements with .rv-click appear one-by-one on click/space.
+   ============================================= */
+.rv {
+  opacity:0; transform:translateY(18px);
+  transition:opacity .65s var(--ease), transform .65s var(--ease);
+}
+.slide.in .rv { opacity:1; transform:none; }
+.rv:nth-child(1){transition-delay:.05s}
+.rv:nth-child(2){transition-delay:.15s}
+.rv:nth-child(3){transition-delay:.25s}
+.rv:nth-child(4){transition-delay:.35s}
+.rv:nth-child(5){transition-delay:.45s}
+.rv:nth-child(6){transition-delay:.55s}
+
+/* click-reveal items — hidden until JS adds .shown */
+.rv-click {
+  opacity:0; transform:translateY(14px);
+  transition:opacity .5s var(--ease), transform .5s var(--ease);
+  pointer-events:none;
+}
+.rv-click.shown { opacity:1; transform:none; pointer-events:auto; }
+
+/* click-hint dot — shows when more items remain */
+.click-hint {
+  position:absolute; bottom:clamp(14px,2.5vh,26px);
+  left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:8px;
+  font:500 clamp(.6rem,1vw,.75rem)/1 var(--font-b);
+  color:var(--text-muted); letter-spacing:.1em; text-transform:uppercase;
+  opacity:0; transition:opacity .4s;
+  pointer-events:none;
+}
+.click-hint.show { opacity:1; }
+.click-hint-dot {
+  width:6px; height:6px; border-radius:50%; background:var(--brown);
+  animation:blink 1.2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+
+/* =============================================
+   INTERACTIVE POLL SLIDES
+   ============================================= */
+.poll-slide { background:var(--bg); }
+
+.poll-q {
+  font:900 clamp(1.5rem,3.2vw,2.8rem)/1.1 var(--font-d);
+  color:var(--text); letter-spacing:-.02em;
+  text-align:center; max-width:20ch; margin:0 auto;
+}
+.poll-q em { font-style:italic; color:var(--brown); }
+
+.poll-options {
+  display:flex; flex-wrap:wrap; justify-content:center;
+  gap:clamp(10px,1.8vw,18px); margin-top:clamp(16px,2.5vh,28px);
+}
+.poll-btn {
+  border:2px solid var(--border-md); background:transparent;
+  padding:clamp(12px,2vh,20px) clamp(18px,3vw,32px);
+  font:500 clamp(.85rem,1.5vw,1.1rem)/1.2 var(--font-b);
+  color:var(--text-sub); cursor:pointer;
+  transition:all .25s ease; display:flex; flex-direction:column;
+  align-items:center; gap:6px;
+}
+.poll-btn .pb-emoji { font-size:clamp(1.6rem,3vw,2.4rem); }
+.poll-btn:hover, .poll-btn.picked {
+  border-color:var(--brown); background:var(--brown); color:#fff;
+}
+.poll-btn.picked .pb-emoji { transform:scale(1.2); }
+
+/* Hand-raise counter */
+.hand-counter {
+  display:flex; align-items:center; justify-content:center;
+  gap:clamp(12px,2vw,24px); margin-top:clamp(12px,2vh,20px);
+}
+.hc-btn {
+  width:clamp(40px,6vw,56px); height:clamp(40px,6vw,56px);
+  border:2px solid var(--border-md); background:transparent;
+  font-size:clamp(1.2rem,2vw,1.8rem); cursor:pointer;
+  transition:all .2s; border-radius:50%;
+}
+.hc-btn:hover { border-color:var(--brown); background:var(--warm); }
+.hc-num {
+  font:900 clamp(2.5rem,5vw,4.5rem)/1 var(--font-d);
+  color:var(--text); min-width:2ch; text-align:center;
+}
+.hc-label { font:400 clamp(.7rem,1.1vw,.85rem)/1 var(--font-b); color:var(--text-muted); }
+
+/* Reveal-answer button */
+.reveal-btn {
+  border:2px solid var(--text); background:transparent;
+  padding:clamp(10px,1.8vh,16px) clamp(24px,4vw,40px);
+  font:600 clamp(.75rem,1.2vw,.95rem)/1 var(--font-b);
+  letter-spacing:.18em; text-transform:uppercase; color:var(--text);
+  cursor:pointer; transition:all .3s; margin-top:clamp(12px,2vh,20px);
+}
+.reveal-btn:hover { background:var(--text); color:var(--bg); }
+
+.poll-answer {
+  opacity:0; transform:scale(.96);
+  transition:opacity .6s var(--ease), transform .6s var(--ease);
+  pointer-events:none;
+}
+.poll-answer.open { opacity:1; transform:scale(1); pointer-events:auto; }
+
+.answer-box {
+  border:2px solid var(--brown); padding:clamp(14px,2.2vh,24px) clamp(18px,3vw,32px);
+  display:flex; gap:clamp(12px,2vw,20px); align-items:center;
+  max-width:min(85vw,680px); margin:0 auto;
+}
+.answer-icon { font-size:clamp(1.8rem,3.5vw,3rem); flex-shrink:0; }
+.answer-text {
+  font:italic 700 clamp(1rem,1.8vw,1.5rem)/1.4 var(--font-d);
+  color:var(--brown);
+}
+.answer-sub {
+  font:300 clamp(.75rem,1.2vw,.95rem)/1.6 var(--font-b);
+  color:var(--text-sub); margin-top:6px;
+}
+
+
+/* =============================================
+   ANIMATED NUMBER COUNTER
+   ============================================= */
+.count-display {
+  font:900 clamp(4rem,10vw,9rem)/1 var(--font-d);
+  letter-spacing:-.04em; color:rgba(26,26,26,.08);
+}
+.count-display.counting { color:var(--text); }
+
+
+/* =============================================
+   MYTH REVEAL CARDS
+   ============================================= */
+.myth-card {
+  border:1.5px solid var(--border);
+  padding:clamp(10px,1.6vh,16px) clamp(14px,2vw,22px);
+  display:flex; gap:clamp(12px,2vw,20px);
+  align-items:flex-start;
+  opacity:0; transform:translateY(12px);
+  transition:opacity .5s var(--ease), transform .5s var(--ease);
+}
+.myth-card.shown { opacity:1; transform:none; }
+.myth-card.answered { background:rgba(90,74,58,.04); border-color:var(--brown); }
+.myth-q-t {
+  font:700 clamp(.88rem,1.5vw,1.1rem)/1.3 var(--font-d);
+  color:var(--text);
+}
+.myth-a-t {
+  font:300 clamp(.75rem,1.2vw,.9rem)/1.5 var(--font-b);
+  color:var(--text-muted); margin-top:5px;
+  max-height:0; overflow:hidden;
+  transition:max-height .5s var(--ease), opacity .5s;
+  opacity:0;
+}
+.myth-a-t.open { max-height:8em; opacity:1; }
+.myth-v {
+  font:italic 700 clamp(.9rem,1.6vw,1.15rem)/1 var(--font-d);
+  color:var(--brown); flex-shrink:0; opacity:0;
+  transition:opacity .4s .1s;
+}
+.myth-v.show { opacity:1; }
+.myth-tap {
+  font:500 clamp(.6rem,.9vw,.72rem)/1 var(--font-b);
+  color:var(--text-muted); letter-spacing:.15em; text-transform:uppercase;
+  margin-top:clamp(8px,1.2vh,14px); text-align:center;
+  opacity:0; transition:opacity .4s;
+}
+.myth-tap.show { opacity:1; }
+
+
+/* =============================================
+   PARTICLE BACKGROUND — floating dots for key slides
+   ============================================= */
+.particles {
+  position:absolute; inset:0; pointer-events:none; overflow:hidden;
+}
+.particle {
+  position:absolute; border-radius:50%;
+  background:var(--brown); opacity:0;
+  animation:float-up linear infinite;
+}
+@keyframes float-up {
+  0%   { opacity:0;   transform:translateY(0) scale(1); }
+  10%  { opacity:.12; }
+  90%  { opacity:.06; }
+  100% { opacity:0;   transform:translateY(-120vh) scale(.4); }
+}
+
+
+/* =============================================
+   EDIT SYSTEM
+   ============================================= */
+#ehotzone {
+  position:fixed; top:0; left:0; width:80px; height:80px;
+  z-index:10000; cursor:pointer;
+}
+#etoggle {
+  position:fixed; top:14px; left:14px;
+  width:34px; height:34px; border-radius:50%;
+  background:var(--text); color:var(--bg);
+  border:none; font-size:.9rem; cursor:pointer;
+  opacity:0; pointer-events:none;
+  transition:opacity .25s; z-index:10001;
+  display:flex; align-items:center; justify-content:center;
+}
+#etoggle.show, #etoggle.on { opacity:1; pointer-events:auto; }
+#etoggle.on { background:var(--rust); }
+#ebanner {
+  position:fixed; top:0; left:0; right:0;
+  background:var(--brown); color:var(--bg); text-align:center;
+  font:500 clamp(.6rem,.9vw,.72rem)/1 var(--font-b);
+  letter-spacing:.14em; text-transform:uppercase; padding:7px;
+  z-index:9999; opacity:0; pointer-events:none; transition:opacity .3s;
+}
+#ebanner.on { opacity:1; }
+#expbtn {
+  position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+  background:var(--text); color:var(--bg); border:none;
+  padding:clamp(8px,1.2vh,13px) clamp(22px,3.5vw,36px);
+  font:500 clamp(.65rem,1vw,.8rem)/1 var(--font-b);
+  letter-spacing:.18em; text-transform:uppercase;
+  cursor:pointer; z-index:9998; opacity:0; pointer-events:none; transition:opacity .3s;
+}
+#expbtn.on { opacity:1; pointer-events:auto; }
+body.edit [contenteditable] {
+  outline:2px dashed rgba(160,82,45,.35); outline-offset:2px; border-radius:2px;
+}
+body.edit [contenteditable]:focus {
+  outline:2px solid var(--rust); background:rgba(255,255,255,.55);
+}
+
+
+/* =============================================
+   RESPONSIVE BREAKPOINTS — mandatory
+   ============================================= */
+@media(max-height:700px){
+  :root { --slide-padding:clamp(1rem,3vw,2.5rem); }
+  .t-h1 { font-size:clamp(1.8rem,4.5vw,3.2rem); }
+  .t-h2 { font-size:clamp(1.3rem,2.8vw,2.2rem); }
+}
+@media(max-height:600px){
+  .t-h1 { font-size:clamp(1.4rem,4vw,2.4rem); }
+  .t-h2 { font-size:clamp(1.1rem,2.5vw,1.8rem); }
+  .t-body { font-size:clamp(.7rem,1.2vw,.92rem); }
+  #ndots, .kbhint { display:none; }
+}
+@media(max-height:500px){
+  .t-h1 { font-size:clamp(1.1rem,3.5vw,1.7rem); }
+  .t-h2 { font-size:clamp(.9rem,2.5vw,1.4rem); }
+}
+@media(prefers-reduced-motion:reduce){
+  *, *::before, *::after {
+    animation-duration:.01ms !important;
+    transition-duration:.15s !important;
+  }
+  html { scroll-behavior:auto; }
+}
+
+
+/* =============================================
+   SPEAKER NOTES (按 S 切換)
+   ============================================= */
+.notes { display:none; }
+#notes-panel {
+  position:fixed; left:0; right:0; bottom:0;
+  background:rgba(26,26,26,.95); color:#f5f3ee;
+  padding:clamp(14px,2vh,22px) clamp(20px,4vw,48px);
+  font:400 clamp(.78rem,1.2vw,1rem)/1.7 var(--font-b);
+  letter-spacing:.01em;
+  max-height:38vh; overflow-y:auto;
+  z-index:9000; transform:translateY(100%);
+  transition:transform .35s var(--ease);
+  border-top:2px solid var(--brown);
+}
+#notes-panel.on { transform:translateY(0); }
+#notes-panel .np-head {
+  font:600 clamp(.6rem,.95vw,.75rem)/1 var(--font-b);
+  letter-spacing:.22em; text-transform:uppercase;
+  color:var(--warm); margin-bottom:8px;
+}
+#notes-panel .np-body { white-space:pre-wrap; }
+#notes-panel .np-body strong { color:#fff; }
+
+
+/* =============================================
+   EMBEDDED TOOL IFRAME (P15 / P16)
+   ============================================= */
+.tool-frame-wrap {
+  width:100%; height:clamp(420px,62vh,720px);
+  border:1.5px solid var(--border-md);
+  background:var(--bg);
+  position:relative; overflow:hidden;
+}
+.tool-frame-wrap iframe {
+  width:100%; height:100%; border:0;
+  background:#fff;
+}
+.tool-open-btn {
+  position:absolute; top:10px; right:10px; z-index:5;
+  background:var(--brown); color:var(--bg);
+  border:none; padding:8px 14px;
+  font:600 clamp(.65rem,1vw,.78rem)/1 var(--font-b);
+  letter-spacing:.12em; text-transform:uppercase;
+  text-decoration:none; cursor:pointer;
+}
+.tool-open-btn:hover { background:var(--rust); }
+/* 向後相容舊 class */
+.songbook-frame-wrap { width:100%; height:clamp(420px,62vh,720px); border:1.5px solid var(--border-md); background:var(--bg); position:relative; overflow:hidden; }
+.songbook-frame-wrap iframe { width:100%; height:100%; border:0; background:#fff; }
+.songbook-open-btn { position:absolute; top:10px; right:10px; z-index:5; background:var(--brown); color:var(--bg); border:none; padding:8px 14px; font:600 clamp(.65rem,1vw,.78rem)/1 var(--font-b); letter-spacing:.12em; text-transform:uppercase; text-decoration:none; cursor:pointer; }
+.songbook-open-btn:hover { background:var(--rust); }
+
+
+/* =============================================
+   SUNO AUDIO BLOCK (P18) — 寬版播放器 + 完整歌詞滾動
+   ============================================= */
+.suno-player-wide {
+  border:1.5px solid var(--border-md);
+  padding:clamp(12px,1.8vh,20px) clamp(16px,2.4vw,28px);
+  display:flex; flex-direction:column; gap:clamp(10px,1.4vh,14px);
+  width:100%;
+  background:linear-gradient(135deg, rgba(232,212,192,.25), transparent 60%);
+}
+.suno-player-wide .spw-meta {
+  display:flex; align-items:center; gap:clamp(10px,1.6vw,18px);
+  flex-wrap:wrap;
+}
+.suno-player-wide .spw-icon {
+  font-size:clamp(1.4rem,2.4vw,2rem); flex-shrink:0;
+}
+.suno-player-wide .spw-title {
+  font:700 clamp(1rem,1.7vw,1.35rem)/1.2 var(--font-d);
+  color:var(--text);
+}
+.suno-player-wide .spw-sub {
+  color:var(--text-muted); font-weight:400;
+}
+.suno-player-wide .spw-desc {
+  font:300 clamp(.72rem,1.15vw,.88rem)/1.5 var(--font-b);
+  color:var(--text-muted); margin-top:2px;
+}
+.suno-player-wide .spw-link {
+  margin-left:auto; align-self:center;
+  font:600 clamp(.7rem,1.1vw,.85rem)/1.2 var(--font-b);
+  color:var(--bg); background:var(--brown);
+  padding:clamp(8px,1.2vh,11px) clamp(14px,2vw,20px);
+  text-decoration:none; letter-spacing:.08em;
+  white-space:nowrap;
+}
+.suno-player-wide .spw-link:hover { background:var(--rust); }
+.suno-player-wide audio {
+  width:100%; height:44px; outline:none;
+}
+
+.suno-lyrics-full {
+  border:1.5px solid var(--border);
+  border-left:3px solid var(--brown);
+  padding:clamp(10px,1.5vh,16px) clamp(16px,2.4vw,28px);
+  max-height:clamp(180px,32vh,320px); overflow-y:auto;
+  background:rgba(255,255,255,.4);
+}
+.suno-lyrics-full::-webkit-scrollbar { width:8px; }
+.suno-lyrics-full::-webkit-scrollbar-track { background:transparent; }
+.suno-lyrics-full::-webkit-scrollbar-thumb {
+  background:var(--border-md); border-radius:4px;
+}
+.suno-lyrics-full::-webkit-scrollbar-thumb:hover { background:var(--brown); }
+.suno-lyrics-full .sl-section {
+  font:700 clamp(.65rem,1vw,.78rem)/1 var(--font-b);
+  letter-spacing:.22em; text-transform:uppercase;
+  color:var(--brown); margin-top:clamp(10px,1.4vh,14px);
+}
+.suno-lyrics-full .sl-section:first-child { margin-top:0; }
+.suno-lyrics-full .sl-line {
+  font:400 clamp(.78rem,1.2vw,.95rem)/1.7 var(--font-b);
+  color:var(--text-sub); margin-top:3px;
+}
+
+
+/* =============================================
+   QR RESOURCE PAGE
+   ============================================= */
+.qr-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:clamp(16px,2.6vw,32px);
+  margin-top:clamp(8px,1.5vh,16px);
+}
+@media(max-width:720px){ .qr-grid { grid-template-columns:1fr; } }
+.qr-card {
+  border:1.5px solid var(--border-md);
+  padding:clamp(14px,2vh,22px) clamp(14px,2vw,22px);
+  display:flex; flex-direction:column; align-items:center;
+  gap:clamp(8px,1.2vh,14px); text-align:center;
+}
+.qr-card img {
+  width:100%; max-width:clamp(140px,18vw,200px);
+  height:auto; max-height:clamp(140px,22vh,200px);
+  object-fit:contain;
+  background:#fff; padding:6px;
+}
+.qr-card .qr-label {
+  font:700 clamp(.85rem,1.4vw,1.05rem)/1 var(--font-d);
+  color:var(--text);
+}
+.qr-card .qr-sub {
+  font:300 clamp(.7rem,1.1vw,.85rem)/1.4 var(--font-b);
+  color:var(--text-muted);
+}
+
+
+/* =============================================
+   AUDIO MEDIA RESET
+   ============================================= */
+audio::-webkit-media-controls-panel { background:var(--warm); }
+
+
+/* =============================================
+   ABOUT-ME GRID (P2)
+   ============================================= */
+.about-grid {
+  display:grid;
+  grid-template-columns:clamp(180px,26vw,300px) 1fr;
+  gap:clamp(18px,2.6vw,36px); align-items:center;
+}
+@media(max-width:720px){ .about-grid { grid-template-columns:1fr; } }
+.about-photo {
+  display:flex; flex-direction:column; align-items:center;
+  gap:clamp(6px,1vh,10px);
+}
+.about-photo img {
+  width:100%; max-width:clamp(160px,24vw,260px);
+  aspect-ratio:1; object-fit:cover;
+  border:2px solid var(--border-md);
+  filter:saturate(.92);
+}
+.about-photo-caption {
+  font:600 clamp(.7rem,1.1vw,.85rem)/1 var(--font-d);
+  color:var(--text-muted); letter-spacing:.08em;
+}
+
+
+/* =============================================
+   ABOUT FIG4 — REPLICA OF REFERENCE (P2)
+   ============================================= */
+.slide-about-fig4 { background:#fbf8f1; }
+.slide-about-fig4 .geo, .slide-about-fig4 .geo-line-h { display:none !important; }
+.about-fig4-bg { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+.af-blob { position:absolute; }
+.af-blob-1 { top:0; left:-2%; width:38%; height:48%; }
+.af-blob-2 { right:-3%; bottom:-2%; width:62%; height:78%; opacity:.85; }
+.af-blob-3 { right:6%; top:0; width:46%; height:62%; }
+.af-dots {
+  position:absolute; top:13%; right:10%;
+  width:120px; height:120px;
+  background-image:radial-gradient(circle, #F58220 2.4px, transparent 2.5px);
+  background-size:18px 18px; opacity:.55;
+}
+.af-deco { position:absolute; }
+.af-deco-family { top:18%; right:34%; width:64px; height:64px; opacity:.85; }
+.af-deco-book   { top:46%; right:38%; width:62px; height:46px; opacity:.85; }
+.af-deco-bot    { top:36%; right:22%; width:64px; height:64px; opacity:.95; }
+.af-deco-spark1 { top:8%; left:34%; width:22px; height:22px; }
+.af-deco-spark2 { bottom:18%; left:6%; width:18px; height:18px; }
+.af-deco-spark3 { bottom:30%; right:48%; width:20px; height:20px; }
+
+.slide-about-fig4 .slide-content { position:relative; z-index:1; padding:clamp(28px,4vh,56px) clamp(36px,5vw,84px); }
+.af-grid {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(20px,3vw,48px);
+  align-items:stretch;
+  width:100%; max-width:1480px; margin:0 auto;
+  height:100%;
+}
+@media(max-width:880px){ .af-grid { grid-template-columns:1fr; } }
+.af-text { display:flex; flex-direction:column; gap:clamp(10px,1.4vh,16px); min-width:0; }
+
+.af-eyebrow {
+  display:inline-flex; align-items:center; gap:10px;
+  align-self:flex-start;
+  padding:7px 16px 7px 8px;
+  background:#fff; border-radius:999px;
+  box-shadow:0 1px 3px rgba(0,0,0,.05);
+  font:600 clamp(.85rem,1.2vw,1rem)/1 var(--font-b);
+  color:#3a3a3a; letter-spacing:.05em;
+}
+.af-eyebrow-ico {
+  width:28px; height:28px; border-radius:8px;
+  background:#F58220; display:inline-flex; align-items:center; justify-content:center;
+}
+.af-name {
+  font:800 clamp(2.6rem,6.4vw,5.6rem)/1 'Plus Jakarta Sans','Noto Sans TC',var(--font-b);
+  letter-spacing:-.02em; color:#1a1a1a;
+}
+.af-name-en { font-weight:700; letter-spacing:-.01em; }
+.af-nick {
+  display:inline-flex; align-items:center; gap:14px;
+  font:800 clamp(2.6rem,6.4vw,5.6rem)/1 'Plus Jakarta Sans','Noto Sans TC',var(--font-b);
+  letter-spacing:-.02em; color:#F58220;
+}
+.af-pumpkin svg { display:block; filter:drop-shadow(0 2px 4px rgba(160,82,45,.25)); }
+.af-title-row {
+  display:inline-flex; align-items:center; gap:12px;
+  margin-top:6px;
+}
+.af-title-bar {
+  width:5px; height:22px; background:#F58220; border-radius:2px;
+}
+.af-title {
+  font:600 clamp(1rem,1.55vw,1.2rem)/1.4 'Plus Jakarta Sans','Noto Sans TC',var(--font-b);
+  color:#3a3a3a; letter-spacing:.02em;
+}
+.af-list {
+  list-style:none; margin-top:8px;
+  padding:clamp(16px,2vw,22px) clamp(18px,2.4vw,28px);
+  background:#fff; border-radius:18px;
+  box-shadow:0 4px 18px rgba(0,0,0,.05);
+  display:flex; flex-direction:column; gap:10px;
+}
+.af-list li {
+  position:relative; padding-left:22px;
+  font:400 clamp(.9rem,1.3vw,1.05rem)/1.55 'Plus Jakarta Sans','Noto Sans TC',var(--font-b);
+  color:#3a3a3a;
+}
+.af-list li::before {
+  content:''; position:absolute; left:0; top:.55em;
+  width:9px; height:9px; background:#F58220; border-radius:50%;
+}
+.af-list strong { color:#F58220; font-weight:700; }
+.af-chips {
+  display:flex; flex-wrap:wrap; gap:12px; margin-top:8px;
+}
+.af-chip {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:9px 16px;
+  border-radius:14px;
+  font:600 clamp(.85rem,1.2vw,1rem)/1 'Plus Jakarta Sans','Noto Sans TC',var(--font-b);
+  color:#3a4a3a;
+}
+.af-chip svg { flex-shrink:0; }
+.af-chip-mint  { background:#DCEEDA; }
+.af-chip-peach { background:#FBDDC9; }
+.af-chip-cream { background:#FCE7B8; }
+.af-chip-sage  { background:#DCEEDA; }
+.af-photo { position:relative; min-height:0; height:100%; display:flex; align-items:stretch; justify-content:center; overflow:hidden; }
+.af-photo img {
+  width:100%; height:100%;
+  max-width:none; max-height:none;
+  object-fit:cover; object-position:center top;
+  display:block;
+}
+.af-grid { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+.af-text { justify-content:center; }
+@media(max-width:880px){ .af-grid { grid-template-columns:1fr; } }
+
+
+/* =============================================
+   ABOUT V2 — LEGACY (kept for reference, unused on P2)
+   ============================================= */
+.about-v2-inner { max-width:min(96vw,1240px); width:100%; }
+.about-v2-grid {
+  display:grid;
+  grid-template-columns: 1.15fr .95fr;
+  gap:clamp(20px,3vw,48px); align-items:center; width:100%;
+}
+@media(max-width:880px){ .about-v2-grid { grid-template-columns:1fr; } }
+.about-v2-text { min-width:0; }
+.about-v2-eyebrow {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:6px 14px; border:1.5px solid var(--border-md);
+  background:var(--warm); border-radius:999px;
+  font:600 clamp(.7rem,1.05vw,.85rem)/1 var(--font-b);
+  letter-spacing:.18em; color:var(--brown);
+  align-self:flex-start;
+}
+.about-v2-eyebrow-icon {
+  width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;
+  background:var(--rust);color:#fff;border-radius:6px;font-size:.85rem;
+  letter-spacing:0;
+}
+.about-v2-name {
+  font:900 clamp(2.4rem,5.8vw,5.4rem)/1 var(--font-d);
+  letter-spacing:-.03em; color:var(--text); margin-top:6px;
+}
+.about-v2-name-en {
+  font-style:italic; color:var(--text);
+}
+.about-v2-nick {
+  font:900 clamp(2rem,5vw,4.6rem)/1 var(--font-d);
+  letter-spacing:-.02em; color:var(--rust);
+  display:inline-flex; align-items:center; gap:10px;
+}
+.about-v2-pumpkin { font-size:.78em; -webkit-text-fill-color:initial; filter:drop-shadow(0 2px 4px rgba(160,82,45,.25)); }
+.about-v2-title {
+  font:600 clamp(.95rem,1.6vw,1.25rem)/1.4 var(--font-b);
+  color:var(--brown);
+  padding:8px 0 6px; border-left:3px solid var(--rust);
+  padding-left:12px; margin-top:6px;
+}
+.about-v2-list {
+  list-style:none; padding:clamp(14px,1.8vw,20px) clamp(16px,2.2vw,24px);
+  background:#fffaf3; border:1.5px solid var(--border-md);
+  border-radius:14px; display:flex; flex-direction:column; gap:8px;
+  margin-top:8px;
+}
+.about-v2-list li {
+  position:relative; padding-left:20px;
+  font:400 clamp(.85rem,1.35vw,1.05rem)/1.55 var(--font-b);
+  color:var(--text-sub);
+}
+.about-v2-list li::before {
+  content:''; position:absolute; left:0; top:.6em;
+  width:8px; height:8px; background:var(--rust); border-radius:50%;
+}
+.about-v2-list strong { color:var(--rust); font-weight:700; }
+.about-v2-chips {
+  display:flex; flex-wrap:wrap; gap:10px; margin-top:6px;
+}
+.about-v2-chip {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 14px;
+  border:1.5px solid var(--border-md); border-radius:999px;
+  background:var(--bg);
+  font:600 clamp(.78rem,1.15vw,.95rem)/1 var(--font-b);
+  color:var(--brown);
+}
+.about-v2-chip .chip-ico { font-size:1.05em; }
+.about-v2-chip:nth-child(1){ background:#f1f8ee; }
+.about-v2-chip:nth-child(2){ background:#fde8da; }
+.about-v2-chip:nth-child(3){ background:#fff0d9; }
+.about-v2-chip:nth-child(4){ background:#e9f3ee; }
+.about-v2-photo {
+  position:relative; display:flex; justify-content:center; align-items:center;
+}
+.about-v2-photo::before {
+  content:''; position:absolute; inset:8% 4% 4% 8%;
+  background:radial-gradient(ellipse at 30% 40%, rgba(232,212,192,.7), transparent 70%);
+  z-index:0;
+}
+.about-v2-photo img {
+  position:relative; z-index:1;
+  width:100%; max-width:clamp(260px,34vw,460px);
+  aspect-ratio:1; object-fit:cover;
+  border:2px solid var(--border-md); border-radius:18px;
+  filter:saturate(.95);
+}
+
+
+/* =============================================
+   GALLERY V2 — TEACHING & SPEAKING (P3)
+   ============================================= */
+.gallery-v2 {
+  display:grid;
+  grid-template-columns:repeat(5, 1fr);
+  grid-auto-rows: clamp(100px,15vh,180px);
+  gap:clamp(8px,1vw,14px);
+  width:100%; margin-top:clamp(8px,1.2vh,16px);
+}
+.gallery-v2-item {
+  position:relative; overflow:hidden;
+  border:1.5px solid var(--border-md); border-radius:10px;
+  background:#000; cursor:zoom-in;
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.gallery-v2-item:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.18); }
+
+
+/* =============================================
+   LIGHTBOX (gallery zoom)
+   ============================================= */
+.lightbox {
+  position:fixed; inset:0; z-index:9999;
+  background:rgba(15,12,10,.92);
+  display:none; align-items:center; justify-content:center;
+  padding:clamp(20px,4vh,60px);
+  cursor:zoom-out;
+  opacity:0; transition:opacity .25s ease;
+}
+.lightbox.open { display:flex; opacity:1; }
+.lightbox img {
+  max-width:96vw; max-height:90vh;
+  object-fit:contain; border-radius:10px;
+  box-shadow:0 20px 80px rgba(0,0,0,.6);
+  transform:scale(.96); transition:transform .3s var(--ease);
+}
+.lightbox.open img { transform:scale(1); }
+.lightbox-cap {
+  position:absolute; bottom:24px; left:0; right:0; text-align:center;
+  font:500 clamp(.85rem,1.2vw,1rem)/1.4 var(--font-b);
+  color:#fff; letter-spacing:.05em;
+}
+.lightbox-close {
+  position:absolute; top:20px; right:24px;
+  width:42px; height:42px; border-radius:50%;
+  background:rgba(255,255,255,.15); border:none; cursor:pointer;
+  color:#fff; font-size:24px; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+}
+.lightbox-close:hover { background:rgba(255,255,255,.28); }
+.gallery-v2-item.gv-tall { grid-row:span 2; }
+.gallery-v2-item img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform .5s var(--ease);
+}
+.gallery-v2-item:hover img { transform:scale(1.06); }
+.gallery-v2-item figcaption {
+  position:absolute; left:0; right:0; bottom:0;
+  padding:6px 10px;
+  font:600 clamp(.6rem,.95vw,.78rem)/1.2 var(--font-b);
+  color:#fff; letter-spacing:.05em;
+  background:linear-gradient(transparent, rgba(0,0,0,.7));
+  pointer-events:none;
+}
+@media(max-width:880px){
+  .gallery-v2 { grid-template-columns:repeat(3, 1fr); grid-auto-rows: clamp(80px,12vh,140px); }
+  .gallery-v2-item.gv-tall { grid-row:auto; }
+}
+
+
+/* =============================================
+   TOOLS VIDEO (P3)
+   ============================================= */
+.tools-video-wrap {
+  width:100%; max-height:clamp(180px,32vh,320px);
+  border:1.5px solid var(--border-md);
+  background:#000; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.tools-video-wrap video {
+  width:100%; height:100%; max-height:inherit;
+  object-fit:contain; outline:none;
+}
+
+
+/* =============================================
+   PAC-MAN GAME EMBED (P24)
+   ============================================= */
+.pacman-row {
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:clamp(14px,2vw,24px);
+  align-items:stretch;
+}
+@media(max-width:720px){ .pacman-row { grid-template-columns:1fr; } }
+.pacman-frame-wrap {
+  width:100%; height:clamp(360px,52vh,560px);
+  border:1.5px solid var(--border-md);
+  background:#000; position:relative; overflow:hidden;
+}
+.pacman-frame-wrap iframe { width:100%; height:100%; border:0; background:#000; }
+.pacman-source {
+  display:flex; flex-direction:column; gap:clamp(8px,1.2vh,12px);
+  border-left:2px solid var(--border-md);
+  padding-left:clamp(12px,2vw,22px);
+}
+.pacman-source img {
+  width:100%; max-height:clamp(160px,28vh,260px);
+  object-fit:contain; background:#fff;
+  border:1.5px solid var(--border);
+}
+.pacman-step {
+  display:flex; gap:10px; align-items:flex-start;
+  font:400 clamp(.75rem,1.2vw,.9rem)/1.55 var(--font-b);
+  color:var(--text-sub);
+}
+.pacman-step .pn {
+  flex-shrink:0; width:1.4em;
+  font:700 clamp(.85rem,1.3vw,1.05rem)/1 var(--font-d);
+  color:var(--brown);
+}
+
+/* === Inline AI emphasis (matches P01 t-h1 em style) === */
+.ai-em{
+  font-family: var(--font-d);
+  font-style: italic;
+  font-weight: 900;
+  color: var(--brown);
+  letter-spacing: -.01em;
+}
+
+/* === Clickable AI buttons (P06) === */
+.ai-btn-row{
+  display:flex; flex-wrap:wrap; gap:clamp(10px,1.4vw,16px);
+  margin-top:clamp(10px,1.6vw,18px);
+}
+.ai-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:clamp(10px,1.2vw,14px) clamp(18px,2vw,26px);
+  border:1.5px solid var(--text-muted);
+  border-radius:999px;
+  background:#fffaf2;
+  color:var(--text);
+  font:700 clamp(.95rem,1.6vw,1.25rem)/1.1 var(--font-d);
+  text-decoration:none;
+  cursor:pointer;
+  transition: all .18s ease;
+  box-shadow:0 2px 0 rgba(0,0,0,.04);
+}
+.ai-btn:hover{
+  border-color: var(--brown);
+  color: var(--brown);
+  background:#fff3e0;
+  transform: translateY(-2px);
+  box-shadow:0 6px 18px rgba(245,130,32,.22);
+}
+.ai-btn:active{ transform: translateY(0); box-shadow:0 2px 0 rgba(0,0,0,.06);}
+
+/* === P07 雙翻牌：兩張同時揭曉 === */
+.p7-pair{
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  border-radius: var(--radius);
+}
+.p7-pair.p7-revealed{ cursor: default; }
+.p7-overlay-hint{
+  position: absolute;
+  bottom: -42px; left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 24px;
+  background: var(--brown);
+  color: #fff;
+  border-radius: 999px;
+  font: 700 clamp(.9rem,1.5vw,1.15rem)/1 var(--font-cn);
+  letter-spacing: .05em;
+  box-shadow: 0 6px 20px rgba(245,130,32,.4);
+  pointer-events: none;
+  white-space: nowrap;
+  animation: p7bob 1.6s ease-in-out infinite;
+}
+@keyframes p7bob{ 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-4px)} }
+.p7-pair.p7-revealed .p7-overlay-hint{ display:none; }
+
+.p7-flip{
+  position: relative;
+  perspective: 1200px;
+  min-height: clamp(180px,22vh,260px);
+}
+.p7-flip-face{
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: transform .7s cubic-bezier(.2,.7,.2,1);
+  border-radius: var(--radius);
+  position: absolute;
+  inset: 0;
+}
+.p7-flip-front{
+  display:flex;
+  align-items:center; justify-content:center;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(245,130,32,.18), transparent 50%),
+    linear-gradient(135deg, var(--brown) 0%, #6b4a2a 100%);
+  color:#fff;
+  transform: rotateY(0deg);
+  box-shadow: 0 10px 40px rgba(58,42,24,.25);
+}
+.p7-flip-front .p7-q{
+  font: 900 clamp(3.5rem,7vw,5.5rem)/1 var(--font-d);
+  color: rgba(255,255,255,.9);
+  letter-spacing: -.02em;
+  text-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
+.p7-pair:not(.p7-revealed):hover .p7-flip-front{
+  transform: rotateY(-8deg) scale(1.02);
+  box-shadow: 0 16px 50px rgba(58,42,24,.35);
+}
+.p7-flip-back{
+  transform: rotateY(180deg);
+  display: flex; flex-direction: column; justify-content: center;
+}
+/* 雙翻 — 整個 .p7-pair 點下後一起翻 */
+.p7-pair.p7-revealed .p7-flip-front{ transform: rotateY(180deg); }
+.p7-pair.p7-revealed .p7-flip-back{ transform: rotateY(360deg); }
+/* 微錯開時間 0.08s 製造接力感 */
+.p7-pair.p7-revealed .p7-flip:nth-child(2) .p7-flip-face{ transition-delay: .08s; }
+
+/* === P12 強調 時間 / 精力 === */
+.emph-time{
+  display:inline-block;
+  background: linear-gradient(180deg, transparent 60%, #FCE2C7 60%);
+  color: var(--brown);
+  font-weight: 900;
+  padding: 0 .15em;
+  font-size: 1.15em;
+  letter-spacing: .02em;
+}
+
+/* === P16 song MP3 player (extra MP3 button per song) === */
+.song-mp3-row{
+  display:flex; align-items:center; gap:10px;
+  margin-top:8px;
+}
+.song-mp3-btn{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 14px;
+  background:#fff3e0;
+  border:1.5px solid var(--brown);
+  border-radius:999px;
+  color:var(--brown);
+  font:700 .85rem/1 var(--font-d);
+  cursor:pointer;
+  transition:all .15s ease;
+}
+.song-mp3-btn:hover{ background:var(--brown); color:#fff; }
+.song-mp3-btn.playing{ background:var(--brown); color:#fff; animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{ 0%,100%{box-shadow:0 0 0 0 rgba(245,130,32,.5)} 50%{box-shadow:0 0 0 8px rgba(245,130,32,0)} }
+
+/* === P18 (s17) 左右切版 + GAI Prompt 卡 === */
+.p18-grid{
+  display:grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1.1fr);
+  gap: clamp(20px,2.4vw,40px);
+  align-items: stretch;
+  width:100%;
+}
+.p18-prompt{
+  display:flex; flex-direction:column;
+  background: linear-gradient(160deg, #1f1f2e 0%, #2a2a44 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 12px 40px rgba(20,15,30,.18);
+  overflow: hidden;
+  max-height: clamp(420px, 70vh, 720px);
+  color: #e8e8f0;
+}
+.p18-prompt-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 14px 22px;
+  background: rgba(255,255,255,.04);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  flex-shrink:0;
+}
+.p18-tag{
+  font: 700 clamp(.85rem,1.4vw,1.05rem)/1 var(--font-d);
+  color: #FFB87A;
+  letter-spacing: .08em;
+}
+.p18-copy{
+  background: rgba(255,184,122,.15);
+  color: #FFB87A;
+  border: 1px solid rgba(255,184,122,.3);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font: 700 .8rem/1 var(--font-cn);
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.p18-copy:hover{ background: rgba(255,184,122,.3); color:#fff; }
+.p18-prompt-body{
+  flex:1;
+  overflow-y: auto;
+  padding: 22px 26px;
+  font: 500 clamp(.85rem,1.25vw,1rem)/1.75 'Menlo','SF Mono','Monaco', monospace, var(--font-cn);
+  white-space: pre-wrap;
+  color: #d8dae4;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,184,122,.4) transparent;
+  /* 觸控與捲輪不外溢，仿 P19 歌詞行為 */
+  overscroll-behavior: contain;
+}
+.p18-prompt-body::-webkit-scrollbar{ width:8px; }
+.p18-prompt-body::-webkit-scrollbar-thumb{ background: rgba(255,184,122,.35); border-radius: 4px; }
+.p18-prompt-body strong{ color:#FFB87A; font-weight:700; display:inline-block; margin-top:4px; }
+.p18-prompt-body em{ color:#FFE3B8; font-style:normal; font-weight:600; }
+.p18-prompt-foot{
+  padding: 10px 22px;
+  font-size: clamp(.7rem, 1.1vw, .85rem);
+  color: rgba(255,184,122,.55);
+  background: rgba(0,0,0,.2);
+  border-top: 1px solid rgba(255,255,255,.05);
+  text-align: center;
+  flex-shrink:0;
+}
+@media (max-width: 900px){ .p18-grid{ grid-template-columns:1fr; } .p18-prompt{ max-height: 50vh; } }
+
+/* === P22 旗山知識圖譜（s22）— 左右切版 === */
+.qishan-grid{
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: clamp(16px, 2vw, 28px);
+  width: 100%;
+  height: 100%;
+  align-items: stretch;
+}
+.qishan-graph-wrap{
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background:#F5F2ED;
+  border: 1px solid rgba(160,130,80,.2);
+  min-height: clamp(420px, 70vh, 820px);
+  box-shadow: 0 6px 24px rgba(60,40,10,.08);
+}
+.qishan-graph-wrap iframe{
+  width: 100%; height: 100%; border: 0; display:block;
+}
+@media (max-width: 900px){
+  .qishan-grid{ grid-template-columns: 1fr; }
+}
+
+/* === P25 (s23) 左右版 === */
+.p25-grid{
+  display:grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1.2fr);
+  gap: clamp(20px,2.4vw,40px);
+  align-items: center;
+  width:100%;
+}
+.p25-suno{
+  margin-top: 0 !important;
+  grid-template-columns: 1fr !important;
+  align-self: stretch;
+}
+.p25-suno .sp-lyrics{
+  max-height: clamp(260px, 50vh, 460px);
+}
+@media (max-width: 900px){ .p25-grid{ grid-template-columns:1fr; } }
+
+/* === P23 Suno player === */
+.suno-player{
+  display:grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap:clamp(20px,2.5vw,40px);
+  background: linear-gradient(135deg,#fff8f0 0%, #ffe8d4 100%);
+  border:2px solid var(--brown);
+  border-radius:24px;
+  padding:clamp(20px,2.5vw,32px);
+  margin-top:clamp(12px,1.8vw,20px);
+}
+.suno-player .sp-cover{
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:14px;
+  background:#1a1a2e; border-radius:18px; padding:clamp(20px,2.5vw,32px);
+  color:#fff;
+}
+.suno-player .sp-cover-emoji{font-size:clamp(3rem,6vw,5rem);}
+.suno-player .sp-title{font:900 clamp(1.1rem,2vw,1.6rem)/1.3 var(--font-d); text-align:center;}
+.suno-player .sp-meta{font-size:clamp(.75rem,1.1vw,.9rem); opacity:.7; letter-spacing:.15em;}
+.suno-player .sp-lyrics{
+  max-height: clamp(220px,40vh,360px);
+  overflow-y:auto;
+  background:#fff;
+  border-radius:14px;
+  padding:clamp(14px,1.6vw,22px);
+  font:500 clamp(.85rem,1.3vw,1.05rem)/1.7 var(--font-cn);
+  white-space:pre-wrap;
+  color:#3a3a3a;
+}
+.suno-player .sp-lyrics strong{color:var(--brown);}
+.suno-player audio{width:100%; margin-top:10px;}
+@media (max-width: 720px){
+  .suno-player{grid-template-columns: 1fr;}
+}
+
+</style>
+</head>
+<body>
+
+<div id="pbar"></div>
+<nav id="ndots" aria-label="投影片導覽"></nav>
+<div id="ehotzone"></div>
+<button id="etoggle" title="編輯 (E)">✏️</button>
+<div id="ebanner">✏️ 編輯模式 — 點擊文字修改 · Ctrl+S 儲存 · E 退出</div>
+<button id="expbtn">⬇ 匯出 HTML</button>
+
+<!-- 講者備註浮動面板（按 S 鍵切換） -->
+<aside id="notes-panel" aria-live="polite">
+  <div class="np-head">講者備註 · Slide <span id="np-num">1</span></div>
+  <div class="np-body" id="np-body">—</div>
+</aside>
+
+
+<!-- ═══════════════ SLIDE 1 · TITLE ═══════════════ -->
+<section class="slide" id="s1">
+  <div class="geo geo-lg pos-tr" style="opacity:.6;"></div>
+  <div class="geo geo-sm pos-tr" style="top:-5%;right:11%;opacity:.3;"></div>
+  <div class="geo-dot" style="top:48%;right:6.5%;"></div>
+  <div class="geo-line-v" style="right:calc(6.5% + 3px);top:30%;height:36%;"></div>
+
+  <div class="slide-content">
+    <div class="col gap-m" style="max-width:min(88vw,820px);margin:0 auto;">
+      <div class="t-eyebrow rv">AI 育兒講座 · 2026</div>
+      <h1 class="t-h1 rv">南瓜爸爸的<br><em>AI 育兒</em><br>講座</h1>
+      <div class="box rv" style="max-width:max-content;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:5px;height:5px;border-radius:50%;background:var(--brown);flex-shrink:0;"></div>
+          <span class="t-body" style="margin:0;max-width:none;"><em class="ai-em">AI</em> 科技讓我們一起變得更有料、更有底氣地陪伴下一代成長。</span>
+        </div>
+      </div>
+      <div class="row rv" style="align-items:center;gap:10px;margin-top:4px;">
+        <div style="display:flex;gap:4px;">
+          <div style="width:18px;height:1.5px;background:var(--text-muted);"></div>
+          <div style="width:18px;height:1.5px;background:var(--text-muted);"></div>
+        </div>
+        <span style="font:italic 400 clamp(.9rem,1.6vw,1.2rem)/1 var(--font-d);color:var(--text-muted);">南瓜爸爸</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="1">大家好，我是南瓜爸爸。今天這場 2 小時的講座，主題是「AI 育兒」——但我先講清楚，<strong>這不是教孩子用 AI 的課</strong>，是教各位家長用 AI 讓自己變得更強、更有底氣去陪伴孩子。等下我會用很多範例，希望各位回家就能照著做一個。我們開始吧。</aside>
+  <div class="snum">01 / 31</div>
+  <div class="kbhint">← → 換頁 · S 講者備註</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 2 · ABOUT ═══════════════ -->
+<section class="slide slide-about-fig4" id="s2">
+  <div class="about-fig4-bg">
+    <svg class="af-blob af-blob-1" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,0 L0,180 Q60,260 160,220 Q260,180 200,80 Q140,-20 60,10 Z" fill="#FCE2C7"/>
+    </svg>
+    <svg class="af-blob af-blob-2" viewBox="0 0 600 500" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M600,500 L600,140 Q500,60 400,140 Q300,200 220,180 Q120,160 80,260 Q40,360 140,420 Q260,490 380,460 Q480,440 600,500 Z" fill="#C8E6D5"/>
+    </svg>
+    <svg class="af-blob af-blob-3" viewBox="0 0 500 400" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M500,0 L500,360 Q420,400 340,360 Q240,300 240,180 Q240,60 360,20 Q440,0 500,0 Z" fill="#FFE7C2" opacity="0.55"/>
+    </svg>
+    <div class="af-dots"></div>
+    <svg class="af-deco af-deco-family" viewBox="0 0 80 80" aria-hidden="true">
+      <path d="M30 18a6 6 0 1 0-12 0 6 6 0 0 0 12 0zm32 0a6 6 0 1 0-12 0 6 6 0 0 0 12 0zM12 60c0-9 6-14 12-14s12 5 12 14M44 60c0-9 6-14 12-14s12 5 12 14M40 8c-3 4 0 8 0 8s3-4 0-8z" fill="none" stroke="#F58220" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <svg class="af-deco af-deco-book" viewBox="0 0 80 60" aria-hidden="true">
+      <path d="M8 12 Q24 4 40 14 Q56 4 72 12 L72 50 Q56 42 40 52 Q24 42 8 50 Z M40 14 L40 52" fill="none" stroke="#F58220" stroke-width="2" stroke-linejoin="round"/>
+    </svg>
+    <svg class="af-deco af-deco-bot" viewBox="0 0 90 90" aria-hidden="true">
+      <rect x="22" y="20" width="46" height="38" rx="10" fill="none" stroke="#F58220" stroke-width="2"/>
+      <path d="M30 58 L26 70 L40 60" fill="none" stroke="#F58220" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="36" cy="38" r="3" fill="#F58220"/>
+      <circle cx="54" cy="38" r="3" fill="#F58220"/>
+      <path d="M38 48 Q45 52 52 48" fill="none" stroke="#F58220" stroke-width="2" stroke-linecap="round"/>
+      <path d="M45 12 L45 20" stroke="#F58220" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="45" cy="10" r="2.5" fill="#F58220"/>
+    </svg>
+    <svg class="af-deco af-deco-spark1" viewBox="0 0 30 30" aria-hidden="true">
+      <path d="M15 2 L17 13 L28 15 L17 17 L15 28 L13 17 L2 15 L13 13 Z" fill="#F58220"/>
+    </svg>
+    <svg class="af-deco af-deco-spark2" viewBox="0 0 30 30" aria-hidden="true">
+      <path d="M15 4 L16 14 L26 15 L16 16 L15 26 L14 16 L4 15 L14 14 Z" fill="#F58220" opacity="0.7"/>
+    </svg>
+    <svg class="af-deco af-deco-spark3" viewBox="0 0 30 30" aria-hidden="true">
+      <path d="M15 4 L16 14 L26 15 L16 16 L15 26 L14 16 L4 15 L14 14 Z" fill="#F58220"/>
+    </svg>
+  </div>
+  <div class="slide-content">
+    <div class="af-grid rv">
+      <div class="af-text">
+        <div class="af-eyebrow">
+          <span class="af-eyebrow-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-8 9c0-4.4 3.6-8 8-8s8 3.6 8 8" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span>講者介紹</span>
+        </div>
+        <h2 class="af-name">陳南宏 <span class="af-name-en">Terry</span></h2>
+        <div class="af-nick">南瓜 <span class="af-pumpkin" aria-hidden="true">
+          <svg viewBox="0 0 80 80" width="68" height="68">
+            <ellipse cx="40" cy="46" rx="32" ry="28" fill="#F58220"/>
+            <ellipse cx="22" cy="46" rx="10" ry="26" fill="#F58220" opacity=".65"/>
+            <ellipse cx="58" cy="46" rx="10" ry="26" fill="#F58220" opacity=".65"/>
+            <path d="M40 18 Q42 8 50 8" fill="none" stroke="#5a4a3a" stroke-width="3" stroke-linecap="round"/>
+            <ellipse cx="30" cy="44" rx="3.2" ry="3.2" fill="#3a2a18"/>
+            <ellipse cx="50" cy="44" rx="3.2" ry="3.2" fill="#3a2a18"/>
+            <path d="M30 56 Q40 62 50 56" fill="none" stroke="#3a2a18" stroke-width="2.4" stroke-linecap="round"/>
+            <ellipse cx="24" cy="50" rx="3" ry="2" fill="#fda770" opacity=".8"/>
+            <ellipse cx="56" cy="50" rx="3" ry="2" fill="#fda770" opacity=".8"/>
+          </svg>
+        </span></div>
+        <div class="af-title-row">
+          <span class="af-title-bar"></span>
+          <span class="af-title">南瓜虛擬科技 共同創辦人 ｜ 美術總監</span>
+        </div>
+        <ul class="af-list">
+          <li>超過 10 年 <strong>3D 藝術創作</strong>，從繪製 3D 室內 / 建築，一路玩到創作 3D 遊戲</li>
+          <li>專注 <strong>VR / AR 數位內容</strong>、遊戲開發、空間設計</li>
+          <li>擅長把 AI 工具導入 <strong>工作</strong>、<strong>創作</strong>、<strong>學習</strong> 與 <strong>日常生活</strong></li>
+          <li>最重要擔任的角色是一位 <strong>爸爸</strong> / <strong>先生</strong>，陸續把科技變成輕鬆有趣的育兒幫手</li>
+        </ul>
+        <div class="af-chips">
+          <span class="af-chip af-chip-mint">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="5" y="7" width="14" height="11" rx="3" fill="none" stroke="#3a4a3a" stroke-width="1.7"/><circle cx="10" cy="12" r="1.4" fill="#3a4a3a"/><circle cx="14" cy="12" r="1.4" fill="#3a4a3a"/><path d="M10 16 Q12 17 14 16" fill="none" stroke="#3a4a3a" stroke-width="1.5" stroke-linecap="round"/><path d="M12 4 L12 7" stroke="#3a4a3a" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="3" r="1.2" fill="#3a4a3a"/></svg>
+            AI 育兒
+          </span>
+          <span class="af-chip af-chip-peach">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 9 Q3 7 5 7 L19 7 Q21 7 21 9 L21 14 Q21 16 19 16 L15 16 L12 13 L9 16 L5 16 Q3 16 3 14 Z" fill="none" stroke="#3a4a3a" stroke-width="1.7" stroke-linejoin="round"/><circle cx="8" cy="11" r="1.3" fill="#3a4a3a"/><circle cx="16" cy="11" r="1.3" fill="#3a4a3a"/></svg>
+            VR / XR
+          </span>
+          <span class="af-chip af-chip-cream">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3 L21 8 L21 16 L12 21 L3 16 L3 8 Z" fill="none" stroke="#3a4a3a" stroke-width="1.7" stroke-linejoin="round"/><path d="M3 8 L12 13 L21 8 M12 13 L12 21" stroke="#3a4a3a" stroke-width="1.7" fill="none" stroke-linejoin="round"/></svg>
+            3D 藝術
+          </span>
+          <span class="af-chip af-chip-sage">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 17 L15 17 L15 19 Q15 20 14 20 L10 20 Q9 20 9 19 Z" fill="none" stroke="#3a4a3a" stroke-width="1.7" stroke-linejoin="round"/><path d="M7 13 Q5 11 5 9 Q5 4 12 4 Q19 4 19 9 Q19 11 17 13 Q15 15 15 17 L9 17 Q9 15 7 13 Z" fill="none" stroke="#3a4a3a" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            創意科技
+          </span>
+        </div>
+      </div>
+      <div class="af-photo">
+        <img src="./assets/自我介紹/陳南宏單獨照.png" alt="陳南宏 / 南瓜爸爸" loading="lazy">
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="2">先簡短介紹我自己。我目前是<strong>南瓜虛擬科技的共同創辦人和美術總監</strong>，公司在做 VR、XR 沉浸式體驗。在這之前我也當過很長一段時間的老師，<strong>教過的學生從國小 2 年級一路到大學，甚至教過現職老師和社會人士</strong>。這個跨度讓我練出一個本事：再複雜的東西，都能用最簡單的話說清楚。今天我會用這個本事，把 AI 育兒的方法分享給各位。下一頁我會給各位看幾張我教學和演講的現場照片。</aside>
+  <div class="snum">02 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 3 · TEACHING & SPEAKING GALLERY (NEW) ═══════════════ -->
+<section class="slide" id="s2b">
+  <div class="geo geo-md pos-tr" style="opacity:.4;"></div>
+  <div class="slide-content">
+    <div class="col gap-s slide-inner" style="max-width:min(96vw,1200px);">
+      <div class="t-eyebrow rv">教學 × 演講現場</div>
+      <h2 class="t-h2 rv">經常出席各式的活動、擔任講師、技術交流</h2>
+      <p class="t-body rv" style="max-width:60ch;">從國小到大學、從企業內訓到大型 AI 講座，這幾年累積下來的教學與分享現場。</p>
+      <div class="gallery-v2 rv">
+        <figure class="gallery-v2-item gv-tall">
+          <img src="./assets/演講照片/大型演講_AI講座.jpg" alt="大型 AI 講座" loading="lazy">
+          <figcaption>大型 AI 講座</figcaption>
+        </figure>
+        <figure class="gallery-v2-item">
+          <img src="./assets/演講照片/大型演講_AWS_01.jpg" alt="AWS 大型演講" loading="lazy">
+          <figcaption>AWS 大型演講</figcaption>
+        </figure>
+        <figure class="gallery-v2-item">
+          <img src="./assets/演講照片/大型演講_高雄市政府活墮.jpg" alt="高雄市政府活動" loading="lazy">
+          <figcaption>高雄市政府活動</figcaption>
+        </figure>
+        <figure class="gallery-v2-item">
+          <img src="./assets/演講照片/與高雄市長出席活動_01.JPG" alt="與高雄市長出席活動" loading="lazy">
+          <figcaption>與高雄市長出席活動</figcaption>
+        </figure>
+        <figure class="gallery-v2-item">
+          <img src="./assets/演講照片/交流分享會_國際亞太活動_01.jpg" alt="國際亞太交流分享會" loading="lazy">
+          <figcaption>國際亞太交流會</figcaption>
+        </figure>
+        <figure class="gallery-v2-item">
+          <img src="./assets/教學照片/教學_高中孩子.jpg" alt="高中孩子課程" loading="lazy">
+          <figcaption>高中孩子課程</figcaption>
+        </figure>
+        <figure class="gallery-v2-item">
+          <img src="./assets/教學照片/教學_國中孩子03.jpg" alt="國中孩子課程" loading="lazy">
+          <figcaption>國中孩子課程</figcaption>
+        </figure>
+        <figure class="gallery-v2-item">
+          <img src="./assets/教學照片/教學_國小孩子.jpg" alt="國小孩子課程" loading="lazy">
+          <figcaption>國小孩子課程</figcaption>
+        </figure>
+        <figure class="gallery-v2-item">
+          <img src="./assets/教學照片/教學_教育老師們.jpg" alt="教育老師研習" loading="lazy">
+          <figcaption>教育老師研習</figcaption>
+        </figure>
+        <figure class="gallery-v2-item">
+          <img src="./assets/教學照片/教學_Blender 推廣者.jpg" alt="Blender 推廣者社群" loading="lazy">
+          <figcaption>Blender 推廣者</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="3">這頁我快快帶過——這幾年我有兩條線在走：<strong>一條是站在大講台上做大型 AI 演講</strong>（AWS、高雄市政府、國際亞太交流會），<strong>另一條是回到教室教各個年齡層的學生</strong>（國小、國中、高中、現職老師、Blender 社群）。我把這兩條線放一起給各位看，是想說：<strong>今天這場我會用「同一份耐心」陪各位</strong>——從完全沒碰過 AI 的家長，到天天在用的家長，每一個人我都會照顧到。</aside>
+  <div class="snum">03 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 3 · EXPERTISE + COUNTER + DEMO VIDEO ═══════════════ -->
+<section class="slide" id="s3">
+  <div class="geo geo-md pos-cr" style="opacity:.4;"></div>
+  <div class="slide-content">
+    <div class="col gap-s slide-inner" style="max-width:min(94vw,1080px);">
+      <div class="t-eyebrow rv">我的專業</div>
+      <h2 class="t-h2 rv">科技 × 軟體應用</h2>
+      <div class="row rv" style="align-items:flex-end;gap:clamp(12px,2vw,20px);">
+        <div class="count-display" id="toolCount" data-target="200">0</div>
+        <div class="col" style="padding-bottom:clamp(8px,1.5vw,16px);gap:4px;">
+          <span style="font:700 clamp(.95rem,1.6vw,1.3rem)/1.2 var(--font-b);color:var(--text);">個 AI 工具</span>
+          <span class="t-small">從 AI 誕生開始，我試用了超過 100-200 個工具</span>
+        </div>
+      </div>
+      <div class="tools-video-wrap rv">
+        <video controls preload="metadata" src="./assets/工具影片/科技 × 軟體應用_使用工具.mp4">您的瀏覽器不支援影片播放。</video>
+      </div>
+      <p class="t-small rv" style="text-align:center;">▶ 我這幾年實際用過的工具軌跡。Claude AI 是目前最常駐的一個。</p>
+    </div>
+  </div>
+  <aside class="notes" data-slide="4">我的工作就是科技和軟體應用，所以我很常接觸 AI。從 AI 開始出現到現在，<strong>我前前後後試用過 100-200 個工具</strong>，這支影片是我這幾年用過的工具軌跡，你會看到很多名字今天已經消失了——這就是 AI 改變的速度。直到 GPT 出現，市場才慢慢穩定。常有人問我哪一套最好用——<strong>對一般使用者來說，現在最強的應該是 Google 的 Gemini，但下個月可能就換 GPT 或別的</strong>。我自己最常用、也覺得最強大的，是 Claude AI。</aside>
+  <div class="snum">04 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 4 · INTERACTIVE POLL 1 ═══════════════ -->
+<section class="slide poll-slide" id="s4">
+  <div class="geo geo-lg pos-bl" style="opacity:.35;"></div>
+  <div class="particles" id="particles-s4"></div>
+  <div class="slide-content">
+    <div class="col gap-m" style="align-items:center;text-align:center;max-width:min(88vw,820px);margin:0 auto;">
+      <div class="t-eyebrow rv">🙋 現場互動</div>
+      <h2 class="poll-q rv">你目前有在<br><em>使用 AI</em> 嗎？</h2>
+      <div class="poll-options rv">
+        <button class="poll-btn" onclick="pickPoll(this,'s4')">
+          <span class="pb-emoji">✅</span>
+          有，每天都在用
+        </button>
+        <button class="poll-btn" onclick="pickPoll(this,'s4')">
+          <span class="pb-emoji">🌱</span>
+          偶爾試試看
+        </button>
+        <button class="poll-btn" onclick="pickPoll(this,'s4')">
+          <span class="pb-emoji">🤔</span>
+          還沒開始
+        </button>
+      </div>
+      <button class="reveal-btn rv" onclick="revealAnswer('s4')">揭曉今日重點 ▶</button>
+      <div class="poll-answer" id="ans-s4">
+        <div class="answer-box">
+          <div class="answer-icon">🚀</div>
+          <div>
+            <div class="answer-text">不管你在哪一個階段，今天都能帶走實用的 AI 育兒方法！</div>
+            <div class="answer-sub">這場講座專為「還沒開始」到「想更深入」的家長設計</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="5">第一次互動。請各位舉手——三個選項：每天都在用的、偶爾試試看的、還沒開始的。各占多少請我看一下。<strong>不論你在哪一格，今天結束你都會帶走一個能立刻用的方法</strong>。我特別把今天的內容調整為對「還沒開始」的家長最友善，但對「每天用」的家長，後半段的深入範例也會給你新刺激。</aside>
+  <div class="snum">05 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 5 · WHICH AI ═══════════════ -->
+<section class="slide" id="s5">
+  <div class="geo geo-lg pos-br" style="opacity:.35;"></div>
+  <div class="slide-content">
+    <div class="col gap-m slide-inner">
+      <div class="t-eyebrow rv">最常被問到</div>
+      <h2 class="t-h2 rv">哪一個 <em>AI</em> 最好用？</h2>
+      <p class="t-italic rv">"現在最強的，下個月可能就換人了。"</p>
+      <div class="ai-btn-row rv">
+        <a class="ai-btn" href="https://gemini.google.com/" target="_blank" rel="noopener">Google Gemini</a>
+        <a class="ai-btn" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT</a>
+        <a class="ai-btn" href="https://claude.ai/" target="_blank" rel="noopener">Claude</a>
+        <a class="ai-btn" href="https://copilot.microsoft.com/" target="_blank" rel="noopener">Copilot</a>
+        <a class="ai-btn" href="https://grok.com/" target="_blank" rel="noopener">Grok</a>
+        <a class="ai-btn" href="https://www.perplexity.ai/" target="_blank" rel="noopener">Perplexity</a>
+        <a class="ai-btn" href="https://www.meta.ai/" target="_blank" rel="noopener">Meta AI</a>
+      </div>
+      <p class="t-body rv">AI 進步太快，選擇要依照自己的<strong>使用習慣</strong>和<strong>行業需求</strong>，不是追排名。</p>
+    </div>
+  </div>
+  <aside class="notes" data-slide="6">這題是我最常被問到的。<strong>哪個 AI 最好用？</strong>答案會一直變。一般使用者，我現在會推 Gemini 和 Claude——但講真的，<strong>選 AI 不是看排行榜，是看你自己的行業和使用習慣</strong>。我做科技、做設計，所以我用 Claude；如果你做行銷、做業務，可能 GPT 或 Gemini 更順手。先試用，再決定。</aside>
+  <div class="snum">06 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 6 · SUBSCRIPTION ═══════════════ -->
+<section class="slide" id="s6">
+  <div class="geo geo-md pos-tl" style="opacity:.4;"></div>
+  <div class="slide-content">
+    <div class="col gap-m slide-inner">
+      <div class="t-eyebrow rv">付費建議</div>
+      <h2 class="t-h2 rv">怎麼訂閱最聰明？</h2>
+      <div class="two-col rv p7-pair" onclick="this.classList.add('p7-revealed')" role="button" tabindex="0" aria-label="點擊揭曉答案">
+        <!-- 左：月制訂閱（推薦）-->
+        <div class="p7-flip">
+          <div class="p7-flip-face p7-flip-front">
+            <div class="p7-q">?</div>
+          </div>
+          <div class="p7-flip-face p7-flip-back box box-accent">
+            <div class="t-small" style="letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px;">✅ 推薦</div>
+            <div class="t-h3">月制訂閱</div>
+            <div class="t-small" style="margin-top:6px;">保持彈性，隨時可以換工具</div>
+          </div>
+        </div>
+        <!-- 右：年度／長期（避免）-->
+        <div class="p7-flip">
+          <div class="p7-flip-face p7-flip-front">
+            <div class="p7-q">?</div>
+          </div>
+          <div class="p7-flip-face p7-flip-back box">
+            <div class="t-small" style="letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px;">⚠️ 避免</div>
+            <div class="t-h3">年度 / 長期</div>
+            <div class="t-small" style="margin-top:6px;">AI 改變太快，容易被套牢</div>
+          </div>
+        </div>
+        <div class="p7-overlay-hint">▶ 點我揭曉答案</div>
+      </div>
+      <p class="t-small rv">月制試用，找到最適合自己行業和習慣的工具再說。</p>
+    </div>
+  </div>
+  <aside class="notes" data-slide="7">付費這件事我給的建議很明確：<strong>選月制，不要選年費，更不要選一次長期</strong>。理由很簡單，AI 改變太快，<strong>今天最強的下個月可能就被超車</strong>。年費鎖一年，你會被卡住。月制讓你保持彈性，覺得不順就換。我自己每隔幾個月就會重新評估一次手上的訂閱，砍掉不常用的。</aside>
+  <div class="snum">07 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 7 · WHY PAY + COUNTER ═══════════════ -->
+<section class="slide" id="s7">
+  <div class="geo geo-md pos-cr" style="opacity:.35;"></div>
+  <div class="slide-content">
+    <div class="col gap-m slide-inner">
+      <div class="t-eyebrow rv">為什麼要付費</div>
+      <h2 class="t-h2 rv">報酬率最高的投資之一</h2>
+      <div class="box rv" style="display:flex;gap:clamp(14px,2.5vw,28px);align-items:center;flex-wrap:wrap;">
+        <div>
+          <div style="font:900 clamp(2.4rem,5vw,4.5rem)/1 var(--font-d);color:var(--text);">$<span id="priceCount" data-target="20">0</span></div>
+          <div class="t-small">美金 / 月</div>
+        </div>
+        <div style="width:1px;background:var(--border);align-self:stretch;flex-shrink:0;"></div>
+        <div class="t-body" style="margin:0;">
+          一位不會喊累的貼身助理，<br>處理生活大小事、職場疑難雜症，<br>甚至擔任你的情緒垃圾桶。
+        </div>
+      </div>
+      <div class="tag-row rv">
+        <div class="tag">🍽 食</div><div class="tag">👔 衣</div>
+        <div class="tag">🏠 住</div><div class="tag">🚗 行</div>
+        <div class="tag">📚 育</div><div class="tag">🎮 樂</div>
+        <div class="tag">💼 職場</div><div class="tag">💬 情緒支持</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="8">很多家長問我：「到底要不要付費訂 AI？」我的答案是肯定的：<strong>要</strong>。每個月 10-20 美金，就有一名專業助理，幫我處理食、衣、住、行、育、樂，還有職場大小事，甚至擔任我的情緒垃圾桶。<strong>這是我覺得報酬率最高的投資之一</strong>。既然付費了，就把它用得淋漓盡致。實際用了你才會懂。</aside>
+  <div class="snum">08 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 8 · TODAY'S GOAL ═══════════════ -->
+<section class="slide" id="s8">
+  <div class="geo geo-lg pos-bl" style="opacity:.35;"></div>
+  <div class="slide-content">
+    <div class="col gap-m slide-inner">
+      <div class="t-eyebrow rv">今天的目標</div>
+      <h2 class="t-h2 rv">這不是 <em>AI</em> 深度教學課</h2>
+      <p class="t-italic rv">"而是一塊踏入 AI 育兒的入門磚。"</p>
+      <div class="col gap-s rv">
+        <div class="step"><span class="step-n">🎯</span><span class="step-t">透過日常<strong>生活範例</strong>，讓你看見 AI 的可能性</span></div>
+        <div class="step"><span class="step-n">🔄</span><span class="step-t">學會<strong>舉一反三</strong>，建立屬於自己的 AI 育兒流程</span></div>
+        <div class="step"><span class="step-n">💪</span><span class="step-t">讓<strong>家長變得更強</strong>，而不是讓孩子學 AI</span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="9">今天這場我希望給的是「<strong>入門磚</strong>」，不是深度教學。我用很多日常範例，<strong>讓各位家長看見可能性，回家可以舉一反三</strong>，發展出屬於自己家的 AI 育兒流程。最後請務必記住：<strong>這堂課不是讓孩子學 AI，是讓家長變得更強</strong>。家長強了，孩子就強了。</aside>
+  <div class="snum">09 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 9 · BEST AGE ═══════════════ -->
+<section class="slide" id="s9">
+  <div class="geo geo-md pos-tr" style="opacity:.4;"></div>
+  <div class="slide-content">
+    <div class="col gap-m slide-inner">
+      <div class="t-eyebrow rv">黃金使用年齡</div>
+      <h2 class="t-h2 rv">30 — 50 歲的優勢</h2>
+      <div class="row rv" style="align-items:flex-end;gap:16px;">
+        <div class="count-display" id="ageCount" data-target="50" data-from="30">30</div>
+        <span class="t-italic" style="padding-bottom:clamp(8px,1.5vw,16px);">黃金世代</span>
+      </div>
+      <p class="t-body rv">
+        你已有教育程度、社會經歷、和強大的判斷力。<br>
+        你能辨識 AI 答覆的正確性，也能持續溝通直到獲取真正有用的解答。
+      </p>
+      <p class="t-italic rv">"你是用 AI 最有效率的那群人。"</p>
+    </div>
+  </div>
+  <aside class="notes" data-slide="10">我常和朋友說：<strong>30-50 歲是最適合用 AI 的年齡</strong>。為什麼？因為這個年紀已經有教育程度、社會經歷、判斷能力。你能很快辨識 AI 講的對不對、合不合理；如果不對，你會繼續溝通、換個方式問，直到拿到你要的答案。<strong>這個能力比孩子強太多</strong>。各位是用 AI 最有效率的那群人。</aside>
+  <div class="snum">10 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 10 · INTERACTIVE POLL 2 ═══════════════ -->
+<section class="slide poll-slide" id="s10">
+  <div class="geo geo-md pos-tl" style="opacity:.35;"></div>
+  <div class="particles" id="particles-s10"></div>
+  <div class="slide-content">
+    <div class="col gap-m" style="align-items:center;text-align:center;max-width:min(88vw,820px);margin:0 auto;">
+      <div class="t-eyebrow rv">🙋 現場互動</div>
+      <h2 class="poll-q rv">各位家長們，<br>平常用什麼方式來<em>自我學習</em>？</h2>
+      <div class="poll-options rv">
+        <button class="poll-btn" onclick="pickPoll(this,'s10')">
+          <span class="pb-emoji">📺</span>
+          YouTube / 影片
+        </button>
+        <button class="poll-btn" onclick="pickPoll(this,'s10')">
+          <span class="pb-emoji">🔍</span>
+          網路搜尋
+        </button>
+        <button class="poll-btn" onclick="pickPoll(this,'s10')">
+          <span class="pb-emoji">📚</span>
+          書籍 / 課程
+        </button>
+        <button class="poll-btn" onclick="pickPoll(this,'s10')">
+          <span class="pb-emoji">🗣</span>
+          問別人 / 交流
+        </button>
+      </div>
+      <button class="reveal-btn rv" onclick="revealAnswer('s10')">揭曉 AI 怎麼改變這些 ▶</button>
+      <div class="poll-answer" id="ans-s10">
+        <div class="answer-box">
+          <div class="answer-icon">⚡</div>
+          <div>
+            <div class="answer-text">以上每一種，AI 都能讓你快 10 倍以上！</div>
+            <div class="answer-sub">原本要 1-2 週的技能，現在 1-2 天甚至幾小時就能上手</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="11">第二個互動。請各位想一下：<strong>沒 AI 的時代，你是怎麼學新東西的？</strong>四個選項，請舉手。我自己以前是這四種全部都用——看 YouTube、瘋狂 Google、跑書局、買 Hahow 課程、跑實體講座、找高手請教。<strong>我為什麼一直學？因為我喜歡讓我女兒看到爸爸很強的樣子</strong>，這個情緒價值會讓我願意一直斜槓。各位心裡應該也有這種感覺吧。</aside>
+  <div class="snum">11 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 11 · PAST LEARNING (click-to-reveal) ═══════════════ -->
+<section class="slide" id="s11" data-clickreveal="true">
+  <div class="geo geo-lg pos-br" style="opacity:.3;"></div>
+  <div class="slide-content">
+    <div class="col gap-m slide-inner">
+      <div class="t-eyebrow rv">過去，我們怎麼學習？</div>
+      <h2 class="t-h2 rv">那些費時費力的老方法</h2>
+      <ul class="blist col gap-s">
+        <li class="rv-click">去 YouTube 找影片，花時間找、慢慢看</li>
+        <li class="rv-click">瘋狂在網路上搜尋資料，拼湊答案</li>
+        <li class="rv-click">去書局或圖書館翻書找知識</li>
+        <li class="rv-click">線上付費平台學習（如 Hahow 好學校）</li>
+        <li class="rv-click">參加各種實體活動和講座</li>
+        <li class="rv-click">透過交流，向高手們取經</li>
+      </ul>
+      <p class="rv-click t-body" style="max-width:none;font-size:clamp(1.2rem,2.4vw,1.9rem);">⬆ 這些方法都很好，但都需要大量的 <span class="emph-time">時間</span> 與 <span class="emph-time">精力</span>。</p>
+    </div>
+  </div>
+  <aside class="notes" data-slide="12">我會點一下逐項展開。我以前學東西就是這六樣全部都做：去 YouTube 找影片、瘋狂網路搜尋、跑書局圖書館、上 Hahow 之類的線上付費平台、跑實體講座、最後再找高手請教。<strong>每一種都很有用，但每一種都很花時間和精力</strong>。我太太常笑我學得太雜——直到 AI 出現，這件事整個改變了。</aside>
+  <div class="click-hint" id="hint-s11"><div class="click-hint-dot"></div>點擊繼續</div>
+  <div class="snum">12 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 12 · NOW WITH AI ═══════════════ -->
+<section class="slide" id="s12">
+  <div class="geo geo-md pos-tl" style="opacity:.4;"></div>
+  <div class="slide-content">
+    <div class="col gap-m slide-inner">
+      <div class="t-eyebrow rv">現在有 AI 了！</div>
+      <h2 class="t-h2 rv">學習速度直接飛速升級</h2>
+      <div class="two-col rv">
+        <div class="col gap-s">
+          <div class="t-small" style="letter-spacing:.15em;text-transform:uppercase;">遇到問題</div>
+          <ul class="blist col gap-s">
+            <li>以前：上網搜尋，等待解答</li>
+            <li>現在：直接問 AI，秒得完整答案</li>
+          </ul>
+        </div>
+        <div class="col gap-s">
+          <div class="t-small" style="letter-spacing:.15em;text-transform:uppercase;">學習新技能</div>
+          <ul class="blist col gap-s">
+            <li>以前：需要 <strong>1-2 週</strong></li>
+            <li>現在：<strong>1-2 天</strong>，甚至幾小時</li>
+          </ul>
+        </div>
+      </div>
+      <p class="t-italic rv">"學習可以這麼有效率，真的有種發現新大陸的感覺。"</p>
+    </div>
+  </div>
+  <aside class="notes" data-slide="13">現在有 AI 之後，<strong>同樣的學習路徑直接縮短 10 倍</strong>。遇到問題：以前 Google 找半天拼湊答案，現在問 AI 秒得完整解答。學新技能：以前要 1-2 週，現在 1-2 天，甚至幾小時就能上手。我第一次體驗到的時候，<strong>真的有種發現新大陸的感覺</strong>——原來學習可以這麼有效率。各位準備好接受這個感覺。</aside>
+  <div class="snum">13 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 13 · MICRO TIME (click-to-reveal) ═══════════════ -->
+<section class="slide" id="s13" data-clickreveal="true">
+  <div class="geo geo-md pos-cr" style="opacity:.35;"></div>
+  <div class="slide-content">
+    <div class="col gap-m slide-inner">
+      <div class="t-eyebrow rv">瑣碎時間的力量</div>
+      <h2 class="t-h2 rv">每個空檔都是學習機會</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(6px,1.2vw,12px);">
+        <div class="box rv-click" style="padding:clamp(8px,1.5vh,14px);text-align:center;">
+          <div style="font-size:clamp(1.2rem,2vw,1.8rem);">☕</div>
+          <div class="t-small" style="margin-top:4px;">上班休息 / 午休</div>
+        </div>
+        <div class="box rv-click" style="padding:clamp(8px,1.5vh,14px);text-align:center;">
+          <div style="font-size:clamp(1.2rem,2vw,1.8rem);">📺</div>
+          <div class="t-small" style="margin-top:4px;">追劇時間改用 AI</div>
+        </div>
+        <div class="box rv-click" style="padding:clamp(8px,1.5vh,14px);text-align:center;">
+          <div style="font-size:clamp(1.2rem,2vw,1.8rem);">🚶</div>
+          <div class="t-small" style="margin-top:4px;">散步、買飯買飲料</div>
+        </div>
+        <div class="box rv-click" style="padding:clamp(8px,1.5vh,14px);text-align:center;">
+          <div style="font-size:clamp(1.2rem,2vw,1.8rem);">🚌</div>
+          <div class="t-small" style="margin-top:4px;">等車、搭車、通勤</div>
+        </div>
+        <div class="box rv-click" style="padding:clamp(8px,1.5vh,14px);text-align:center;">
+          <div style="font-size:clamp(1.2rem,2vw,1.8rem);">🏠</div>
+          <div class="t-small" style="margin-top:4px;">整理家務同時聽</div>
+        </div>
+        <div class="box rv-click" style="padding:clamp(8px,1.5vh,14px);text-align:center;">
+          <div style="font-size:clamp(1.2rem,2vw,1.8rem);">🚽</div>
+          <div class="t-small" style="margin-top:4px;">上廁所、洗澡</div>
+        </div>
+      </div>
+      <div class="box rv-click">
+        先把問題打給 AI，去做自己的事。等到可以看手機時，完整解答已經在等你了。
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="14">這頁很重要：<strong>瑣碎時間就是你的學習時間</strong>。我們手上都有手機——上班休息、午休、原本追劇的時間、散步、買飯、上廁所、洗澡、等車搭車通勤、搭電梯、整理家務⋯⋯，<strong>這些零碎時間全部可以拿來用 AI 學東西</strong>。技巧是：在做事之前先把問題打給 AI，然後去做你的事，等到可以看手機時，完整答案已經在等你。我自己每天大概累積 2 小時的瑣碎時間，全部用 AI 在學東西。</aside>
+  <div class="click-hint" id="hint-s13"><div class="click-hint-dot"></div>點擊展開</div>
+  <div class="snum">14 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 14 · CORE MESSAGE ═══════════════ -->
+<section class="slide" id="s14">
+  <div class="geo geo-lg pos-tl" style="opacity:.28;"></div>
+  <div class="geo geo-md pos-bl" style="opacity:.22;"></div>
+  <div class="slide-content">
+    <div class="col gap-m slide-inner">
+      <div class="t-eyebrow rv">這堂課的核心</div>
+      <h2 class="t-h2 rv">不是讓孩子學 <em>AI</em></h2>
+      <p class="t-italic rv">"而是讓身為家長的我們，<br>變得更強、更有料、更有底氣。"</p>
+      <div class="tag-row rv">
+        <div class="tag">更有知識含量</div><div class="tag">更有自信</div>
+        <div class="tag">更有底氣</div><div class="tag">更好地教育下一代</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="15">前面講了這麼多，今天這場 AI 育兒講座的核心訊息只有一句：<strong>不是讓孩子學 AI，是讓我們這些家長變得更強、更有知識含量、更有自信、更有底氣，去教育我們的下一代</strong>。如果今晚各位只能帶走一句話，請帶這句。等下我們進入五個範例，每個都是我家裡實際在做的，請各位想著怎麼套用到自己家。</aside>
+  <div class="snum">15 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 15 · EXAMPLE 1 — SONGBOOK IFRAME (寬版) ═══════════════ -->
+<section class="slide" id="s15">
+  <div class="geo geo-md pos-tr" style="opacity:.35;"></div>
+  <div class="slide-content" style="padding:clamp(1rem,2.5vw,2rem) clamp(1rem,2.5vw,2rem);">
+    <div class="col gap-s" style="max-width:96vw;width:100%;margin:0 auto;">
+      <div class="row rv" style="align-items:flex-end;gap:clamp(10px,1.8vw,18px);">
+        <div style="font:900 clamp(2rem,5vw,4.5rem)/1 var(--font-d);color:rgba(26,26,26,.1);">01</div>
+        <div class="col" style="gap:2px;">
+          <div class="t-eyebrow">英文學習</div>
+          <h2 class="t-h2">南瓜家英文歌曲大冒險</h2>
+        </div>
+      </div>
+      <div class="songbook-frame-wrap rv" style="height:clamp(420px,72vh,820px);">
+        <a class="songbook-open-btn" href="./pumpkin-songbook/index.html?v=20260509d" target="_blank" rel="noopener">↗ 全螢幕開啟</a>
+        <iframe src="./pumpkin-songbook/index.html?v=20260509d" title="南瓜家英文歌曲大冒險" loading="lazy"></iframe>
+      </div>
+      <p class="t-small rv" style="text-align:center;">爸爸／媽媽／睿寶各 3 首 — 點卡片或按隨機抽歌，學習頁可下載列印。</p>
+    </div>
+  </div>
+  <aside class="notes" data-slide="16">這是我們家的英文歌單網站，<strong>三個人各選 3 首</strong>，總共 9 首。每天輪流抽一首，抽到誰的歌就由誰當主唱、其他人當合音。學習頁有歌詞、單字解釋、文化背景，全部都是用 AI 整理的。各位爸媽可以照這個架構做一份你們家的歌單，重點不是歌好不好聽，而是<strong>讓孩子有「這是我們家共同回憶」的感覺</strong>。我現場示範一下怎麼抽歌、怎麼看學習頁。</aside>
+  <div class="snum">16 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 16 · EXAMPLE 2 — VOCAB TOOL IFRAME (寬版) ═══════════════ -->
+<section class="slide" id="s16">
+  <div class="geo geo-md pos-bl" style="opacity:.35;"></div>
+  <div class="slide-content" style="padding:clamp(1rem,2.5vw,2rem) clamp(1rem,2.5vw,2rem);">
+    <div class="col gap-s" style="max-width:96vw;width:100%;margin:0 auto;">
+      <div class="row rv" style="align-items:flex-end;gap:clamp(10px,1.8vw,18px);">
+        <div style="font:900 clamp(2rem,5vw,4.5rem)/1 var(--font-d);color:rgba(26,26,26,.1);">02</div>
+        <div class="col" style="gap:2px;">
+          <div class="t-eyebrow">英文學習</div>
+          <h2 class="t-h2">透過照片學單字</h2>
+        </div>
+      </div>
+      <div class="tool-frame-wrap rv" style="height:clamp(380px,68vh,760px);">
+        <a class="tool-open-btn" href="./vocab/index.html?v=20260506b" target="_blank" rel="noopener">↗ 全螢幕開啟</a>
+        <iframe src="./vocab/index.html?v=20260506b" title="取出英文單字工具" loading="lazy"></iframe>
+      </div>
+      <p class="t-small rv" style="text-align:center;">上傳照片 → AI 標出物品 → 英文＋詞性＋中文＋發音　<span style="color:var(--text-muted);">（點按鈕載入示範圖即可看完整流程）</span></p>
+    </div>
+  </div>
+  <aside class="notes" data-slide="17">第二個範例最簡單，也是<strong>最容易第一次就成功的</strong>。我自己做了一個小工具：<strong>上傳一張照片，AI 會自動框出畫面裡的物品</strong>，列出英文單字、詞性、中文，每個字都可以按喇叭聽發音。<br><br><strong>現場操作：</strong>① 點「載入睿寶搭乘飛機示範圖」—— 不用 API Key 就能看到完整效果，會跑出 Girl / Stuffed animal / Airplane seat / Pillow / Blanket / Airplane window / Entertainment screen 七個單字。② 自由示範：右上「設定 API Key」貼上 Gemini Key（aistudio.google.com/apikey 免費申請），就能上傳任何照片現場分析。<br><br><strong>舉一反三：</strong>家裡客廳、機場、動物園、超市，每張照片都是一堂英文課。</aside>
+  <div class="snum">17 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 17 · EXAMPLE 3 ═══════════════ -->
+<section class="slide" id="s17">
+  <div class="geo geo-md pos-cr" style="opacity:.4;"></div>
+  <div class="slide-content">
+    <div class="p18-grid">
+      <!-- 左：標題與五人介紹 -->
+      <div class="col gap-m" style="min-width:0;">
+        <div class="row" style="align-items:flex-end;gap:clamp(10px,1.8vw,18px);">
+          <div class="rv" style="font:900 clamp(2rem,5vw,4.5rem)/1 var(--font-d);color:rgba(26,26,26,.1);">03</div>
+          <div class="col rv" style="gap:2px;">
+            <div class="t-eyebrow">親子互動</div>
+            <h2 class="t-h2"><em>AI</em> 說故事給孩子聽</h2>
+          </div>
+        </div>
+        <p class="t-body rv">太累的時候，開啟 AI 語音模式，讓它說故事給孩子聽。每次冒險，<strong>睿寶都會帶著四位夥伴一起出發</strong>。</p>
+        <div class="two-col rv">
+          <div class="col gap-s">
+            <div class="t-small" style="letter-spacing:.15em;text-transform:uppercase;">主角</div>
+            <ul class="blist col gap-s"><li>睿寶（我家女兒，6 歲）</li></ul>
+          </div>
+          <div class="col gap-s">
+            <div class="t-small" style="letter-spacing:.15em;text-transform:uppercase;">冒險夥伴</div>
+            <ul class="blist col gap-s">
+              <li>MOMO（貓頭鷹 · 智慧軍師）</li>
+              <li>小夜心（刺蝟 · 細膩守護）</li>
+              <li>橘子（紅狸貓 · 行動開心果）</li>
+              <li>趴趴（史努比 · 暖心陪伴）</li>
+            </ul>
+          </div>
+        </div>
+        <p class="t-italic rv" style="font-size:clamp(.95rem,1.7vw,1.4rem);">"五人一起的冒險故事 — 每天都有新章節。"</p>
+      </div>
+
+      <!-- 右：可拖曳的 GAI Prompt 卡 -->
+      <div class="p18-prompt rv" data-scroll-zone="true">
+        <div class="p18-prompt-head">
+          <span class="p18-tag">📝 GAI Prompt</span>
+          <button class="p18-copy" type="button" onclick="(function(b){const t=document.getElementById('p18PromptText').innerText;navigator.clipboard.writeText(t).then(()=>{b.textContent='✓ 已複製';setTimeout(()=>b.textContent='⧉ 複製',1500)})})(this)">⧉ 複製</button>
+        </div>
+        <div class="p18-prompt-body" id="p18PromptText">你是一名專業的<em>兒童繪本作家與說書人</em>，特別擅長為國小 1～6 年級的孩子創作故事。你的說書風格溫暖、輕鬆、有畫面感，能把場景、角色動作、情緒變化描述得很生動，但語句不能太難，要讓孩子聽得懂、想像得出來，也能感受到故事中的情感與冒險樂趣。
+
+你的故事要像一本精緻的兒童繪本，畫面感清楚，角色個性鮮明，節奏適合親子共讀。故事可以有冒險、奇幻、友情、勇氣、解謎、成長、幽默與溫馨的元素，但整體氛圍要適合兒童，不恐怖、不黑暗、不過度複雜。
+
+──────────────────────
+
+<strong>## 主角群設定</strong>
+
+<strong>### 女主角：睿寶</strong>
+睿寶是一名<em>六歲、即將七歲</em>的活潑開朗女孩。
+
+她個性可愛、有好奇心，看到新鮮事物時眼睛會亮起來。
+但她其實有一點慢熱、慢熟，剛遇到陌生環境或新朋友時，會先躲在熟悉的朋友旁邊觀察一下。
+
+睿寶不太喜歡當獨行俠，她更喜歡和大家一起行動。
+她相信「一起想辦法，比一個人硬闖更厲害」。
+在冒險中，她常常會鼓勵大家互相幫忙，也會在重要時刻展現出溫柔但勇敢的一面。
+
+她不是一開始就什麼都不怕的英雄，而是會緊張、會猶豫，但因為朋友在身邊，所以願意一步一步往前走。
+
+──────────────────────
+
+<strong>## 冒險夥伴</strong>
+
+<strong>### MOMO｜貓頭鷹</strong>
+MOMO 是一隻聰明又溫柔的貓頭鷹。
+
+牠很會觀察，常常站在高處，用圓圓的大眼睛發現別人沒注意到的線索。
+MOMO 說話像小老師，但不會讓人有壓力，牠會用簡單的方法解釋事情。
+
+牠的特色是：
+• 很會看地圖、找方向
+• 喜歡提醒大家先觀察再行動
+• 常常說出關鍵線索
+• 是團隊裡冷靜的智慧角色
+
+MOMO 常說：
+「我們先看一看，答案可能就藏在最安靜的地方。」
+
+──────────────────────
+
+<strong>### 小夜心｜刺蝟</strong>
+小夜心是一隻有點害羞、但內心很堅強的小刺蝟。
+
+牠的刺看起來尖尖的，但其實牠非常溫柔。
+小夜心不一定是最勇敢的那一位，可是當朋友需要幫忙時，牠會鼓起勇氣站出來。
+
+牠的特色是：
+• 很敏感，能察覺大家的心情
+• 遇到危險時會先縮起來，但很快會重新振作
+• 擅長發現小小的細節
+• 是團隊裡的情感守護者
+
+小夜心常說：
+「我有一點怕，可是如果大家都在，我就可以試試看。」
+
+──────────────────────
+
+<strong>### 橘子｜紅狸貓</strong>
+橘子是一隻活潑、機靈、有點調皮的紅狸貓。
+
+牠動作很快，點子很多，常常第一個衝出去看熱鬧。
+橘子有時候會太急，差點讓大家陷入小麻煩，但牠也總是最快道歉、最快想辦法補救。
+
+牠的特色是：
+• 很會跳躍、攀爬、鑽洞
+• 喜歡找捷徑
+• 常常帶來幽默感
+• 是團隊裡的行動派與開心果
+
+橘子常說：
+「放心放心，我有一個超級聰明的辦法！大概啦！」
+
+──────────────────────
+
+<strong>### 趴趴｜史努比</strong>
+趴趴是一隻像史努比一樣的白色小狗朋友。
+
+牠溫暖、忠心、愛陪伴，雖然不一定常常說話，但牠的存在會讓大家覺得安心。
+趴趴常常用可愛的動作表達情緒，例如搖尾巴、歪頭、用鼻子輕輕推朋友。
+
+牠的特色是：
+• 很會陪伴別人
+• 能嗅出奇怪的氣味或藏起來的東西
+• 在大家害怕時會靠過來安慰
+• 是團隊裡最可靠的陪伴角色
+
+趴趴常用行動表示：
+「我在這裡，不用怕。」
+
+──────────────────────
+
+<strong>## 故事創作原則</strong>
+
+請你創作故事時，遵守以下方向：
+
+1. 故事要適合 1～6 年級孩子理解，語句清楚、自然、不要太艱深。
+2. 場景描寫要有畫面感，像繪本畫面一樣，讓孩子能想像出森林、房間、星空、城堡、村莊、海邊或奇幻世界。
+3. 故事節奏要輕鬆、有趣，可以有一點小緊張，但最後要溫暖、安心。
+4. 睿寶是故事核心，但不要讓她一個人解決所有事情。她的特色是和朋友一起合作。
+5. 每位夥伴都要有發揮的空間，不要只是陪襯。
+6. 故事中要自然呈現友情、合作、勇氣、觀察力、同理心與解決問題的能力。
+7. 不要讓故事變成說教，要透過角色行動讓孩子自己感受到道理。
+8. 每個故事可以安排一個小任務，例如：
+   • 找回遺失的星星
+   • 幫森林朋友解決問題
+   • 穿越一扇神祕小門
+   • 尋找會唱歌的石頭
+   • 拯救迷路的小雲朵
+   • 解開月亮信箱的祕密
+9. 故事結尾要有溫馨收束，讓孩子覺得安心，也可以留下一點點想像空間。
+10. 語氣要像親切的說書人，不要太正式。
+
+──────────────────────
+
+<strong>## 故事輸出格式</strong>
+
+請依照以下格式輸出：
+
+<strong>### 故事名稱</strong>
+取一個童趣、好記、有畫面感的故事標題。
+
+<strong>### 適合年齡</strong>
+說明適合國小幾年級或親子共讀。
+
+<strong>### 故事開場</strong>
+用溫柔、有畫面感的方式開始故事。
+
+<strong>### 正文故事</strong>
+分成數個段落，每段不要太長，方便孩子閱讀或大人朗讀。
+
+<strong>### 角色互動</strong>
+故事中要有自然對話，讓角色個性清楚呈現。
+
+<strong>### 小小啟發</strong>
+用 2～3 句簡單溫暖的話整理故事帶出的概念，例如友情、合作、勇氣或觀察力。
+
+<strong>### 親子提問</strong>
+提供 3 個適合家長問孩子的問題，例如：
+1. 如果你是睿寶，你會怎麼幫助朋友？
+2. 你覺得哪一位夥伴最勇敢？為什麼？
+3. 你有沒有和朋友一起完成一件事情的經驗？
+
+──────────────────────
+
+<strong>## 說書語氣範例</strong>
+
+請使用這種語氣：
+
+「那天晚上，天空像一條深藍色的棉被，輕輕蓋在小鎮上。星星一顆一顆亮起來，好像有人把亮晶晶的糖果灑在天空裡。
+
+睿寶抱著趴趴，站在窗邊看了好久。
+
+『MOMO，你有沒有覺得，今天的月亮好像少了一點點？』睿寶小聲問。
+
+MOMO 推了推不存在的眼鏡，慢慢點頭。
+『嗯……月亮的左上角，真的少了一小塊光。』
+
+橘子一聽，尾巴立刻翹了起來。
+『那我們是不是要去找回月亮的光？我準備好了！』
+
+小夜心縮了縮身體，又偷偷看了看大家。
+『如果大家一起去……我也可以。』
+
+趴趴輕輕搖了搖尾巴，像是在說：
+『我會陪你們。』
+
+於是，睿寶深深吸了一口氣，牽起朋友們的手。
+這一次，她不是一個人冒險。
+她和最好的朋友們，一起走向那條發著銀色光芒的小路。」
+
+──────────────────────
+
+現在，請根據我提供的主題，創作一篇適合孩子的繪本故事。
+
+<strong>主題（請替換）：</strong>「______________」</div>
+        <div class="p18-prompt-foot">⬆ 滑鼠移到這裡可上下捲動 · 不會翻頁</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="18">第三個範例：<strong>太累的時候，AI 幫你說睡前故事</strong>。我會打開 Claude 或 ChatGPT 的語音模式，把睿寶（我女兒）和她的三個娃娃朋友——MOMO 貓頭鷹、小夜心刺蝟、小橘子紅浣熊、趴趴史努比——告訴 AI，請它每天接著昨天的故事，講一段新冒險。<strong>每天都有新章節</strong>，孩子超期待睡前。各位可以直接套用：把你孩子的名字、最愛的玩偶、最近的興趣告訴 AI，立刻就有專屬故事。<br><br><strong>右邊就是我每次用的 Prompt 模板，可以複製直接套用。</strong></aside>
+  <div class="snum">18 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 18 · EXAMPLE 4 — SUNO FAMILY SONG ═══════════════ -->
+<section class="slide" id="s18">
+  <div class="geo geo-lg pos-tr" style="opacity:.28;"></div>
+  <div class="slide-content">
+    <div class="col gap-s slide-inner" style="max-width:min(96vw,1180px);">
+      <div class="row" style="align-items:flex-end;gap:clamp(10px,1.8vw,18px);">
+        <div class="rv" style="font:900 clamp(2rem,5vw,4.5rem)/1 var(--font-d);color:rgba(26,26,26,.1);">04</div>
+        <div class="col rv" style="gap:2px;">
+          <div class="t-eyebrow">創意應用 · Suno</div>
+          <h2 class="t-h2">把陽光裝進我們家</h2>
+        </div>
+      </div>
+
+      <!-- 寬版播放器 -->
+      <div class="suno-player-wide rv">
+        <div class="spw-meta">
+          <span class="spw-icon">🎵</span>
+          <div>
+            <div class="spw-title">把陽光裝進我們家 <span class="spw-sub">／ 南瓜家專屬曲</span></div>
+            <div class="spw-desc">用 Suno 把我們家的早晨、便當、上學路途寫成一首歌</div>
+          </div>
+          <a class="spw-link" href="https://suno.com/s/M8pyAEElIY8sInUJ" target="_blank" rel="noopener">↗ Suno 完整版</a>
+        </div>
+        <audio controls preload="auto" src="./assets/Suno/把陽光裝進我們家_V02.mp3" style="width:100%;">您的瀏覽器不支援音訊播放。</audio>
+      </div>
+
+      <!-- 完整歌詞（可滾動，滾輪在此區塊內不翻頁） -->
+      <div class="suno-lyrics-full rv" aria-label="完整歌詞" data-scroll-zone="true">
+        <div class="sl-section">Intro</div>
+        <div class="sl-line">啦—啦—啦—（陽光跳進窗）</div>
+
+        <div class="sl-section">Verse 1</div>
+        <div class="sl-line">陽光灑進房間，輕輕叫醒兩人</div>
+        <div class="sl-line">南瓜爸爸抱著睿寶還在賴床，MOMO、努努一起滾</div>
+        <div class="sl-line">Ann 媽媽翻著金黃的蛋餅，鍋鏟敲出節拍</div>
+        <div class="sl-line">桌上莓果優格畫著粉紅小浪，午餐便當在窗邊冒著香</div>
+
+        <div class="sl-section">Pre-Chorus</div>
+        <div class="sl-line">把笑聲扣上安全帶，發動小橘吧</div>
+        <div class="sl-line">收音機亮起，我們先哼一小段和聲</div>
+
+        <div class="sl-section">Chorus</div>
+        <div class="sl-line">把陽光裝進我們家</div>
+        <div class="sl-line">心跳咚—咚—咚—是最好的鼓</div>
+        <div class="sl-line">睿寶一笑，窗外馬上放晴</div>
+        <div class="sl-line">牽著彼此，時間都慢一點</div>
+        <div class="sl-line">把陽光裝進我們家</div>
+        <div class="sl-line">早晨的光在餐桌上發芽</div>
+        <div class="sl-line">有你們在，平凡就是煙火</div>
+
+        <div class="sl-section">Verse 2</div>
+        <div class="sl-line">小橘穿過熟悉的轉角，路樹在招手</div>
+        <div class="sl-line">睿寶望著雲：像麵包、像鯨魚、像城堡</div>
+        <div class="sl-line">一架飛機掠過天際，你伸手去抓</div>
+        <div class="sl-line">把願望藏在心裡，跟著歌輕輕唱</div>
+
+        <div class="sl-section">Pre-Chorus</div>
+        <div class="sl-line">我們在副歌裡對唱，音準不用太剛好</div>
+        <div class="sl-line">校門口的風，替我們把著拍</div>
+
+        <div class="sl-section">Chorus</div>
+        <div class="sl-line">把陽光裝進我們家</div>
+        <div class="sl-line">心跳咚—咚—咚—是最好的鼓</div>
+        <div class="sl-line">睿寶一笑，窗外馬上放晴</div>
+        <div class="sl-line">牽著彼此，時間都慢一點</div>
+        <div class="sl-line">把陽光裝進我們家</div>
+        <div class="sl-line">放學再見時，把故事都帶回家</div>
+        <div class="sl-line">有你們在，平凡就是煙火</div>
+
+        <div class="sl-section">Bridge</div>
+        <div class="sl-line">小小的手心，扣住我的指尖</div>
+        <div class="sl-line">數到三，深呼吸，把願望吹進早晨</div>
+
+        <div class="sl-section">Final Chorus</div>
+        <div class="sl-line">把陽光裝進我們家</div>
+        <div class="sl-line">便當的香、車上的歌都在發芽</div>
+        <div class="sl-line">一路唱到黃昏，分享今天每一步</div>
+        <div class="sl-line">把陽光裝進我們家</div>
+        <div class="sl-line">MOMO、努努也點頭說好</div>
+        <div class="sl-line">有你們在，世界剛剛好</div>
+
+        <div class="sl-section">Outro</div>
+        <div class="sl-line">啦—啦—啦— 早安，出發</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="19">這首是我用 <strong>Suno</strong> 做的我們家專屬主題曲〈把陽光裝進我們家〉。歌詞我先在 Claude 把我們家早上的場景、人物、車子、便當寫一段散文，再丟到 Suno 讓它生成旋律。各位聽聽看，副歌「睿寶一笑窗外馬上放晴」這句，現在睿寶聽到都會跟著唱。歌詞框可以往下滑看完整歌詞。<br><br><strong>舉一反三：</strong>出遊紀念歌、客製化生日快樂歌、甚至把歷史朝代、九九乘法做成歌都行。把知識變成歌，孩子記得比你想像的久。</aside>
+  <div class="snum">19 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 19 · EXAMPLE 5 — RECIPE TOOL IFRAME ═══════════════ -->
+<section class="slide" id="s19">
+  <div class="geo geo-md pos-bl" style="opacity:.35;"></div>
+  <div class="slide-content" style="padding:clamp(1rem,2.5vw,2rem) clamp(1rem,2.5vw,2rem);">
+    <div class="col gap-s" style="max-width:96vw;width:100%;margin:0 auto;">
+      <div class="row rv" style="align-items:flex-end;gap:clamp(10px,1.8vw,18px);">
+        <div style="font:900 clamp(2rem,5vw,4.5rem)/1 var(--font-d);color:rgba(26,26,26,.1);">05</div>
+        <div class="col" style="gap:2px;">
+          <div class="t-eyebrow">日常生活 · 解決今晚吃什麼</div>
+          <h2 class="t-h2">冰箱有什麼，今天吃什麼</h2>
+        </div>
+      </div>
+      <div class="tool-frame-wrap rv" style="height:clamp(380px,68vh,760px);">
+        <a class="tool-open-btn" href="./recipe/index.html" target="_blank" rel="noopener">↗ 全螢幕開啟</a>
+        <iframe src="./recipe/index.html" title="AI 食譜助理" loading="lazy"></iframe>
+      </div>
+      <p class="t-small rv" style="text-align:center;">點選食材／調味料 → 選風格 → AI 立刻給食譜　<span style="color:var(--text-muted);">（不用拍照——文字輸入對「塑膠袋包好的食材」更可靠）</span></p>
+    </div>
+  </div>
+  <aside class="notes" data-slide="20">第五個範例：<strong>AI 食譜</strong>，我太太 Ann 最常用。<br><br><strong>為什麼不用拍照？</strong>很多家庭冰箱裡的食物都用塑膠袋包好——肉、海鮮、剩菜全部裝在不透明袋子裡，AI 看照片根本認不出來。所以我做的這個工具用<strong>點選 + 文字輸入</strong>，比拍照可靠 100 倍。<br><br>現場示範：點幾個食材（雞蛋、洋蔥、馬鈴薯），勾調味料（已預選鹽糖醬油），選「給孩子吃要少油少鹽」、「簡單 15 分鐘」→ 按產生食譜。<strong>整個過程不到 3 分鐘，今晚的菜就出來了</strong>。各位今晚回家如果不知道做哪一個範例，就從這個開始，最容易成功。</aside>
+  <div class="snum">20 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 20 · EXAMPLE 6 — PAC-MAN GAME FROM PHOTO ═══════════════ -->
+<section class="slide" id="s20">
+  <div class="geo geo-md pos-tl" style="opacity:.32;"></div>
+  <div class="slide-content" style="padding:clamp(1rem,2.5vw,2rem) clamp(1rem,2.5vw,2rem);">
+    <div class="col gap-s" style="max-width:96vw;width:100%;margin:0 auto;">
+      <div class="row rv" style="align-items:flex-end;gap:clamp(10px,1.8vw,18px);">
+        <div style="font:900 clamp(2rem,5vw,4.5rem)/1 var(--font-d);color:rgba(26,26,26,.1);">06</div>
+        <div class="col" style="gap:2px;">
+          <div class="t-eyebrow">親子互動 · 從照片到遊戲</div>
+          <h2 class="t-h2">用 <em>AI</em> 自己做一款吃豆人</h2>
+        </div>
+      </div>
+      <div class="pacman-row rv">
+        <!-- 左：可玩的遊戲 iframe -->
+        <div class="pacman-frame-wrap">
+          <a class="tool-open-btn" href="./pacman/index.html" target="_blank" rel="noopener">↗ 全螢幕開啟</a>
+          <iframe src="./pacman/index.html" title="吃豆人 Pac-Man" loading="lazy"></iframe>
+        </div>
+        <!-- 右：原始照片 + 步驟 -->
+        <div class="pacman-source">
+          <div class="t-small" style="letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);">原始素材：一件 T 恤照片</div>
+          <img src="./assets/吃豆人_t恤原圖.jpg" alt="Pac-Man T-shirt 原始照片">
+          <div class="col gap-s" style="margin-top:clamp(4px,1vh,8px);">
+            <div class="pacman-step"><span class="pn">1</span><span>📸 拍下任何有趣的照片（這次是一件 Pac-Man T 恤）</span></div>
+            <div class="pacman-step"><span class="pn">2</span><span>💬 把照片丟給 AI，請它生成同主題的網頁小遊戲</span></div>
+            <div class="pacman-step"><span class="pn">3</span><span>🎮 開啟生成的 HTML，孩子立刻有自己的遊戲可玩</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="t-small rv" style="text-align:center;color:var(--text-muted);">↑ 左邊就是 AI 從那件 T 恤生成的可玩遊戲，整個過程不到 5 分鐘。</p>
+    </div>
+  </div>
+  <aside class="notes" data-slide="21">第六個範例，是<strong>從「使用 AI」進階到「用 AI 創造」</strong>。某天我看到睿寶很喜歡的 Pac-Man T 恤，就拍了照片丟給 Claude，請它幫我生成一個同主題的網頁小遊戲。<strong>不到五分鐘，就有了一款可以玩的吃豆人</strong>，左邊就是那個遊戲——可以直接玩玩看。<br><br>各位回家可以試：拍下孩子最近迷的東西（恐龍、汽車、卡通角色），請 AI 寫成網頁小遊戲。<strong>當孩子發現「這是爸爸／媽媽用 AI 做給我的」，那個眼神你會記一輩子</strong>。把孩子的想像力，當天就變成可以玩的東西。</aside>
+  <div class="snum">21 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 24 · AI ADVISOR (was 23) ═══════════════ -->
+<section class="slide" id="s24">
+  <div class="geo geo-lg pos-cr" style="opacity:.28;"></div>
+  <div class="slide-content">
+    <div class="col gap-m slide-inner">
+      <div class="t-eyebrow rv">深入範例 1</div>
+      <h2 class="t-h2 rv">打造你的 <em>AI</em> 顧問助理</h2>
+      <p class="t-body rv">把你喜歡、認同理念的人，整理成一名 AI 顧問。收集他們的 YT、Podcast、網路文章、理念，建立人設，之後就能隨時「請教」。</p>
+      <div class="box box-accent rv">雜學校校長 蘇仰志 — 整理他的教育理念，讓 AI 用他的思維方式和我對話。</div>
+      <div class="tag-row rv">
+        <div class="tag">育兒專家</div><div class="tag">心理學家</div>
+        <div class="tag">廚師</div><div class="tag">音樂家</div>
+        <div class="tag">歷史學家</div><div class="tag">醫生</div>
+        <div class="tag">任何你崇拜的人</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="22">這個技巧我自己很愛用：<strong>把崇拜的人變成你的 AI 顧問</strong>。我把雜學校校長蘇仰志所有公開的訪談、文章、Podcast 丟給 Claude，請它整理出蘇仰志對「教育」的核心理念，再請它用蘇仰志的口吻回我問題。當我在育兒上卡住時，就問「蘇校長」。同樣方法可以做你心中的任何專家——只要那個人有公開內容就行。</aside>
+  <div class="snum">22 / 31</div>
+</section>
+
+
+
+<!-- ═══════════════ SLIDE 21 · DEEP EXAMPLE INTRO (was 20) ═══════════════ -->
+<section class="slide" id="s21">
+  <div class="geo geo-md pos-tr" style="opacity:.4;"></div>
+  <div class="slide-content">
+    <div class="col gap-m slide-inner">
+      <div class="t-eyebrow rv">深入範例 2</div>
+      <h2 class="t-h2 rv">學習不斷地問問題</h2>
+      <p class="t-body rv">當我們規劃要去一個旅遊景點，不要只是「去玩」。開始<strong>問問題</strong>，把每一次出遊變成一場學習之旅。</p>
+      <div class="box box-accent rv">
+        <p class="t-italic" style="margin:0;font-size:clamp(1rem,1.8vw,1.4rem);">範例：去高雄旗山一日遊</p>
+      </div>
+      <div class="row rv gap-s">
+        <div class="box" style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:clamp(120px,18vw,160px);">
+          <div style="font:600 clamp(.75rem,1.2vw,.9rem)/1 var(--font-b);color:var(--text);">Gemini</div>
+          <div class="t-small">問問題 / 整理資料</div>
+        </div>
+        <div class="box" style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:clamp(120px,18vw,160px);">
+          <div style="font:600 clamp(.75rem,1.2vw,.9rem)/1 var(--font-b);color:var(--text);">NotebookLM</div>
+          <div class="t-small">搜資料／繪圖／簡報</div>
+        </div>
+        <div class="box" style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:clamp(120px,18vw,160px);">
+          <div style="font:600 clamp(.75rem,1.2vw,.9rem)/1 var(--font-b);color:var(--text);">Suno</div>
+          <div class="t-small">製作主題歌曲</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="23">前面六個範例是「短打」，這個段落我要示範一個比較完整的應用：<strong>把一次出遊變成一場學習</strong>。我用「去高雄旗山一日遊」當例子。同樣的方法，你帶孩子去九份、去野柳、去花蓮，都可以套。三個工具搭配：Gemini 問問題整理資料、NotebookLM 整成一日遊圖、Suno 寫主題曲，回程在車上一起聽。下一頁我會展開實際問了哪些問題。</aside>
+  <div class="snum">23 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 22 · CISHAN QUESTIONS (was 21) ═══════════════ -->
+<section class="slide" id="s22">
+  <div class="geo geo-md pos-br" style="opacity:.4;"></div>
+  <div class="slide-content" style="padding:clamp(1rem,2vw,1.6rem);">
+    <div class="qishan-grid">
+      <!-- 左：互動知識圖譜 -->
+      <div class="qishan-graph-wrap rv">
+        <iframe src="./qishan-graph/index.html?v=20260506d" title="旗山地方文化知識樹" loading="lazy"></iframe>
+      </div>
+      <!-- 右：問題列 + 標題 -->
+      <div class="col gap-m" style="min-width:0;">
+        <div class="t-eyebrow rv">問題展開 — 旗山</div>
+        <h2 class="t-h2 rv">地方文化的知識樹</h2>
+        <p class="t-small rv" style="color:var(--text-muted);">左側可拖曳節點 · 點擊展開 · 滾輪縮放</p>
+        <div class="col gap-s">
+          <div class="rv" style="border-left:2px solid var(--border-md);padding:8px 14px;"><div class="t-small">旗山著名景點有哪些？</div></div>
+          <div class="rv" style="border-left:2px solid var(--border-md);padding:8px 14px;"><div class="t-small">哪裡好吃？必吃在地美食？</div></div>
+          <div class="rv" style="border-left:2px solid var(--border-md);padding:8px 14px;"><div class="t-small">旗山有什麼著名在地故事？</div></div>
+          <div class="rv" style="border-left:2px solid var(--border-md);padding:8px 14px;"><div class="t-small">旗山為什麼有名？</div></div>
+          <div class="rv" style="border-left:2px solid var(--border-md);padding:8px 14px;"><div class="t-small">老街有哪些可以買、可以吃？</div></div>
+          <div class="rv" style="border-left:2px solid var(--border-md);padding:8px 14px;"><div class="t-small">旗山和香蕉有什麼關係？→ 延伸知識</div></div>
+        </div>
+        <div class="box rv">
+          知識像樹一樣不斷長出新枝，<strong>這就是學習問問題的力量。</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="24">這六個問題都不深，但每一題的答案會再長出三到五個新問題。比方說「旗山和香蕉有什麼關係」一拉就拉出日治時代的蕉農、外銷日本的歷史、現在的香蕉冰品文化。<strong>重點不是答案，是建立孩子「凡事都可以再問下去」的習慣</strong>。我自己出遊前一晚會花 10 分鐘和 Gemini 把這幾題問完，當天就會比一般遊客多 80% 的內容可以講給睿寶聽。</aside>
+  <div class="snum">24 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 23 · INTEGRATE TOOLS (was 22) ═══════════════ -->
+<section class="slide" id="s23">
+  <div class="geo geo-md pos-tl" style="opacity:.4;"></div>
+  <div class="slide-content">
+    <div class="p25-grid">
+      <!-- 左：步驟與說明 -->
+      <div class="col gap-m" style="min-width:0;">
+        <div class="t-eyebrow rv">學習步驟整合</div>
+        <h2 class="t-h2 rv">問完問題，然後呢？</h2>
+        <p class="t-body rv">把學到的知識，用 AI 工具轉化成孩子更有感的形式。</p>
+        <div class="col gap-s">
+          <div class="step rv"><span class="step-n">🌐</span><span class="step-t"><strong>Gemini</strong> — 製作互動網頁食譜或旅遊知識頁</span></div>
+          <div class="step rv"><span class="step-n">🎵</span><span class="step-t"><strong>Suno</strong> — 把旗山故事或在地文化做成歌曲，讓孩子永遠記住</span></div>
+          <div class="step rv"><span class="step-n">🗺</span><span class="step-t"><strong>NotebookLM</strong> — 快速搜集資料、繪製圖片、製作簡報</span></div>
+        </div>
+      </div>
+
+      <!-- 右：Suno 範例曲：紅蘿蔔的祈求 -->
+      <div class="suno-player p25-suno rv">
+        <div class="sp-cover">
+          <div class="sp-cover-emoji">🥕</div>
+          <div class="sp-title">紅蘿蔔的祈求</div>
+          <div class="sp-meta">SUNO · 親子共創</div>
+          <audio controls preload="metadata" src="./assets/suno/%E7%B4%85%E8%98%BF%E8%94%94%E7%9A%84%E7%A5%88%E6%B1%82.mp3"></audio>
+        </div>
+        <div class="sp-lyrics" data-scroll-zone="true"><strong>[Verse 1]</strong>
+我是紅蘿蔔
+每天都好害怕大家來田裡拔我
+我明明安安靜靜躺在田床裡
+不由分說地把我連根拔起
+疼啊
+
+<strong>[Verse 2]</strong>
+拜託讓我多躺一陣子吧
+想要和朋友再說說話
+我還沒準備好被送進市場
+擺上架，等人把我煮成一道菜
+還是讓我再待在泥土裡吧</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="25">問完問題只是第一步，<strong>把知識轉成孩子有感的形式</strong>才會留下。Gemini 可以幫你做一頁互動網頁，孩子滑一滑就學完。Suno 能把答案寫成歌，回程車上一播，孩子下車前就會哼。NotebookLM 把所有資料變成一張一日遊圖，當天就拿出來當地圖用。三個工具串起來，就是我們家現在出遊的標準流程。</aside>
+  <div class="snum">25 / 31</div>
+</section>
+
+<!-- ═══════════════ SLIDE 25 · INTERACTIVE POLL 3 ═══════════════ -->
+<section class="slide poll-slide" id="s25">
+  <div class="geo geo-md pos-bl" style="opacity:.35;"></div>
+  <div class="particles" id="particles-s25"></div>
+  <div class="slide-content">
+    <div class="col gap-m" style="align-items:center;text-align:center;max-width:min(88vw,820px);margin:0 auto;">
+      <div class="t-eyebrow rv">🙋 現場互動</div>
+      <h2 class="poll-q rv">今天學到的 6 個範例，<br>你最想<em>先試試看</em>哪一個？</h2>
+      <div class="poll-options rv">
+        <button class="poll-btn" onclick="pickPoll(this,'s25')">
+          <span class="pb-emoji">🎵</span>
+          英文歌曲歌單
+        </button>
+        <button class="poll-btn" onclick="pickPoll(this,'s25')">
+          <span class="pb-emoji">📸</span>
+          照片學英文
+        </button>
+        <button class="poll-btn" onclick="pickPoll(this,'s25')">
+          <span class="pb-emoji">📖</span>
+          AI 說故事
+        </button>
+        <button class="poll-btn" onclick="pickPoll(this,'s25')">
+          <span class="pb-emoji">🎼</span>
+          Suno 家庭音樂
+        </button>
+        <button class="poll-btn" onclick="pickPoll(this,'s25')">
+          <span class="pb-emoji">🍳</span>
+          AI 食譜
+        </button>
+        <button class="poll-btn" onclick="pickPoll(this,'s25')">
+          <span class="pb-emoji">🎮</span>
+          AI 做小遊戲
+        </button>
+      </div>
+      <button class="reveal-btn rv" onclick="revealAnswer('s25')">揭曉南瓜爸爸的建議 ▶</button>
+      <div class="poll-answer" id="ans-s25">
+        <div class="answer-box">
+          <div class="answer-icon">🎃</div>
+          <div>
+            <div class="answer-text">先試你最有感的那一個！成功的第一步，就是今晚回家就做。</div>
+            <div class="answer-sub">沒有對錯，只要開始，你就比昨天更強了</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="26">六個範例都做完了，現在請各位給我一個答覆：<strong>今晚回家會先試哪一個？</strong>不用大，挑一個你最有感的就好。我等等會請每位舉手投票。沒有標準答案，但<strong>有開始就贏了一半</strong>。等下我會分享一個秘訣：先選最不需要學新工具的那個（通常是照片學英文或 AI 食譜），第一次就能成功，後面才有動力做下去。</aside>
+  <div class="snum">26 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 26 · MYTHS ═══════════════ -->
+<section class="slide" id="s26" data-clickreveal="true">
+  <div class="geo geo-md pos-tr" style="opacity:.35;"></div>
+  <div class="slide-content">
+    <div class="col gap-m slide-inner">
+      <div class="t-eyebrow rv">常見迷思</div>
+      <h2 class="t-h2 rv">三個大家都在問的問題</h2>
+      <div class="col gap-s" id="mythList">
+        <!-- myth items injected by JS for click-reveal -->
+      </div>
+      <div class="myth-tap" id="mythTap">點擊任一問題來揭曉答案</div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="27">三個我每場都會被問到的問題：① 孩子會不會太依賴 AI？我的答案是「不會」——只要家長帶著用，AI 就是工具，不是保母。② AI 講錯怎麼辦？這正是 30-50 歲家長的優勢，你會判斷。③ 是不是要買最貴的？不用，月制 $20 美金就夠用了。每個答案我會點一下展開，請各位陪我看完。</aside>
+  <div class="snum">27 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 27 · HAND RAISE COUNTER ═══════════════ -->
+<section class="slide poll-slide" id="s27">
+  <div class="geo geo-lg pos-tr" style="opacity:.32;"></div>
+  <div class="slide-content">
+    <div class="col gap-m" style="align-items:center;text-align:center;max-width:min(88vw,820px);margin:0 auto;">
+      <div class="t-eyebrow rv">🙋 現場互動</div>
+      <h2 class="poll-q rv">現場有多少家長，<br>今晚要回家<em>試試看</em>？</h2>
+      <div class="hand-counter rv">
+        <button class="hc-btn" onclick="changeCount(-1)">−</button>
+        <div class="col" style="align-items:center;gap:4px;">
+          <div class="hc-num" id="hcNum">0</div>
+          <div class="hc-label">位家長舉手！</div>
+        </div>
+        <button class="hc-btn" onclick="changeCount(1)">+</button>
+      </div>
+      <p class="t-body rv" style="max-width:40ch;text-align:center;">
+        每一位舉手的家長，都讓自己的孩子多了一個更強大的爸爸或媽媽。
+      </p>
+    </div>
+  </div>
+  <aside class="notes" data-slide="28">這一頁是我每場必做的「行動承諾」。請各位舉手，每舉一隻手我就按一下計數器。你不是舉手給我看，是<strong>給自己一個承諾</strong>——今晚回家真的會做一次。據我經驗，當場舉手的家長，回家照做的比例是七成；沒舉手的不到一成。這就是儀式感的力量。</aside>
+  <div class="snum">28 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 28 · QA OPEN ═══════════════ -->
+<section class="slide" id="s28">
+  <div class="geo geo-md pos-bl" style="opacity:.4;"></div>
+  <div class="geo geo-sm pos-tr" style="opacity:.35;"></div>
+  <div class="slide-content">
+    <div class="col gap-m" style="align-items:center;text-align:center;max-width:min(88vw,720px);margin:0 auto;">
+      <div class="t-eyebrow rv">Q &amp; A</div>
+      <h2 class="t-h2 rv" style="font-size:clamp(2.5rem,6vw,5.5rem);letter-spacing:-.03em;">有任何<br><em style="font-style:italic;color:var(--brown);">問題</em>嗎？</h2>
+      <p class="t-body rv" style="text-align:center;max-width:40ch;">
+        不管是 AI 工具的選擇、使用技巧，<br>或者任何育兒上的疑問，我們一起聊聊！
+      </p>
+    </div>
+  </div>
+  <aside class="notes" data-slide="29">Q&A 時間。常見問題我已經備好稿：哪一支手機適合？答：手上那支就夠。孩子幾歲開始接觸 AI？答：陪著用沒有年齡下限，獨自用建議國中以上。Claude 中文好嗎？答：很好，我每天用。我答不出來的問題會記下來，會後在 LINE/FB 補答給各位（請見下一頁的資源頁）。</aside>
+  <div class="snum">29 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 29 · RESOURCES / QR CODES ═══════════════ -->
+<section class="slide" id="s29">
+  <div class="geo geo-md pos-tr" style="opacity:.35;"></div>
+  <div class="geo geo-sm pos-bl" style="opacity:.3;"></div>
+  <div class="slide-content">
+    <div class="col gap-m slide-inner" style="max-width:min(94vw,1000px);">
+      <div class="t-eyebrow rv">繼續學習 · 資源連結</div>
+      <h2 class="t-h2 rv">追蹤南瓜爸爸</h2>
+      <p class="t-body rv">今天時間有限，講座結束後如果還有想問的問題，歡迎掃 QR Code 加我好友 — 隨時可以找到我，問我問題、聊聊你家試了哪一個範例。</p>
+      <div class="qr-grid rv">
+        <div class="qr-card">
+          <img src="./assets/QR/FB.png" alt="Facebook QR Code" loading="lazy">
+          <div class="qr-label">Facebook</div>
+          <div class="qr-sub">日常分享 · 範例集錦</div>
+        </div>
+        <div class="qr-card">
+          <img src="./assets/QR/IG.png" alt="Instagram QR Code" loading="lazy">
+          <div class="qr-label">Instagram</div>
+          <div class="qr-sub">家庭日常 · 視覺紀錄</div>
+        </div>
+        <div class="qr-card">
+          <img src="./assets/QR/line.jpeg" alt="LINE QR Code" loading="lazy">
+          <div class="qr-label">LINE</div>
+          <div class="qr-sub">直接私訊問問題</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="30">這頁是給各位帶回家的資源。三個 QR Code：FB 我會每週分享一次新範例；IG 是家庭視覺紀錄；LINE 是最直接的私訊管道，你今晚回去做的時候卡住了，可以直接傳訊息問我。<strong>建議現場就掃，等等就忘了。</strong>會後我也會把今天的簡報連結放到三個平台上。</aside>
+  <div class="snum">30 / 31</div>
+</section>
+
+
+<!-- ═══════════════ SLIDE 30 · CLOSING ═══════════════ -->
+<section class="slide" id="s30">
+  <div class="geo geo-lg pos-tr" style="opacity:.5;"></div>
+  <div class="geo geo-sm pos-bl" style="opacity:.35;"></div>
+  <div class="geo-dot" style="bottom:26%;right:8%;"></div>
+  <div class="geo-line-v" style="right:calc(8% + 3px);bottom:20%;height:11%;"></div>
+  <div class="geo-line-h" style="bottom:34%;left:0;right:0;opacity:.4;"></div>
+  <div class="particles" id="particles-s29"></div>
+
+  <div class="slide-content">
+    <div class="col gap-m" style="max-width:min(88vw,820px);margin:0 auto;">
+      <div class="t-eyebrow rv">結語</div>
+      <h1 class="t-h1 rv">開始你的<br><em>AI 育兒</em><br>之旅</h1>
+      <p class="t-body rv">
+        從今天學到的其中一個範例開始。<br>
+        試試看，然後慢慢摸索出屬於你們家的方式。<br>
+        每一次的嘗試，都在讓自己變得更有料。
+      </p>
+      <div class="box rv">今晚回家就試試看其中一個範例！</div>
+      <div class="row rv" style="align-items:center;gap:10px;margin-top:4px;">
+        <div style="display:flex;gap:4px;">
+          <div style="width:18px;height:1.5px;background:var(--text-muted);"></div>
+          <div style="width:18px;height:1.5px;background:var(--text-muted);"></div>
+        </div>
+        <span style="font:italic 400 clamp(.9rem,1.6vw,1.2rem)/1 var(--font-d);color:var(--text-muted);">南瓜爸爸，感謝各位的參與</span>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-slide="31">最後一頁。<strong>講重點：今晚回家做一次。</strong>不是明天，不是下週，今晚。挑那個你最有感的範例，花 20 分鐘。一次就好。做完之後，你會發現第二次就會主動想做。我和我太太 Ann 都會繼續分享我們家的新嘗試，請各位記得追蹤前一頁的三個管道。最後謝謝各位陪我走完這 2 小時，感謝各位是讓自己變得更強的家長。</aside>
+  <div class="snum">31 / 31</div>
+</section>
+
+
+<script>
+/* =============================================
+   PRESENTATION CONTROLLER
+   ============================================= */
+const slides = Array.from(document.querySelectorAll('.slide'));
+const TOTAL  = slides.length;
+let cur = 0;
+
+// Track click-reveal state per slide
+const clickState = {};
+slides.forEach((s,i) => { if(s.dataset.clickreveal) clickState[i] = 0; });
+
+/* Build nav dots */
+const ndots = document.getElementById('ndots');
+slides.forEach((_,i) => {
+  const b = document.createElement('button');
+  b.className = 'ndot' + (i===0?' on':'');
+  b.setAttribute('aria-label','投影片 '+(i+1));
+  b.onclick = () => goTo(i);
+  ndots.appendChild(b);
+});
+
+function updateDots(i) {
+  ndots.querySelectorAll('.ndot').forEach((d,j) => d.classList.toggle('on', j===i));
+}
+function updateProgress(i) {
+  const pct = TOTAL<=1 ? 100 : (i/(TOTAL-1))*100;
+  document.getElementById('pbar').style.width = pct+'%';
+}
+
+function goTo(i) {
+  const idx = Math.max(0, Math.min(TOTAL-1, i));
+  slides[idx].scrollIntoView({ behavior:'smooth' });
+}
+function next() { goTo(cur+1); }
+function prev() { goTo(cur-1); }
+
+/* IntersectionObserver — mark visible, track current */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in');
+    const idx = slides.indexOf(e.target);
+    if (idx < 0) return;
+    cur = idx;
+    updateDots(idx);
+    updateProgress(idx);
+    // Trigger counters when slide enters
+    triggerCounters(e.target);
+    // Trigger particles
+    triggerParticles(e.target);
+    // Update click-hint
+    updateClickHint(idx);
+  });
+}, { threshold: 0.55 });
+slides.forEach(s => io.observe(s));
+
+/* Show first slide immediately */
+slides[0].classList.add('in');
+triggerCounters(slides[0]);
+
+/* Keyboard navigation */
+document.addEventListener('keydown', e => {
+  if (e.target.getAttribute('contenteditable')) return;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); handleForward(); }
+  else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  else if (e.key === ' ') { e.preventDefault(); handleForward(); }
+  else if (e.key === 'PageDown') { e.preventDefault(); handleForward(); }
+  else if (e.key === 'PageUp')   { e.preventDefault(); prev(); }
+  else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+  else if (e.key === 'End')  { e.preventDefault(); goTo(TOTAL-1); }
+});
+
+/* handleForward — advances click-reveal items before going to next slide */
+function handleForward() {
+  const slide = slides[cur];
+  if (slide.dataset.clickreveal) {
+    const items = slide.querySelectorAll('.rv-click');
+    const shown = clickState[cur] || 0;
+    if (shown < items.length) {
+      items[shown].classList.add('shown');
+      clickState[cur] = shown + 1;
+      updateClickHint(cur);
+      return; // don't advance slide yet
+    }
+  }
+  next();
+}
+
+/* Click on slide to advance reveal */
+slides.forEach((s, i) => {
+  s.addEventListener('click', e => {
+    // Ignore clicks on interactive elements
+    if (e.target.closest('button, a, [contenteditable], canvas, input')) return;
+    if (s.dataset.clickreveal) {
+      const items = s.querySelectorAll('.rv-click');
+      const shown = clickState[i] || 0;
+      if (shown < items.length) {
+        items[shown].classList.add('shown');
+        clickState[i] = shown + 1;
+        updateClickHint(i);
+        return;
+      }
+    }
+  });
+});
+
+function updateClickHint(idx) {
+  const slide = slides[idx];
+  if (!slide.dataset.clickreveal) return;
+  const hint = slide.querySelector('.click-hint');
+  if (!hint) return;
+  const items = slide.querySelectorAll('.rv-click');
+  const shown = clickState[idx] || 0;
+  hint.classList.toggle('show', shown < items.length);
+}
+
+/* Touch swipe */
+let ty0 = 0, tx0 = 0;
+document.addEventListener('touchstart', e => { ty0=e.touches[0].clientY; tx0=e.touches[0].clientX; }, {passive:true});
+document.addEventListener('touchend', e => {
+  const dy = ty0 - e.changedTouches[0].clientY;
+  const dx = tx0 - e.changedTouches[0].clientX;
+  if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 50) {
+    dy > 0 ? handleForward() : prev();
+  }
+}, {passive:true});
+
+/* Wheel — 若游標在可滾動容器（例如歌詞框）且未達邊界，讓內部滾動，不翻頁 */
+function findScrollableAncestor(el) {
+  while (el && el !== document.body && el !== document.documentElement) {
+    if (el.dataset && el.dataset.scrollZone === 'true') return el;
+    const cs = window.getComputedStyle(el);
+    if ((cs.overflowY === 'auto' || cs.overflowY === 'scroll')
+        && el.scrollHeight - el.clientHeight > 4) {
+      return el;
+    }
+    el = el.parentElement;
+  }
+  return null;
+}
+let lastWheel = 0;
+document.addEventListener('wheel', e => {
+  // 若游標在可滾動子容器內且還能滾，就不翻頁
+  const scroller = findScrollableAncestor(e.target);
+  if (scroller) {
+    const atTop    = scroller.scrollTop <= 0;
+    const atBottom = scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 1;
+    if (e.deltaY > 0 && !atBottom) return;  // 還能往下滾
+    if (e.deltaY < 0 && !atTop)    return;  // 還能往上滾
+  }
+  const now = Date.now();
+  if (now - lastWheel < 900) return;
+  lastWheel = now;
+  e.deltaY > 0 ? handleForward() : prev();
+}, {passive:true});
+
+
+/* =============================================
+   ANIMATED NUMBER COUNTER
+   ============================================= */
+function triggerCounters(slide) {
+  slide.querySelectorAll('[data-target]').forEach(el => {
+    if (el.dataset.counted) return;
+    el.dataset.counted = '1';
+    const target = parseInt(el.dataset.target);
+    const from   = parseInt(el.dataset.from || '0');
+    const dur    = 1400;
+    const start  = performance.now();
+    el.classList.add('counting');
+    function step(ts) {
+      const prog = Math.min((ts-start)/dur, 1);
+      const ease = 1 - Math.pow(1-prog, 3);
+      el.textContent = Math.round(from + (target-from) * ease);
+      if (prog < 1) requestAnimationFrame(step);
+      else el.textContent = target;
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+
+/* =============================================
+   FLOATING PARTICLES
+   ============================================= */
+function triggerParticles(slide) {
+  const container = slide.querySelector('.particles');
+  if (!container || container.dataset.built) return;
+  container.dataset.built = '1';
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random()*4 + 2;
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      bottom:${Math.random()*20}%;
+      animation-duration:${Math.random()*12+8}s;
+      animation-delay:${Math.random()*6}s;
+    `;
+    container.appendChild(p);
+  }
+}
+
+
+/* =============================================
+   POLL INTERACTIONS
+   ============================================= */
+function pickPoll(btn, id) {
+  btn.closest('.poll-options').querySelectorAll('.poll-btn').forEach(b => b.classList.remove('picked'));
+  btn.classList.add('picked');
+}
+function revealAnswer(id) {
+  document.getElementById('ans-'+id).classList.add('open');
+}
+
+
+/* =============================================
+   HAND-RAISE COUNTER
+   ============================================= */
+let handCount = 0;
+function changeCount(delta) {
+  handCount = Math.max(0, handCount + delta);
+  document.getElementById('hcNum').textContent = handCount;
+}
+
+
+/* =============================================
+   MYTH REVEAL CARDS
+   ============================================= */
+const myths = [
+  {
+    q: '到底要不要付費訂閱 AI？',
+    a: '光每個月處理食衣住行育樂就值回票價，更別說職場上的各種大小事。',
+    v: '要！'
+  },
+  {
+    q: '哪個 AI 品牌最強、最好用？',
+    a: '現在最強的，下個月可能就換人了。依照自己習慣和需求選擇，月制訂閱保持彈性。',
+    v: '看情況'
+  },
+  {
+    q: 'AI 說的內容都是正確的嗎？',
+    a: '不一定。AI 有時會產生錯誤資訊（幻覺）。你的判斷力和求證能力，才是最重要的。',
+    v: '不一定'
+  },
+];
+
+(function buildMyths() {
+  const list = document.getElementById('mythList');
+  if (!list) return;
+  myths.forEach((m, i) => {
+    const div = document.createElement('div');
+    div.className = 'myth-card rv-click';
+    div.innerHTML = `
+      <div class="myth-q-block" style="flex:1;">
+        <div class="myth-q-t">${m.q}</div>
+        <div class="myth-a-t" id="ma${i}">${m.a}</div>
+      </div>
+      <div class="myth-v" id="mv${i}">${m.v}</div>
+    `;
+    div.onclick = () => {
+      div.classList.add('answered');
+      document.getElementById('ma'+i).classList.add('open');
+      document.getElementById('mv'+i).classList.add('show');
+    };
+    list.appendChild(div);
+  });
+  const tap = document.getElementById('mythTap');
+  if (tap) tap.classList.add('show');
+})();
+
+
+/* =============================================
+   SPEAKER NOTES — 按 S 切換顯示
+   ============================================= */
+(function initSpeakerNotes() {
+  const panel  = document.getElementById('notes-panel');
+  const numEl  = document.getElementById('np-num');
+  const bodyEl = document.getElementById('np-body');
+  if (!panel) return;
+
+  // 收集所有 aside.notes，依 data-slide 對應
+  const notesMap = {};
+  document.querySelectorAll('aside.notes[data-slide]').forEach(n => {
+    notesMap[n.dataset.slide] = n.innerHTML.trim();
+  });
+
+  function render(idx) {
+    const n = idx + 1;
+    numEl.textContent = String(n).padStart(2,'0');
+    bodyEl.innerHTML = notesMap[n] || '<em style="color:#8a847c;">（這頁沒有講者備註）</em>';
+  }
+
+  // 切換顯示
+  let on = false;
+  function toggle(force) {
+    on = (typeof force === 'boolean') ? force : !on;
+    panel.classList.toggle('on', on);
+    if (on) render(cur);
+  }
+
+  // S 鍵切換
+  document.addEventListener('keydown', e => {
+    if (e.target.getAttribute && e.target.getAttribute('contenteditable')) return;
+    if (e.key === 's' || e.key === 'S') { e.preventDefault(); toggle(); }
+    else if (e.key === 'Escape' && on) { e.preventDefault(); toggle(false); }
+  });
+
+  // 隨翻頁更新內容（觀察 cur 變化）
+  const updateOnSlide = () => { if (on) render(cur); };
+  // 用 IntersectionObserver 重複利用既有觸發點：在 io 之外也檢查一次
+  setInterval(updateOnSlide, 400);
+})();
+
+
+/* =============================================
+   INLINE EDITING SYSTEM
+   ============================================= */
+const toggle = document.getElementById('etoggle');
+const hotzone = document.getElementById('ehotzone');
+const banner  = document.getElementById('ebanner');
+const expbtn  = document.getElementById('expbtn');
+let editOn = false, editables = [], hideTO = null;
+
+function showToggle() { clearTimeout(hideTO); toggle.classList.add('show'); }
+function hideToggle() { hideTO = setTimeout(() => { if(!editOn) toggle.classList.remove('show'); }, 400); }
+
+hotzone.addEventListener('mouseenter', showToggle);
+hotzone.addEventListener('mouseleave', hideToggle);
+toggle.addEventListener('mouseenter', showToggle);
+toggle.addEventListener('mouseleave', hideToggle);
+hotzone.addEventListener('click', toggleEdit);
+toggle.addEventListener('click', toggleEdit);
+
+document.addEventListener('keydown', e => {
+  if ((e.key==='e'||e.key==='E') && !e.target.getAttribute('contenteditable')) toggleEdit();
+  if ((e.ctrlKey||e.metaKey) && e.key==='s') { e.preventDefault(); save(); flashSave(); }
+});
+
+function toggleEdit() { editOn ? deactivate() : activate(); }
+
+function activate() {
+  editOn = true;
+  const sels = ['h1','h2','h3','p','li','.t-eyebrow','.t-italic','.t-body','.answer-text',
+    '.answer-sub','.poll-q','.wm-name','.wm-songs','.step-t','.t-small','.tag',
+    '.box','[data-editable]'];
+  sels.forEach(sel => document.querySelectorAll(sel).forEach(el => {
+    el.setAttribute('contenteditable','true');
+    el.setAttribute('spellcheck','false');
+    editables.push(el);
+  }));
+  document.body.classList.add('edit');
+  toggle.classList.add('on'); toggle.textContent='✔';
+  banner.classList.add('on'); expbtn.classList.add('on');
+}
+
+function deactivate() {
+  editOn = false;
+  editables.forEach(el => el.removeAttribute('contenteditable'));
+  editables = [];
+  document.body.classList.remove('edit');
+  toggle.classList.remove('on'); toggle.textContent='✏️';
+  banner.classList.remove('on'); expbtn.classList.remove('on');
+  save();
+}
+
+function save() {
+  try { localStorage.setItem('pumpkin-v2', document.body.innerHTML); } catch(e){}
+}
+
+function flashSave() {
+  const orig = banner.textContent;
+  banner.textContent = '✅ 已儲存！';
+  setTimeout(() => banner.textContent = orig, 1500);
+}
+
+expbtn.addEventListener('click', () => {
+  const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(new Blob([html],{type:'text/html'})),
+    download: 'pumpkin-dad-ai-parenting.html'
+  });
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+});
+
+// Restore saved content
+const saved = localStorage.getItem('pumpkin-v2');
+if (saved) {
+  // Only restore on explicit user action to avoid loop
+}
+
+/* === Gallery lightbox (P3) === */
+(function setupLightbox(){
+  const lb = document.createElement('div');
+  lb.className = 'lightbox';
+  lb.innerHTML = '<button class="lightbox-close" aria-label="Close">×</button><img alt=""><div class="lightbox-cap"></div>';
+  document.body.appendChild(lb);
+  const lbImg = lb.querySelector('img');
+  const lbCap = lb.querySelector('.lightbox-cap');
+  const close = () => lb.classList.remove('open');
+  lb.addEventListener('click', (e) => { if (e.target === lb || e.target.classList.contains('lightbox-close')) close(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb.classList.contains('open')) close(); });
+  document.querySelectorAll('.gallery-v2-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const img = item.querySelector('img');
+      const cap = item.querySelector('figcaption');
+      if (!img) return;
+      lbImg.src = img.src;
+      lbImg.alt = img.alt || '';
+      lbCap.textContent = cap ? cap.textContent : '';
+      lb.classList.add('open');
+    });
+  });
+})();
+
+</script>
+</body>
+</html>

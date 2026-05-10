@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(update-config)",
+      "Bash(gh repo:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(docker --version)",
+      "Bash(brew --version)",
+      "Bash(claude --enable-auto-mode)",
+      "Skill(browse)",
+      "Skill(browse:*)",
+      "Skill(claude-api)"
+    ]
+  }
+}

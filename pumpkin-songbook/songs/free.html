@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<title>Free — 南瓜家學習本</title>
+<style>
+  @page { size: A4; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+    background: #faf7ff; color: #2a1805;
+    padding: 10px; max-width: 210mm; margin: 0 auto; line-height: 1.5;
+  }
+  ruby { ruby-position: inter-character; ruby-align: center; margin-right: 3px; }
+  rt { font-size: 0.55em; color: #5a3bd4; font-weight: 400; letter-spacing: 0;
+       font-family: "Noto Sans TC", "PingFang TC", sans-serif; }
+  .lyric-zh, .col-box p, .hero-subtitle { line-height: 2.1; }
+  .w-zh { line-height: 2.0; }
+
+  .hero {
+    display: flex; align-items: stretch; gap: 14px;
+    background: linear-gradient(135deg, #a991ff 0%, #7b5cff 55%, #5a3bd4 100%);
+    border-radius: 16px; padding: 14px;
+    color: #fff; box-shadow: 0 4px 0 #5a3bd4;
+    margin-bottom: 12px;
+  }
+  .cover-box {
+    width: 110px; height: 110px; border-radius: 12px; overflow: hidden;
+    flex-shrink: 0; border: 3px solid #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,.3);
+    background: rgba(0,0,0,.1);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cover-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cover-placeholder {
+    font-size: 10px; text-align: center; padding: 8px;
+    color: rgba(255,255,255,.9); line-height: 1.4;
+  }
+  .hero-meta { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+  .hero-title { font-size: 22px; font-weight: 900; letter-spacing: .02em; line-height: 1.1; }
+  .hero-subtitle { font-size: 13px; opacity: .95; margin-top: 4px; }
+  .hero-artist { font-size: 14px; margin-top: 6px; opacity: .95; }
+  .owner-pill {
+    display: inline-block; background: #fff; color: #5a3bd4;
+    padding: 3px 12px; border-radius: 12px;
+    font-size: 12px; font-weight: 700; margin-top: 6px;
+  }
+
+  .info-card {
+    background: #fff; border: 2px solid #c4b3ff; border-radius: 12px;
+    padding: 10px 14px; margin-bottom: 10px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 14px;
+  }
+  .info-row { font-size: 12px; }
+  .info-label { color: #5a3bd4; font-weight: 700; font-size: 11px; display: block; }
+  .info-value { color: #2a1805; font-weight: 600; }
+
+  .sh {
+    font-size: 15px; font-weight: 900; color: #5a3bd4;
+    margin: 12px 0 6px; padding: 4px 10px;
+    background: linear-gradient(90deg, #f0ecff 0%, transparent 100%);
+    border-left: 4px solid #5a3bd4; border-radius: 4px;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .col-box {
+    background: #fff; border: 2px solid #c4b3ff; border-radius: 12px;
+    padding: 10px 12px;
+  }
+  .col-box .ct { font-size: 13px; font-weight: 900; color: #5a3bd4; margin-bottom: 4px; }
+  .col-box p { font-size: 12.5px; color: #3d1f08; }
+
+  .lyric-block {
+    background: #f0ecff; border-left: 5px solid #5a3bd4; border-radius: 10px;
+    padding: 10px 14px; margin-bottom: 6px;
+  }
+  .lyric-label {
+    display: inline-block;
+    margin-bottom: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.78);
+    color: #5a3bd4;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .lyric-label-zh {
+    margin-top: 8px;
+    margin-bottom: 2px;
+    background: rgba(61,31,8,0.08);
+    color: #6b5b4a;
+    text-transform: none;
+  }
+  .lyric-en {
+    font-size: 14px; font-weight: 700; color: #5a3bd4; line-height: 1.5;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+  }
+  .lyric-zh { font-size: 12.5px; color: #3d1f08; margin-top: 3px; }
+
+  .full-lyrics { margin-top: 4px; }
+  .full-lyric-block {
+    background: #fff;
+    border: 2px solid #c4b3ff;
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+  }
+  .full-lyric-line {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #2a1805;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+  }
+
+  .word-section-label {
+    font-size: 11px; font-weight: 700; color: #5a3bd4;
+    margin: 8px 0 4px; padding-left: 4px;
+    letter-spacing: .05em;
+  }
+  .word-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;
+  }
+  .word-card {
+    background: #fff; border: 1px solid #c4b3ff; border-radius: 8px;
+    padding: 5px 8px 6px;
+  }
+  .word-card.basic    { border-left: 4px solid #5a3bd4; background: #fff; }
+  .word-card.advanced { border-left: 4px solid #5a3bd4; background: #f0ecff; }
+  .word-card .row1 {
+    display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+  }
+  .w-en { font-weight: 800; color: #5a3bd4; font-size: 13px;
+          font-family: 'Comic Sans MS', 'Arial', sans-serif; }
+  .w-type { font-size: 9.5px; color: #fff; background: #5a3bd4; padding: 1px 5px; border-radius: 4px; font-weight: 700; }
+  .w-ph { font-size: 9.5px; color: #888; }
+  .w-zh { font-size: 11.5px; color: #3d1f08; margin-top: 2px; }
+  .w-ex { font-size: 10px; color: #5a3a1a; font-style: italic; margin-top: 2px; line-height: 1.35; }
+
+  .mission {
+    background: linear-gradient(135deg, #f0ecff 0%, #d0c2ff 100%);
+    border-radius: 12px; padding: 10px 14px; margin-top: 10px;
+    font-size: 12.5px; color: #3d1f08; line-height: 1.7;
+  }
+  .mission .t { font-weight: 900; color: #5a3bd4; }
+
+  @media print { body { background: #fff; padding: 0; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="cover-box">
+    <img src="file:///Users/chennanhong/Desktop/AI%20%E8%82%B2%E5%85%92/%E8%8B%B1%E6%96%87%E6%AD%8C%E6%9B%B2/Free.jpg" alt="Free cover"
+      onerror="this.style.display='none';this.parentNode.innerHTML='<div class=&quot;cover-placeholder&quot;>封面圖<br>Free</div>'">
+  </div>
+  <div class="hero-meta">
+    <div>
+      <div class="hero-title">Free</div>
+      <div class="hero-subtitle"><ruby>自<rt>ㄗˋ</rt></ruby><ruby>由<rt>ㄧㄡˊ</rt></ruby></div>
+      <div class="hero-artist">— Rumi &amp; Jinu (KPop Demon Hunters)</div>
+    </div>
+    <div><span class="owner-pill">睿寶選的歌</span></div>
+  </div>
+</div>
+
+<div class="info-card">
+  <div class="info-row"><span class="info-label">創作人</span><span class="info-value">EJAE / Mark Sonnenblick</span></div>
+  <div class="info-row"><span class="info-label">發行年份</span><span class="info-value">2025 年</span></div>
+  <div class="info-row"><span class="info-label">收錄專輯</span><span class="info-value">KPop Demon Hunters 原聲帶</span></div>
+  <div class="info-row"><span class="info-label">演唱者</span><span class="info-value">Rumi &amp; Jinu (KPop Demon Hunters)</span></div>
+</div>
+
+<div class="two-col">
+  <div class="col-box">
+    <div class="ct">🎼 曲風</div>
+    <p><ruby>流<rt>ㄌㄧㄡˊ</rt></ruby><ruby>行<rt>ㄒㄧㄥˊ</rt></ruby><ruby>抒<rt>ㄕㄨ</rt></ruby><ruby>情<rt>ㄑㄧㄥˊ</rt></ruby>。<ruby>前<rt>ㄑㄧㄢˊ</rt></ruby><ruby>半<rt>ㄅㄢˋ</rt></ruby><ruby>段<rt>ㄉㄨㄢˋ</rt></ruby><ruby>安<rt>ㄢ</rt></ruby><ruby>靜<rt>ㄐㄧㄥˋ</rt></ruby>，<ruby>後<rt>ㄏㄡˋ</rt></ruby><ruby>半<rt>ㄅㄢˋ</rt></ruby><ruby>段<rt>ㄉㄨㄢˋ</rt></ruby><ruby>越<rt>ㄩㄝˋ</rt></ruby><ruby>來<rt>ㄌㄞˊ</rt></ruby><ruby>越<rt>ㄩㄝˋ</rt></ruby><ruby>有<rt>ㄧㄡˇ</rt></ruby><ruby>力<rt>ㄌㄧˋ</rt></ruby><ruby>氣<rt>˙ㄑㄧ</rt></ruby>。</p>
+  </div>
+  <div class="col-box">
+    <div class="ct">💡 歌曲意境</div>
+    <p><ruby>這<rt>ㄓㄜˋ</rt></ruby><ruby>首<rt>ㄕㄡˇ</rt></ruby><ruby>歌<rt>ㄍㄜ</rt></ruby><ruby>像<rt>ㄒㄧㄤˋ</rt></ruby><ruby>在<rt>ㄗㄞˋ</rt></ruby><ruby>說<rt>ㄕㄨㄛ</rt></ruby>：<ruby>把<rt>ㄅㄚˇ</rt></ruby><ruby>心<rt>ㄒㄧㄣ</rt></ruby><ruby>裡<rt>ㄌㄧˇ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>小<rt>ㄒㄧㄠˇ</rt></ruby><ruby>祕<rt>ㄇㄧˋ</rt></ruby><ruby>密<rt>ㄇㄧˋ</rt></ruby><ruby>說<rt>ㄕㄨㄛ</rt></ruby><ruby>出<rt>ㄔㄨ</rt></ruby><ruby>來<rt>ㄌㄞˊ</rt></ruby><ruby>之<rt>ㄓ</rt></ruby><ruby>後<rt>ㄏㄡˋ</rt></ruby>，<ruby>人<rt>ㄖㄣˊ</rt></ruby><ruby>會<rt>ㄏㄨㄟˋ</rt></ruby><ruby>慢<rt>ㄇㄢˋ</rt></ruby><ruby>慢<rt>˙ㄇㄢ</rt></ruby><ruby>變<rt>ㄅㄧㄢˋ</rt></ruby><ruby>輕<rt>ㄑㄧㄥ</rt></ruby><ruby>鬆<rt>ㄙㄨㄥ</rt></ruby>，<ruby>也<rt>ㄧㄝˇ</rt></ruby><ruby>更<rt>ㄍㄥˋ</rt></ruby><ruby>有<rt>ㄧㄡˇ</rt></ruby><ruby>勇<rt>ㄩㄥˇ</rt></ruby><ruby>氣<rt>˙ㄑㄧ</rt></ruby>。</p>
+  </div>
+</div>
+
+<div class="sh">🎵 英文歌詞重點片段（英文原句 + 中文注音）</div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">We've been suffocating under secrets.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>們<rt>˙ㄇㄣ</rt></ruby><ruby>一<rt>ㄧˋ</rt></ruby><ruby>直<rt>ㄓˊ</rt></ruby><ruby>被<rt>ㄅㄟˋ</rt></ruby><ruby>祕<rt>ㄇㄧˋ</rt></ruby><ruby>密<rt>ㄇㄧˋ</rt></ruby><ruby>壓<rt>ㄧㄚ</rt></ruby><ruby>得<rt>˙ㄉㄜ</rt></ruby><ruby>喘<rt>ㄔㄨㄢˇ</rt></ruby><ruby>不<rt>ㄅㄨˊ</rt></ruby><ruby>過<rt>ㄍㄨㄛˋ</rt></ruby><ruby>氣<rt>ㄑㄧˋ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">We can't fix it if we never face it.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>不<rt>ㄅㄨˊ</rt></ruby><ruby>面<rt>ㄇㄧㄢˋ</rt></ruby><ruby>對<rt>ㄉㄨㄟˋ</rt></ruby><ruby>就<rt>ㄐㄧㄡˋ</rt></ruby><ruby>沒<rt>ㄇㄟˊ</rt></ruby><ruby>辦<rt>ㄅㄢˋ</rt></ruby><ruby>法<rt>ㄈㄚˇ</rt></ruby><ruby>把<rt>ㄅㄚˇ</rt></ruby><ruby>它<rt>ㄊㄚ</rt></ruby><ruby>修<rt>ㄒㄧㄡ</rt></ruby><ruby>好<rt>ㄏㄠˇ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">We could be free.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>們<rt>˙ㄇㄣ</rt></ruby><ruby>可<rt>ㄎㄜˇ</rt></ruby><ruby>以<rt>ㄧˇ</rt></ruby><ruby>自<rt>ㄗˋ</rt></ruby><ruby>由<rt>ㄧㄡˊ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">Let the past be the past.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>讓<rt>ㄖㄤˋ</rt></ruby><ruby>過<rt>ㄍㄨㄛˋ</rt></ruby><ruby>去<rt>ㄑㄩˋ</rt></ruby><ruby>成<rt>ㄔㄥˊ</rt></ruby><ruby>為<rt>ㄨㄟˊ</rt></ruby><ruby>過<rt>ㄍㄨㄛˋ</rt></ruby><ruby>去<rt>ㄑㄩˋ</rt></ruby>。</div>
+    </div>
+
+<div class="sh">🎤 完整英文歌詞</div>
+<div class="full-lyrics">
+  <div class="full-lyric-block"><div class="full-lyric-line">I tried to hide but something broke</div><div class="full-lyric-line">I tried to sing couldn't hit the notes</div><div class="full-lyric-line">The words kept catching in my throat</div><div class="full-lyric-line">I tried to smile, I was suffocating though</div><div class="full-lyric-line">But here with you - I can finally breathe</div><div class="full-lyric-line">You say you're no good,</div><div class="full-lyric-line">but you're good for me</div><div class="full-lyric-line">I've been hoping to change,</div><div class="full-lyric-line">now I know we can change</div><div class="full-lyric-line">But I won't if you're not by my side</div><div class="full-lyric-line">Why does it feel right every time I let you in?</div><div class="full-lyric-line">Why does it feel like I can tell you anything?</div><div class="full-lyric-line">All the secrets that keep me in chains</div><div class="full-lyric-line">and All the damage that might make me dangerous</div><div class="full-lyric-line">You got a dark side, guess you're not the only one What if we both try fighting</div><div class="full-lyric-line">what we're running from?</div><div class="full-lyric-line">We can't fix it if we never face it</div><div class="full-lyric-line">What if we find a way to escape it?</div><div class="full-lyric-line">We could be</div><div class="full-lyric-line">Free</div><div class="full-lyric-line">Free</div><div class="full-lyric-line">We can't fix it if we never face it</div><div class="full-lyric-line">Let the past be the past 'til it's weightless</div><div class="full-lyric-line">Ooh, time goes by, and I lose perspective</div><div class="full-lyric-line">Yeah, hope only hurts, so I just forget it</div><div class="full-lyric-line">But you're breaking through all the dark in me</div><div class="full-lyric-line">when I thought that nobody could</div><div class="full-lyric-line">And you're waking up all these parts of</div><div class="full-lyric-line">me that I thought were buried for good</div><div class="full-lyric-line">Between imposter and this</div><div class="full-lyric-line">monster, I been lost inside my head</div><div class="full-lyric-line">Ain't no choice when all these voices</div><div class="full-lyric-line">keep me pointing towards no end</div><div class="full-lyric-line">It's just easy when I'm with you</div><div class="full-lyric-line">No one see me the way you do</div><div class="full-lyric-line">I don't trust it but I want to</div><div class="full-lyric-line">I keep coming back to</div><div class="full-lyric-line">Why does it feel right every time I let you in?</div><div class="full-lyric-line">Why does it feel like I can tell you anything?</div><div class="full-lyric-line">We can't fix it if we never face it</div><div class="full-lyric-line">What if we find a way to escape it?</div><div class="full-lyric-line">We could be</div><div class="full-lyric-line">Free</div><div class="full-lyric-line">Free</div><div class="full-lyric-line">We can't fix it if we never face it</div><div class="full-lyric-line">Let the past be the past 'til it's weightless</div><div class="full-lyric-line">Oh... so take my hand, it's open Free, free</div><div class="full-lyric-line">What if we heal what's broken?</div><div class="full-lyric-line">I couldn't sing but you give me hope</div><div class="full-lyric-line">We can't fix it if we never face it</div><div class="full-lyric-line">Let the past be the past 'til it's weightless</div></div>
+</div>
+
+<div class="sh">📚 精選單字 20 個（基礎 12 + 進階 8）</div>
+
+<div class="word-section-label">🟡 基礎 12 個 — 睿寶一定要會</div>
+<div class="word-grid">
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">free</span><span class="w-type">形容詞</span><span class="w-ph">/friː/</span></div>
+    <div class="w-zh"><ruby>自<rt>ㄗˋ</rt></ruby><ruby>由<rt>ㄧㄡˊ</rt></ruby></div>
+    <div class="w-ex">Feel free.（感覺自由）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">heart</span><span class="w-type">名詞</span><span class="w-ph">/hɑːrt/</span></div>
+    <div class="w-zh"><ruby>心<rt>ㄒㄧㄣ</rt></ruby></div>
+    <div class="w-ex">My heart.（我的心）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">secret</span><span class="w-type">名詞</span><span class="w-ph">/ˈsiːkrət/</span></div>
+    <div class="w-zh"><ruby>祕<rt>ㄇㄧˋ</rt></ruby><ruby>密<rt>ㄇㄧˋ</rt></ruby></div>
+    <div class="w-ex">A little secret.（小祕密）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">fear</span><span class="w-type">名詞</span><span class="w-ph">/fɪr/</span></div>
+    <div class="w-zh"><ruby>害<rt>ㄏㄞˋ</rt></ruby><ruby>怕<rt>ㄆㄚˋ</rt></ruby></div>
+    <div class="w-ex">Face fear.（面對害怕）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">dark</span><span class="w-type">名詞</span><span class="w-ph">/dɑːrk/</span></div>
+    <div class="w-zh"><ruby>黑<rt>ㄏㄟ</rt></ruby><ruby>暗<rt>ㄢˋ</rt></ruby></div>
+    <div class="w-ex">Dark side.（黑暗面）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">light</span><span class="w-type">名詞</span><span class="w-ph">/laɪt/</span></div>
+    <div class="w-zh"><ruby>光<rt>ㄍㄨㄤ</rt></ruby></div>
+    <div class="w-ex">Bright light.（明亮的光）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">brave</span><span class="w-type">形容詞</span><span class="w-ph">/breɪv/</span></div>
+    <div class="w-zh"><ruby>勇<rt>ㄩㄥˇ</rt></ruby><ruby>敢<rt>ㄍㄢˇ</rt></ruby></div>
+    <div class="w-ex">Be brave.（勇敢）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">wing</span><span class="w-type">名詞</span><span class="w-ph">/wɪŋ/</span></div>
+    <div class="w-zh"><ruby>翅<rt>ㄔˋ</rt></ruby><ruby>膀<rt>ㄅㄤˇ</rt></ruby></div>
+    <div class="w-ex">Open wings.（張開翅膀）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">fly</span><span class="w-type">動詞</span><span class="w-ph">/flaɪ/</span></div>
+    <div class="w-zh"><ruby>飛<rt>ㄈㄟ</rt></ruby></div>
+    <div class="w-ex">Fly high.（飛高）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">sky</span><span class="w-type">名詞</span><span class="w-ph">/skaɪ/</span></div>
+    <div class="w-zh"><ruby>天<rt>ㄊㄧㄢ</rt></ruby><ruby>空<rt>ㄎㄨㄥ</rt></ruby></div>
+    <div class="w-ex">Blue sky.（藍天）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">face</span><span class="w-type">動詞</span><span class="w-ph">/feɪs/</span></div>
+    <div class="w-zh"><ruby>面<rt>ㄇㄧㄢˋ</rt></ruby><ruby>對<rt>ㄉㄨㄟˋ</rt></ruby></div>
+    <div class="w-ex">Face it.（面對它）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">past</span><span class="w-type">名詞</span><span class="w-ph">/pæst/</span></div>
+    <div class="w-zh"><ruby>過<rt>ㄍㄨㄛˋ</rt></ruby><ruby>去<rt>ㄑㄩˋ</rt></ruby></div>
+    <div class="w-ex">The past.（過去）</div>
+  </div>
+</div>
+
+<div class="word-section-label">🟠 進階 8 個 — 爸媽一起學</div>
+<div class="word-grid">
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">suffocating</span><span class="w-type">動詞</span><span class="w-ph">/ˈsʌfəkeɪtɪŋ/</span></div>
+    <div class="w-zh"><ruby>喘<rt>ㄔㄨㄢˇ</rt></ruby><ruby>不<rt>ㄅㄨˊ</rt></ruby><ruby>過<rt>ㄍㄨㄛˋ</rt></ruby><ruby>氣<rt>ㄑㄧˋ</rt></ruby></div>
+    <div class="w-ex">Feel suffocating.（覺得喘不過氣）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">chains</span><span class="w-type">名詞</span><span class="w-ph">/tʃeɪnz/</span></div>
+    <div class="w-zh"><ruby>鎖<rt>ㄙㄨㄛˇ</rt></ruby><ruby>鏈<rt>ㄌㄧㄢˋ</rt></ruby></div>
+    <div class="w-ex">Break chains.（打破鎖鏈）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">dangerous</span><span class="w-type">形容詞</span><span class="w-ph">/ˈdeɪndʒərəs/</span></div>
+    <div class="w-zh"><ruby>危<rt>ㄨㄟˊ</rt></ruby><ruby>險<rt>ㄒㄧㄢˇ</rt></ruby></div>
+    <div class="w-ex">Too dangerous.（太危險）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">weightless</span><span class="w-type">形容詞</span><span class="w-ph">/ˈweɪtləs/</span></div>
+    <div class="w-zh"><ruby>沒<rt>ㄇㄟˊ</rt></ruby><ruby>有<rt>ㄧㄡˇ</rt></ruby><ruby>重<rt>ㄓㄨㄥˋ</rt></ruby><ruby>量<rt>ㄌㄧㄤˋ</rt></ruby></div>
+    <div class="w-ex">Weightless feel.（無重力感）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">imposter</span><span class="w-type">名詞</span><span class="w-ph">/ɪmˈpɑːstər/</span></div>
+    <div class="w-zh"><ruby>冒<rt>ㄇㄠˋ</rt></ruby><ruby>牌<rt>ㄆㄞˊ</rt></ruby><ruby>者<rt>ㄓㄜˇ</rt></ruby></div>
+    <div class="w-ex">Not an imposter.（不是冒牌者）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">monster</span><span class="w-type">名詞</span><span class="w-ph">/ˈmɑːnstər/</span></div>
+    <div class="w-zh"><ruby>怪<rt>ㄍㄨㄞˋ</rt></ruby><ruby>物<rt>ㄨˋ</rt></ruby></div>
+    <div class="w-ex">Scary monster.（可怕的怪物）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">trust</span><span class="w-type">動詞</span><span class="w-ph">/trʌst/</span></div>
+    <div class="w-zh"><ruby>信<rt>ㄒㄧㄣˋ</rt></ruby><ruby>任<rt>ㄖㄣˋ</rt></ruby></div>
+    <div class="w-ex">Trust me.（相信我）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">heal</span><span class="w-type">動詞</span><span class="w-ph">/hiːl/</span></div>
+    <div class="w-zh"><ruby>療<rt>ㄌㄧㄠˊ</rt></ruby><ruby>癒<rt>ㄩˋ</rt></ruby></div>
+    <div class="w-ex">Heal together.（一起療癒）</div>
+  </div>
+</div>
+
+<div class="mission">
+  <span class="t">🎯 親子任務：</span>聽到 <b>free</b> 雙手張開像翅膀 🕊️；聽到 <b>brave</b> 比一個加油的拳頭 💪；副歌 <b>we could be free</b> 全家大聲唱！
+</div>
+
+</body>
+</html>

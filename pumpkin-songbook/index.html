@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第一屆 南瓜家英文歌曲大冒險</title>
+<link rel="stylesheet" href="./styles/songbook.css?v=20260509d">
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>🎃 第一屆 南瓜家英文歌曲大冒險</h1>
+    <div class="sub">親子英文歌曲學習本 — 手動選歌、隨機抽歌、音效揭曉、每首歌都可下載一份 A4 學習頁。</div>
+    <div class="tags">
+      <span class="tag">🎤 南瓜爸爸</span>
+      <span class="tag">🌿 Ann 媽媽</span>
+      <span class="tag">💜 睿寶</span>
+      <span class="tag">🎵 9 首精選歌曲</span>
+    </div>
+  </section>
+
+  <!-- 揭曉台 -->
+  <section class="stage-card" id="stageCard">
+    <div class="stage-info">
+      <span id="stageOwner">還沒選歌｜按下按鈕開始</span>
+      <div id="stageTitle">按「隨機抽歌」或「快速抽歌」</div>
+      <div id="stageSub">或是從下面 9 首歌卡片裡挑一首。</div>
+      <div id="statusText">提示：已完成的歌會自動跳過，不會再被抽到。</div>
+    </div>
+    <div class="stage-actions">
+      <button id="revealButton" class="btn btn-primary">🎲 隨機抽歌（動畫版）</button>
+      <button id="quickPickButton" class="btn btn-secondary">⚡ 快速抽歌</button>
+    </div>
+  </section>
+
+  <!-- 工具列 -->
+  <div class="toolbar">
+    <button id="printBookletButton" class="btn btn-ghost">📖 列印整本家庭活動冊</button>
+    <button id="exportButton" class="btn btn-ghost">⬇️ 匯出歌單 JSON</button>
+    <button id="importButton" class="btn btn-ghost">⬆️ 匯入歌單 JSON</button>
+    <input id="importFile" class="file-hidden" type="file" accept="application/json,.json">
+    <button id="resetButton" class="btn btn-ghost">🔄 重設完成狀態</button>
+  </div>
+
+  <!-- 歌曲卡片 -->
+  <div class="nav-title">全部 9 首歌 — 點一下就可以看學習本</div>
+  <div id="songNav" class="song-nav"></div>
+
+  <!-- 空狀態 -->
+  <div id="emptyState" class="empty-state">
+    <div class="big">🎶</div>
+    <h3>還沒選歌</h3>
+    <div>先按隨機抽歌，或從上面的歌卡挑一首，下面就會出現完整學習本。</div>
+  </div>
+
+  <!-- 詳情區 -->
+  <section id="detailSection" class="detail-section">
+    <div class="detail-card">
+      <!-- Hero -->
+      <div id="detailHero" class="detail-hero">
+        <div class="cover-box">
+          <img id="coverImage" src="" alt="">
+        </div>
+        <div class="detail-meta">
+          <span id="resultBadge" class="result-badge">手動選歌</span>
+          <br>
+          <span id="ownerBadge" class="owner-badge">選歌者</span>
+          <div id="songTitle" class="detail-title">歌名</div>
+          <div id="songMeta" class="detail-sub">演唱者 · 曲風 · 年份</div>
+        </div>
+        <div class="detail-actions">
+          <a id="youtubeLink" class="btn btn-youtube" target="_blank" rel="noopener">▶ YouTube</a>
+          <a id="downloadLink" class="btn btn-download disabled" download>⬇ 下載單曲學習頁</a>
+        </div>
+      </div>
+
+      <!-- MP3 試聽（全寬橫條，位於 hero 之下）-->
+      <div id="mp3Wrap" class="mp3-wrap" hidden>
+        <span class="mp3-label">🎵 試聽 MP3</span>
+        <audio id="mp3Player" preload="auto" controls></audio>
+      </div>
+
+      <!-- 抽中感言 -->
+      <div id="celebrateText" class="callout"></div>
+
+      <!-- 故事 / 學習 / 任務 / 句型 -->
+      <div class="info-grid">
+        <div class="info-box"><strong>🎼 曲風</strong><p id="genreDescBox"></p></div>
+        <div class="info-box"><strong>💡 歌曲意境</strong><p id="meaningBox"></p></div>
+        <div class="info-box"><strong>📖 歌曲故事</strong><p id="songStory"></p></div>
+        <div class="info-box"><strong>📚 今天學什麼</strong><p id="songLearn"></p></div>
+        <div class="info-box"><strong>🎯 親子小任務</strong><p id="songTask"></p></div>
+        <div class="info-box"><strong>🗣 句型練習</strong><p id="songPractice"></p></div>
+      </div>
+
+      <!-- 精選歌詞 -->
+      <div class="sub-head">🎵 英文歌詞重點片段（英文原句 + 中文注音）</div>
+      <div id="lyricList" class="lyric-list"></div>
+
+      <!-- 單字 -->
+      <div class="sub-head">📚 精選單字 20 個</div>
+      <div class="vocab-section">
+        <div class="vocab-label">🟡 基礎 12 個 — 睿寶一定要會</div>
+        <div id="basicVocabGrid" class="word-grid"></div>
+        <div class="vocab-label" style="margin-top:14px;">🟠 進階 8 個 — 爸媽一起學</div>
+        <div id="advancedVocabGrid" class="word-grid"></div>
+      </div>
+
+      <!-- 親子任務 -->
+      <div id="missionBox" class="mission-box"></div>
+    </div>
+  </section>
+
+  <footer>
+    南瓜家英文歌曲大冒險 · 親子英文歌曲學習本 · {{file://} 直接打開即可運作 }
+  </footer>
+
+</div>
+
+<div id="confettiLayer" class="confetti-layer"></div>
+
+<!-- 資料與邏輯 -->
+<script src="./scripts/songbook-data.js?v=20260509d"></script>
+<script src="./scripts/download-template.js?v=20260509d"></script>
+<script src="./scripts/songbook-app.js?v=20260509d"></script>
+</body>
+</html>

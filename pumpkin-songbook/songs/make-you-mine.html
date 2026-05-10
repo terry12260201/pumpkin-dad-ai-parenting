@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<title>Make You Mine — 南瓜家學習本</title>
+<style>
+  @page { size: A4; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+    background: #fff9ef; color: #2a1805;
+    padding: 10px; max-width: 210mm; margin: 0 auto; line-height: 1.5;
+  }
+  ruby { ruby-position: inter-character; ruby-align: center; margin-right: 3px; }
+  rt { font-size: 0.55em; color: #8a3a2a; font-weight: 400; letter-spacing: 0;
+       font-family: "Noto Sans TC", "PingFang TC", sans-serif; }
+  .lyric-zh, .col-box p, .hero-subtitle { line-height: 2.1; }
+  .w-zh { line-height: 2.0; }
+
+  .hero {
+    display: flex; align-items: stretch; gap: 14px;
+    background: linear-gradient(135deg, #ffb347 0%, #ff7a59 55%, #e25d7c 100%);
+    border-radius: 16px; padding: 14px;
+    color: #fff; box-shadow: 0 4px 0 #cf4c3a;
+    margin-bottom: 12px;
+  }
+  .cover-box {
+    width: 110px; height: 110px; border-radius: 12px; overflow: hidden;
+    flex-shrink: 0; border: 3px solid #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,.3);
+    background: rgba(0,0,0,.1);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cover-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cover-placeholder {
+    font-size: 10px; text-align: center; padding: 8px;
+    color: rgba(255,255,255,.9); line-height: 1.4;
+  }
+  .hero-meta { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+  .hero-title { font-size: 22px; font-weight: 900; letter-spacing: .02em; line-height: 1.1; }
+  .hero-subtitle { font-size: 13px; opacity: .95; margin-top: 4px; }
+  .hero-artist { font-size: 14px; margin-top: 6px; opacity: .95; }
+  .owner-pill {
+    display: inline-block; background: #fff; color: #cf4c3a;
+    padding: 3px 12px; border-radius: 12px;
+    font-size: 12px; font-weight: 700; margin-top: 6px;
+  }
+
+  .info-card {
+    background: #fff; border: 2px solid #ffd8c5; border-radius: 12px;
+    padding: 10px 14px; margin-bottom: 10px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 14px;
+  }
+  .info-row { font-size: 12px; }
+  .info-label { color: #cf4c3a; font-weight: 700; font-size: 11px; display: block; }
+  .info-value { color: #2a1805; font-weight: 600; }
+
+  .sh {
+    font-size: 15px; font-weight: 900; color: #cf4c3a;
+    margin: 12px 0 6px; padding: 4px 10px;
+    background: linear-gradient(90deg, #fff4ec 0%, transparent 100%);
+    border-left: 4px solid #cf4c3a; border-radius: 4px;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .col-box {
+    background: #fff; border: 2px solid #ffd8c5; border-radius: 12px;
+    padding: 10px 12px;
+  }
+  .col-box .ct { font-size: 13px; font-weight: 900; color: #cf4c3a; margin-bottom: 4px; }
+  .col-box p { font-size: 12.5px; color: #3d1f08; }
+
+  .lyric-block {
+    background: #fff4ec; border-left: 5px solid #cf4c3a; border-radius: 10px;
+    padding: 10px 14px; margin-bottom: 6px;
+  }
+  .lyric-label {
+    display: inline-block;
+    margin-bottom: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.78);
+    color: #cf4c3a;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .lyric-label-zh {
+    margin-top: 8px;
+    margin-bottom: 2px;
+    background: rgba(61,31,8,0.08);
+    color: #6b5b4a;
+    text-transform: none;
+  }
+  .lyric-en {
+    font-size: 14px; font-weight: 700; color: #cf4c3a; line-height: 1.5;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+  }
+  .lyric-zh { font-size: 12.5px; color: #3d1f08; margin-top: 3px; }
+
+  .full-lyrics { margin-top: 4px; }
+  .full-lyric-block {
+    background: #fff;
+    border: 2px solid #ffd8c5;
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+  }
+  .full-lyric-line {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #2a1805;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+  }
+
+  .word-section-label {
+    font-size: 11px; font-weight: 700; color: #cf4c3a;
+    margin: 8px 0 4px; padding-left: 4px;
+    letter-spacing: .05em;
+  }
+  .word-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;
+  }
+  .word-card {
+    background: #fff; border: 1px solid #ffd8c5; border-radius: 8px;
+    padding: 5px 8px 6px;
+  }
+  .word-card.basic    { border-left: 4px solid #cf4c3a; background: #fff; }
+  .word-card.advanced { border-left: 4px solid #cf4c3a; background: #fff4ec; }
+  .word-card .row1 {
+    display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+  }
+  .w-en { font-weight: 800; color: #cf4c3a; font-size: 13px;
+          font-family: 'Comic Sans MS', 'Arial', sans-serif; }
+  .w-type { font-size: 9.5px; color: #fff; background: #cf4c3a; padding: 1px 5px; border-radius: 4px; font-weight: 700; }
+  .w-ph { font-size: 9.5px; color: #888; }
+  .w-zh { font-size: 11.5px; color: #3d1f08; margin-top: 2px; }
+  .w-ex { font-size: 10px; color: #5a3a1a; font-style: italic; margin-top: 2px; line-height: 1.35; }
+
+  .mission {
+    background: linear-gradient(135deg, #fff4ec 0%, #ffd8c5 100%);
+    border-radius: 12px; padding: 10px 14px; margin-top: 10px;
+    font-size: 12.5px; color: #3d1f08; line-height: 1.7;
+  }
+  .mission .t { font-weight: 900; color: #cf4c3a; }
+
+  @media print { body { background: #fff; padding: 0; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="cover-box">
+    <img src="file:///Users/chennanhong/Desktop/AI%20%E8%82%B2%E5%85%92/%E8%8B%B1%E6%96%87%E6%AD%8C%E6%9B%B2/Make%20You%20Mine.jpg" alt="Make You Mine cover"
+      onerror="this.style.display='none';this.parentNode.innerHTML='<div class=&quot;cover-placeholder&quot;>封面圖<br>Make You Mine</div>'">
+  </div>
+  <div class="hero-meta">
+    <div>
+      <div class="hero-title">Make You Mine</div>
+      <div class="hero-subtitle"><ruby>讓<rt>ㄖㄤˋ</rt></ruby><ruby>你<rt>ㄋㄧˇ</rt></ruby><ruby>成<rt>ㄔㄥˊ</rt></ruby><ruby>為<rt>ㄨㄟˊ</rt></ruby><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby></div>
+      <div class="hero-artist">— PUBLIC</div>
+    </div>
+    <div><span class="owner-pill">南瓜爸爸選的歌</span></div>
+  </div>
+</div>
+
+<div class="info-card">
+  <div class="info-row"><span class="info-label">創作人</span><span class="info-value">John Vaughn / Ben Lapps / Matthew Alvarado</span></div>
+  <div class="info-row"><span class="info-label">發行年份</span><span class="info-value">2018 年</span></div>
+  <div class="info-row"><span class="info-label">收錄專輯</span><span class="info-value">Let's Remember Sundays</span></div>
+  <div class="info-row"><span class="info-label">演唱者</span><span class="info-value">PUBLIC</span></div>
+</div>
+
+<div class="two-col">
+  <div class="col-box">
+    <div class="ct">🎼 曲風</div>
+    <p><ruby>流<rt>ㄌㄧㄡˊ</rt></ruby><ruby>行<rt>ㄒㄧㄥˊ</rt></ruby><ruby>搖<rt>ㄧㄠˊ</rt></ruby><ruby>滾<rt>ㄍㄨㄣˇ</rt></ruby>(Pop Rock)。<ruby>節<rt>ㄐㄧㄝˊ</rt></ruby><ruby>奏<rt>ㄗㄡˋ</rt></ruby><ruby>明<rt>ㄇㄧㄥˊ</rt></ruby><ruby>快<rt>ㄎㄨㄞˋ</rt></ruby>，<ruby>很<rt>ㄏㄣˇ</rt></ruby><ruby>適<rt>ㄕˋ</rt></ruby><ruby>合<rt>ㄏㄜˊ</rt></ruby><ruby>全<rt>ㄑㄩㄢˊ</rt></ruby><ruby>家<rt>ㄐㄧㄚ</rt></ruby><ruby>拍<rt>ㄆㄞ</rt></ruby><ruby>手<rt>ㄕㄡˇ</rt></ruby>。</p>
+  </div>
+  <div class="col-box">
+    <div class="ct">💡 歌曲意境</div>
+    <p><ruby>這<rt>ㄓㄜˋ</rt></ruby><ruby>首<rt>ㄕㄡˇ</rt></ruby><ruby>歌<rt>ㄍㄜ</rt></ruby><ruby>在<rt>ㄗㄞˋ</rt></ruby><ruby>說<rt>ㄕㄨㄛ</rt></ruby>：「<ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>想<rt>ㄒㄧㄤˇ</rt></ruby><ruby>和<rt>ㄏㄢˋ</rt></ruby><ruby>你<rt>ㄋㄧˇ</rt></ruby><ruby>更<rt>ㄍㄥˋ</rt></ruby><ruby>靠<rt>ㄎㄠˋ</rt></ruby><ruby>近<rt>ㄐㄧㄣˋ</rt></ruby>、<ruby>慢<rt>ㄇㄢˋ</rt></ruby><ruby>慢<rt>˙ㄇㄢ</rt></ruby><ruby>牽<rt>ㄑㄧㄢ</rt></ruby><ruby>手<rt>ㄕㄡˇ</rt></ruby>」。<ruby>給<rt>ㄍㄟˇ</rt></ruby><ruby>小<rt>ㄒㄧㄠˇ</rt></ruby><ruby>朋<rt>ㄆㄥˊ</rt></ruby><ruby>友<rt>ㄧㄡˇ</rt></ruby><ruby>就<rt>ㄐㄧㄡˋ</rt></ruby><ruby>像<rt>ㄒㄧㄤˋ</rt></ruby><ruby>在<rt>ㄗㄞˋ</rt></ruby><ruby>說<rt>ㄕㄨㄛ</rt></ruby><ruby>珍<rt>ㄓㄣ</rt></ruby><ruby>惜<rt>ㄒㄧˊ</rt></ruby><ruby>家<rt>ㄐㄧㄚ</rt></ruby><ruby>人<rt>ㄖㄣˊ</rt></ruby>。</p>
+  </div>
+</div>
+
+<div class="sh">🎵 英文歌詞重點片段（英文原句 + 中文注音）</div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">I don't mind if we take some time.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>不<rt>ㄅㄨˊ</rt></ruby><ruby>介<rt>ㄐㄧㄝˋ</rt></ruby><ruby>意<rt>ㄧˋ</rt></ruby><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>們<rt>˙ㄇㄣ</rt></ruby><ruby>花<rt>ㄏㄨㄚ</rt></ruby><ruby>一<rt>ㄧ</rt></ruby><ruby>點<rt>ㄉㄧㄢˇ</rt></ruby><ruby>時<rt>ㄕˊ</rt></ruby><ruby>間<rt>ㄐㄧㄢ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">Put your hand in mine and take it slow.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>把<rt>ㄅㄚˇ</rt></ruby><ruby>你<rt>ㄋㄧˇ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>手<rt>ㄕㄡˇ</rt></ruby><ruby>放<rt>ㄈㄤˋ</rt></ruby><ruby>進<rt>ㄐㄧㄣˋ</rt></ruby><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>手<rt>ㄕㄡˇ</rt></ruby><ruby>裡<rt>ㄌㄧˇ</rt></ruby>，<ruby>慢<rt>ㄇㄢˋ</rt></ruby><ruby>慢<rt>˙ㄇㄢ</rt></ruby><ruby>來<rt>ㄌㄞˊ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">I just wanna make you mine.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>只<rt>ㄓˇ</rt></ruby><ruby>想<rt>ㄒㄧㄤˇ</rt></ruby><ruby>讓<rt>ㄖㄤˋ</rt></ruby><ruby>你<rt>ㄋㄧˇ</rt></ruby><ruby>成<rt>ㄔㄥˊ</rt></ruby><ruby>為<rt>ㄨㄟˊ</rt></ruby><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">It's okay if you take your time.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>慢<rt>ㄇㄢˋ</rt></ruby><ruby>慢<rt>˙ㄇㄢ</rt></ruby><ruby>來<rt>ㄌㄞˊ</rt></ruby><ruby>沒<rt>ㄇㄟˊ</rt></ruby><ruby>關<rt>ㄍㄨㄢ</rt></ruby><ruby>係<rt>˙ㄒㄧ</rt></ruby>。</div>
+    </div>
+
+<div class="sh">🎤 完整英文歌詞</div>
+<div class="full-lyrics">
+  <div class="full-lyric-block"><div class="full-lyric-line">Well, I will call you darlin' and everything will be okay</div><div class="full-lyric-line">'Cause I know that I am yours and you are mine</div><div class="full-lyric-line">Doesn't matter anyway</div><div class="full-lyric-line">In the night, we'll take a walk, it's nothin' funny</div><div class="full-lyric-line">Just to</div><div class="full-lyric-line">Talk</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Put your hand in mine</div><div class="full-lyric-line">You know that I want to be with you all the time</div><div class="full-lyric-line">You know that I won't stop until I make you mine</div><div class="full-lyric-line">You know that I won't stop until I make you mine</div><div class="full-lyric-line">Until I make you mine</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Well, I have called you darlin' and I'll say it again, again</div><div class="full-lyric-line">So kiss me 'til I'm sorry, babe, that you are gone and I'm a mess</div><div class="full-lyric-line">And I'll hurt you and you'll hurt me and we'll say things we can't repeat</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Put your hand in mine</div><div class="full-lyric-line">You know that I want to be with you all the time</div><div class="full-lyric-line">You know that I won't stop until I make you mine</div><div class="full-lyric-line">You know that I won't stop until I make you mine</div><div class="full-lyric-line">Until I make you mine</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">You need to know</div><div class="full-lyric-line">We'll take it slow</div><div class="full-lyric-line">I miss you so</div><div class="full-lyric-line">We'll take it slow</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">It's hard to feel you slipping</div><div class="full-lyric-line">(You need to know)</div><div class="full-lyric-line">Through my fingers are so numb</div><div class="full-lyric-line">(We'll take it slow)</div><div class="full-lyric-line">And how was I supposed to know</div><div class="full-lyric-line">(I miss you so)</div><div class="full-lyric-line">That you were not the one?</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Put your hand in mine</div><div class="full-lyric-line">You know that I want to be with you all the time</div><div class="full-lyric-line">You know that I won't stop until I make you mine</div><div class="full-lyric-line">You know that I won't stop until I make you mine</div><div class="full-lyric-line">Until I make you mine</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Put your hand in mine</div><div class="full-lyric-line">You know that I want to be with you all the time</div><div class="full-lyric-line">Oh darlin', darlin', baby, you're so very fine</div><div class="full-lyric-line">You know that I won't stop until I make you mine</div><div class="full-lyric-line">Until I make you</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">La-la-la-la-la</div><div class="full-lyric-line">La-la-la-la-la-la-la</div><div class="full-lyric-line">La-la-la-la-la</div><div class="full-lyric-line">La-la-la-la-la-la-la</div><div class="full-lyric-line">La-la-la-la-la</div><div class="full-lyric-line">La-la-la-la-la-la-la</div><div class="full-lyric-line">La-la-la-la-la</div></div>
+</div>
+
+<div class="sh">📚 精選單字 20 個（基礎 12 + 進階 8）</div>
+
+<div class="word-section-label">🟡 基礎 12 個 — 睿寶一定要會</div>
+<div class="word-grid">
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">mine</span><span class="w-type">代名詞</span><span class="w-ph">/maɪn/</span></div>
+    <div class="w-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby></div>
+    <div class="w-ex">It's mine.（這是我的）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">hand</span><span class="w-type">名詞</span><span class="w-ph">/hænd/</span></div>
+    <div class="w-zh"><ruby>手<rt>ㄕㄡˇ</rt></ruby></div>
+    <div class="w-ex">Your hand.（你的手）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">hold</span><span class="w-type">動詞</span><span class="w-ph">/hoʊld/</span></div>
+    <div class="w-zh"><ruby>握<rt>ㄨㄛˋ</rt></ruby><ruby>住<rt>ㄓㄨˋ</rt></ruby></div>
+    <div class="w-ex">Hold on.（撐住）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">slow</span><span class="w-type">形容詞</span><span class="w-ph">/sloʊ/</span></div>
+    <div class="w-zh"><ruby>慢<rt>ㄇㄢˋ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby></div>
+    <div class="w-ex">Take it slow.（慢慢來）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">time</span><span class="w-type">名詞</span><span class="w-ph">/taɪm/</span></div>
+    <div class="w-zh"><ruby>時<rt>ㄕˊ</rt></ruby><ruby>間<rt>ㄐㄧㄢ</rt></ruby></div>
+    <div class="w-ex">Take time.（花時間）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">walk</span><span class="w-type">動詞</span><span class="w-ph">/wɔːk/</span></div>
+    <div class="w-zh"><ruby>散<rt>ㄙㄢˋ</rt></ruby><ruby>步<rt>ㄅㄨˋ</rt></ruby></div>
+    <div class="w-ex">Let's walk.（我們散步）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">home</span><span class="w-type">名詞</span><span class="w-ph">/hoʊm/</span></div>
+    <div class="w-zh"><ruby>家<rt>ㄐㄧㄚ</rt></ruby></div>
+    <div class="w-ex">Go home.（回家）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">stay</span><span class="w-type">動詞</span><span class="w-ph">/steɪ/</span></div>
+    <div class="w-zh"><ruby>停<rt>ㄊㄧㄥˊ</rt></ruby><ruby>留<rt>ㄌㄧㄡˊ</rt></ruby></div>
+    <div class="w-ex">Stay here.（待在這裡）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">love</span><span class="w-type">名詞</span><span class="w-ph">/lʌv/</span></div>
+    <div class="w-zh"><ruby>愛<rt>ㄞˋ</rt></ruby></div>
+    <div class="w-ex">Big love.（大大的愛）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">sure</span><span class="w-type">形容詞</span><span class="w-ph">/ʃʊr/</span></div>
+    <div class="w-zh"><ruby>確<rt>ㄑㄩㄝˋ</rt></ruby><ruby>定<rt>ㄉㄧㄥˋ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby></div>
+    <div class="w-ex">I'm sure.（我很確定）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">kiss</span><span class="w-type">動詞</span><span class="w-ph">/kɪs/</span></div>
+    <div class="w-zh"><ruby>親<rt>ㄑㄧㄣ</rt></ruby><ruby>吻<rt>ㄨㄣˇ</rt></ruby></div>
+    <div class="w-ex">A sweet kiss.（甜甜的吻）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">smile</span><span class="w-type">名詞</span><span class="w-ph">/smaɪl/</span></div>
+    <div class="w-zh"><ruby>微<rt>ㄨㄟˊ</rt></ruby><ruby>笑<rt>ㄒㄧㄠˋ</rt></ruby></div>
+    <div class="w-ex">Your smile.（你的微笑）</div>
+  </div>
+</div>
+
+<div class="word-section-label">🟠 進階 8 個 — 爸媽一起學</div>
+<div class="word-grid">
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">darlin'</span><span class="w-type">名詞</span><span class="w-ph">/ˈdɑːrlɪn/</span></div>
+    <div class="w-zh"><ruby>親<rt>ㄑㄧㄣ</rt></ruby><ruby>愛<rt>ㄞˋ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby></div>
+    <div class="w-ex">Hi, darlin'.（嗨，親愛的）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">slipping</span><span class="w-type">動詞</span><span class="w-ph">/ˈslɪpɪŋ/</span></div>
+    <div class="w-zh"><ruby>溜<rt>ㄌㄧㄡ</rt></ruby><ruby>走<rt>ㄗㄡˇ</rt></ruby></div>
+    <div class="w-ex">Time slipping.（時間溜走）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">fingers</span><span class="w-type">名詞</span><span class="w-ph">/ˈfɪŋɡərz/</span></div>
+    <div class="w-zh"><ruby>手<rt>ㄕㄡˇ</rt></ruby><ruby>指<rt>ㄓˇ</rt></ruby></div>
+    <div class="w-ex">Ten fingers.（十根手指）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">numb</span><span class="w-type">形容詞</span><span class="w-ph">/nʌm/</span></div>
+    <div class="w-zh"><ruby>麻<rt>ㄇㄚˊ</rt></ruby><ruby>木<rt>ㄇㄨˋ</rt></ruby></div>
+    <div class="w-ex">Feel numb.（感到麻木）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">suppose</span><span class="w-type">動詞</span><span class="w-ph">/səˈpoʊz/</span></div>
+    <div class="w-zh"><ruby>應<rt>ㄧㄥ</rt></ruby><ruby>該<rt>ㄍㄞ</rt></ruby></div>
+    <div class="w-ex">Suppose to.（應該要）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">mess</span><span class="w-type">名詞</span><span class="w-ph">/mes/</span></div>
+    <div class="w-zh"><ruby>混<rt>ㄏㄨㄣˋ</rt></ruby><ruby>亂<rt>ㄌㄨㄢˋ</rt></ruby></div>
+    <div class="w-ex">Big mess.（一團亂）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">anyway</span><span class="w-type">副詞</span><span class="w-ph">/ˈeniweɪ/</span></div>
+    <div class="w-zh"><ruby>總<rt>ㄗㄨㄥˇ</rt></ruby><ruby>之<rt>ㄓ</rt></ruby></div>
+    <div class="w-ex">Anyway, it's fine.（總之沒事）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">miss</span><span class="w-type">動詞</span><span class="w-ph">/mɪs/</span></div>
+    <div class="w-zh"><ruby>想<rt>ㄒㄧㄤˇ</rt></ruby><ruby>念<rt>ㄋㄧㄢˋ</rt></ruby></div>
+    <div class="w-ex">Miss you.（想你）</div>
+  </div>
+</div>
+
+<div class="mission">
+  <span class="t">🎯 親子任務：</span>聽到 <b>mine</b> 雙手放在胸口 🫶；聽到 <b>slow</b> 全家動作慢動作；副歌 <b>make you mine</b> 一起左右搖擺。
+</div>
+
+</body>
+</html>

@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>壽山國小 — AI 育兒講座之提示詞整理</title>
+<meta name="description" content="南瓜爸爸 AI 育兒講座 — 9 個範例工具的完整 Prompt + 20 位親子 AI 代理人，給家長帶回家直接用。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Fraunces:ital,wght@1,700;1,900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="./assets/agents-data.js"></script>
+<style>
+:root {
+  --pumpkin: #F58220;
+  --pumpkin-light: #FF8C42;
+  --pumpkin-dark: #d96f15;
+  --brown: #8B4513;
+  --cream: #FFF8F0;
+  --cream-deep: #FBEFDA;
+  --mint: #C8E6D5;
+  --peach: #FCE2C7;
+  --butter: #FCE7B8;
+  --ink: #1a1a1a;
+  --ink-soft: #3a3a3a;
+  --ink-muted: #6a6358;
+  --line: rgba(160,130,80,.18);
+  --code-bg: #1f1f2e;
+  --code-fg: #e8e8f0;
+  --code-accent: #FFB87A;
+  --code-em: #FFE3B8;
+  --shadow-sm: 0 2px 8px rgba(60,40,10,.06);
+  --shadow-md: 0 6px 24px rgba(60,40,10,.08);
+  --shadow-lg: 0 16px 50px rgba(60,40,10,.12);
+  --font-en: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-cn: 'Noto Sans TC', system-ui, sans-serif;
+  --font-em: 'Fraunces', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  font-family: var(--font-cn), var(--font-en);
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+em.eng { font-family: var(--font-em); font-style: italic; font-weight: 700; color: var(--brown); letter-spacing: -.01em; }
+
+/* ========== LAYOUT ========== */
+.app {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+  max-width: 1480px;
+  margin: 0 auto;
+}
+@media (max-width: 900px) { .app { grid-template-columns: 1fr; } }
+
+/* ========== SIDEBAR ========== */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 32px 24px;
+  background: var(--cream-deep);
+  border-right: 1px solid var(--line);
+}
+@media (max-width: 900px) { .sidebar { position: static; height: auto; } }
+
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 900; font-size: 18px; color: var(--brown);
+  margin-bottom: 8px;
+}
+.brand .emoji { font-size: 28px; }
+.brand-sub {
+  font-size: 12px; color: var(--ink-muted);
+  letter-spacing: .12em; text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.toc-label {
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--ink-muted); font-weight: 700;
+  margin: 18px 0 10px;
+}
+.toc {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.toc a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--ink-soft);
+  font-size: 14px; font-weight: 500;
+  transition: all .15s ease;
+  border-left: 3px solid transparent;
+}
+.toc a .num {
+  flex-shrink: 0;
+  width: 24px; height: 24px; line-height: 24px;
+  text-align: center;
+  background: rgba(255,255,255,.6);
+  border-radius: 6px;
+  font: 700 11px var(--font-en);
+  color: var(--brown);
+}
+.toc a:hover {
+  background: rgba(245,130,32,.08);
+  color: var(--pumpkin-dark);
+}
+.toc a.active {
+  background: var(--pumpkin);
+  color: white;
+  border-left-color: var(--brown);
+  font-weight: 700;
+}
+.toc a.active .num {
+  background: var(--brown);
+  color: white;
+}
+
+.sidebar-foot {
+  margin-top: 32px; padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-size: 11px; color: var(--ink-muted);
+  line-height: 1.7;
+}
+.sidebar-foot strong { color: var(--brown); display: block; margin-bottom: 4px; }
+
+/* ========== MAIN ========== */
+.main { padding: 48px clamp(20px, 4vw, 64px) 80px; }
+
+/* ========== HERO ========== */
+.hero {
+  position: relative;
+  margin-bottom: 56px;
+  padding: 48px 0 32px;
+  border-bottom: 2px solid var(--line);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  right: -30px; top: -30px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, var(--peach), transparent 70%);
+  opacity: .6;
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-size: 13px; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--pumpkin); font-weight: 800;
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font: 900 clamp(28px, 4vw, 44px)/1.2 var(--font-cn);
+  letter-spacing: -.01em;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+.hero h1 .em { font-family: var(--font-em); font-style: italic; color: var(--brown); }
+.hero-desc {
+  font-size: 17px; color: var(--ink-soft);
+  max-width: 760px; line-height: 1.8;
+}
+.hero-meta {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-top: 24px;
+}
+.hero-meta .chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 12px; font-weight: 600;
+  color: var(--ink-soft);
+}
+
+/* ========== INDEX TABLE ========== */
+.index-section {
+  margin-bottom: 64px;
+  padding: 28px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+}
+.index-section h2 {
+  font: 800 22px var(--font-cn);
+  margin-bottom: 18px;
+  color: var(--ink);
+  display: flex; align-items: center; gap: 10px;
+}
+.index-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+.index-card {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 14px 16px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: all .15s ease;
+}
+.index-card:hover {
+  background: var(--peach);
+  border-color: var(--pumpkin);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.index-card .ic-num {
+  font: 900 12px var(--font-en);
+  color: var(--pumpkin); letter-spacing: .1em;
+}
+.index-card .ic-title {
+  font: 700 15px/1.3 var(--font-cn);
+  color: var(--ink);
+}
+.index-card .ic-meta {
+  font-size: 11px; color: var(--ink-muted);
+}
+
+/* ========== SECTION DIVIDER ========== */
+.section-divider {
+  margin: 80px 0 48px;
+  text-align: center;
+  position: relative;
+}
+.section-divider::before {
+  content: '';
+  position: absolute;
+  inset: 50% 0 0 0;
+  height: 1px;
+  background: var(--line);
+  z-index: 0;
+}
+.section-divider .label {
+  position: relative;
+  display: inline-block;
+  padding: 12px 32px;
+  background: var(--cream);
+  font: 800 18px var(--font-cn);
+  color: var(--brown);
+  letter-spacing: .15em;
+  z-index: 1;
+}
+
+/* ========== TOOL SECTION ========== */
+.tool {
+  margin-bottom: 80px;
+  padding-top: 24px;
+}
+.tool-head {
+  display: flex; align-items: flex-start; gap: 20px;
+  margin-bottom: 28px;
+}
+.tool-num {
+  flex-shrink: 0;
+  width: 64px; height: 64px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--pumpkin), var(--pumpkin-dark));
+  color: white;
+  border-radius: 18px;
+  font: 900 28px var(--font-en);
+  box-shadow: var(--shadow-md);
+}
+.tool-meta { flex: 1; min-width: 0; }
+.tool-meta .label {
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--ink-muted); font-weight: 700;
+  margin-bottom: 4px;
+}
+.tool-meta h2 {
+  font: 900 clamp(22px, 2.6vw, 28px)/1.2 var(--font-cn);
+  letter-spacing: -.01em;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.tool-meta h2 .icon { display: inline-block; margin-right: 8px; }
+.tool-meta .tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-top: 8px;
+}
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px; font-weight: 600;
+  background: var(--peach);
+  color: var(--brown);
+}
+.tag.tool-claude { background: #FFE4D9; color: #B5440D; }
+.tag.tool-gpt { background: #D4F4E2; color: #0E7B3E; }
+.tag.tool-gemini { background: #DBE9FF; color: #1E5AA8; }
+.tag.tool-suno { background: #F3E5FB; color: #6B2C8E; }
+.tag.tool-codex { background: #1f1f2e; color: var(--code-accent); }
+
+/* ========== TOOL BODY ========== */
+.tool-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.info-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 16px;
+  padding: 14px 18px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 14px;
+}
+.info-row .k {
+  font-weight: 700; color: var(--ink-muted);
+  font-size: 12px; letter-spacing: .1em;
+  padding-top: 2px;
+}
+.info-row .v { color: var(--ink-soft); line-height: 1.7; }
+.info-row .v code {
+  background: var(--cream-deep);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--brown);
+}
+.info-row .v a { color: var(--pumpkin-dark); font-weight: 600; }
+.info-row .v strong { color: var(--brown); }
+
+/* ========== "MADE WITH" BANNER ========== */
+.made-with {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 22px;
+  background: linear-gradient(135deg, #fff8ec 0%, #ffeed5 100%);
+  border: 1.5px solid var(--pumpkin);
+  border-radius: 14px;
+  font-size: 14px;
+}
+.made-with .mw-icon {
+  flex-shrink: 0;
+  width: 38px; height: 38px;
+  background: var(--pumpkin); color: white;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.made-with .mw-text { color: var(--ink-soft); line-height: 1.6; }
+.made-with .mw-text strong { color: var(--brown); }
+.made-with .mw-text a { color: var(--pumpkin-dark); text-decoration: none; font-weight: 700; border-bottom: 2px solid var(--peach); }
+
+/* ========== PROMPT CARD ========== */
+.prompt-card {
+  background: var(--code-bg);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+.prompt-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px;
+  background: rgba(255,255,255,.04);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.prompt-tag {
+  display: flex; align-items: center; gap: 8px;
+  font: 700 13px var(--font-cn);
+  color: var(--code-accent);
+  letter-spacing: .04em;
+}
+.prompt-tag .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--code-accent);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.copy-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 16px;
+  background: rgba(255,184,122,.15);
+  color: var(--code-accent);
+  border: 1px solid rgba(255,184,122,.3);
+  border-radius: 999px;
+  font: 700 12px var(--font-cn);
+  cursor: pointer;
+  transition: all .15s ease;
+  white-space: nowrap;
+}
+.copy-btn:hover {
+  background: rgba(255,184,122,.3);
+  color: white;
+  transform: translateY(-1px);
+}
+.copy-btn.copied {
+  background: #2da44e;
+  color: white;
+  border-color: #2da44e;
+}
+.prompt-body {
+  padding: 24px 28px;
+  font: 500 13.5px/1.75 var(--font-mono);
+  color: var(--code-fg);
+  white-space: pre-wrap;
+  overflow-x: auto;
+  max-height: 560px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,184,122,.4) transparent;
+}
+.prompt-body::-webkit-scrollbar { width: 8px; }
+.prompt-body::-webkit-scrollbar-thumb { background: rgba(255,184,122,.35); border-radius: 4px; }
+.prompt-body strong { color: var(--code-accent); font-weight: 700; }
+.prompt-body em { color: var(--code-em); font-style: normal; font-weight: 600; }
+.prompt-foot {
+  padding: 10px 20px;
+  background: rgba(0,0,0,.2);
+  font-size: 11px;
+  color: rgba(255,184,122,.6);
+  text-align: center;
+}
+
+/* ========== STEP CARDS ========== */
+.step-card {
+  margin: 14px 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: white;
+}
+.step-head {
+  padding: 14px 20px;
+  background: linear-gradient(135deg, var(--peach), var(--butter));
+  font-weight: 700;
+  color: var(--brown);
+  display: flex; align-items: center; gap: 10px;
+}
+.step-head .step-n {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  background: var(--brown);
+  color: white;
+  border-radius: 50%;
+  font: 800 13px var(--font-en);
+}
+.step-body { padding: 0; }
+.step-card .prompt-card { border-radius: 0; box-shadow: none; }
+
+/* ========== ALERT ========== */
+.alert {
+  display: flex; gap: 14px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #FFF3E0, #FFE8D4);
+  border: 1px solid var(--pumpkin);
+  border-radius: 12px;
+  margin: 12px 0;
+}
+.alert-icon { font-size: 22px; flex-shrink: 0; }
+.alert-body { font-size: 14px; color: var(--ink-soft); line-height: 1.7; }
+.alert-body strong { color: var(--brown); }
+
+/* ========== COMMON SECTION ========== */
+.common-section {
+  margin-top: 48px;
+  padding: 40px;
+  background: linear-gradient(135deg, #fff8ec 0%, #fff 100%);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  box-shadow: var(--shadow-md);
+}
+.common-section h2 {
+  font: 900 24px var(--font-cn);
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.common-section .sub {
+  color: var(--ink-muted);
+  margin-bottom: 28px;
+  font-size: 14px;
+}
+.common-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.common-grid .card {
+  padding: 18px 20px;
+  background: white;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+}
+.common-grid .card h3 {
+  font: 700 15px var(--font-cn);
+  color: var(--brown);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.common-grid .card .desc {
+  font-size: 13px; color: var(--ink-soft); line-height: 1.7;
+}
+.common-grid .card a {
+  color: var(--pumpkin-dark); text-decoration: none; font-weight: 600;
+  border-bottom: 1px solid var(--peach);
+}
+.common-grid .card a:hover { background: var(--cream-deep); }
+
+/* ========== AGENTS GRID ========== */
+.agents-intro {
+  margin: 8px 0 32px;
+  padding: 24px 28px;
+  background: linear-gradient(135deg, var(--peach), var(--butter));
+  border-radius: 18px;
+  border: 1px solid var(--pumpkin);
+}
+.agents-intro h3 {
+  font: 900 22px var(--font-cn);
+  color: var(--brown);
+  margin-bottom: 8px;
+}
+.agents-intro p {
+  font-size: 14px; color: var(--ink-soft); line-height: 1.7;
+}
+
+.cat-filter {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 24px;
+}
+.cat-btn {
+  padding: 8px 18px;
+  background: white;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  font: 700 13px var(--font-cn);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.cat-btn:hover {
+  border-color: var(--pumpkin);
+  color: var(--pumpkin-dark);
+}
+.cat-btn.active {
+  background: var(--pumpkin);
+  border-color: var(--pumpkin);
+  color: white;
+}
+
+.agents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 18px;
+}
+.agent-card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: all .2s ease;
+}
+.agent-card:hover {
+  border-color: var(--pumpkin);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.agent-card .ac-head {
+  padding: 18px 20px 14px;
+  display: flex; align-items: flex-start; gap: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.agent-card .ac-emoji {
+  flex-shrink: 0;
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, var(--peach), var(--butter));
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+}
+.agent-card .ac-title { flex: 1; min-width: 0; }
+.agent-card .ac-name {
+  font: 900 16px var(--font-cn);
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.agent-card .ac-tagline {
+  font-size: 12px; color: var(--ink-muted); line-height: 1.5;
+}
+.agent-card .ac-cat {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--cream-deep);
+  color: var(--brown);
+  border-radius: 999px;
+  font-size: 10px; font-weight: 700;
+  margin-top: 4px;
+  letter-spacing: .05em;
+}
+.agent-card .ac-body {
+  padding: 16px 20px;
+  flex: 1;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.agent-card .ac-line {
+  font-size: 12px; line-height: 1.6;
+}
+.agent-card .ac-line .lk {
+  color: var(--ink-muted); font-weight: 700;
+  font-size: 10px; letter-spacing: .1em;
+  display: block; margin-bottom: 2px;
+}
+.agent-card .ac-line .lv {
+  color: var(--ink-soft);
+}
+.agent-card .ac-foot {
+  padding: 12px 20px;
+  background: var(--cream);
+  border-top: 1px solid var(--line);
+}
+.agent-card .ac-tags {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  margin-bottom: 10px;
+}
+.agent-card .ac-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-muted);
+}
+.agent-card .ac-copy {
+  width: 100%;
+  padding: 10px;
+  background: var(--pumpkin);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font: 700 13px var(--font-cn);
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.agent-card .ac-copy:hover {
+  background: var(--pumpkin-dark);
+}
+.agent-card .ac-copy.copied {
+  background: #2da44e;
+}
+
+/* ========== TOAST ========== */
+.toast {
+  position: fixed;
+  bottom: 32px; left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  padding: 12px 24px;
+  background: var(--ink);
+  color: white;
+  border-radius: 999px;
+  font: 700 14px var(--font-cn);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transition: all .3s cubic-bezier(.2,.7,.2,1);
+  pointer-events: none;
+  z-index: 1000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toc-toggle {
+  display: none;
+  position: fixed;
+  bottom: 24px; right: 24px;
+  width: 52px; height: 52px;
+  background: var(--pumpkin);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 22px;
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  z-index: 100;
+}
+@media (max-width: 900px) { .toc-toggle { display: block; } }
+
+/* ========== FOOTER ========== */
+.footer {
+  margin-top: 80px; padding-top: 32px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  color: var(--ink-muted);
+  font-size: 14px;
+}
+.footer .pumpkin { font-size: 28px; }
+.footer strong { color: var(--brown); }
+.footer .links {
+  margin-top: 14px;
+  display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;
+  font-size: 12px;
+}
+.footer .links a {
+  color: var(--pumpkin-dark);
+  text-decoration: none;
+  border-bottom: 1px solid var(--peach);
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="emoji">🎃</span>
+      <span>南瓜爸爸 工具庫</span>
+    </div>
+    <div class="brand-sub">壽山國小 · AI 育兒講座</div>
+
+    <div class="toc-label">講座範例工具</div>
+    <ul class="toc" id="toc">
+      <li><a href="#tool-1"><span class="num">01</span><span>英文歌單 Songbook</span></a></li>
+      <li><a href="#tool-2"><span class="num">02</span><span>拍照學單字</span></a></li>
+      <li><a href="#tool-3"><span class="num">03</span><span>AI 說故事</span></a></li>
+      <li><a href="#tool-4"><span class="num">04</span><span>Suno 家庭主題曲</span></a></li>
+      <li><a href="#tool-5"><span class="num">05</span><span>AI 食譜</span></a></li>
+      <li><a href="#tool-6"><span class="num">06</span><span>AI 自製吃豆人</span></a></li>
+      <li><a href="#tool-7"><span class="num">07</span><span>AI 顧問助理</span></a></li>
+      <li><a href="#tool-8"><span class="num">08</span><span>旗山旅遊知識圖譜</span></a></li>
+      <li><a href="#tool-9"><span class="num">09</span><span>Suno 紅蘿蔔的祈求</span></a></li>
+    </ul>
+
+    <div class="toc-label">附加資源</div>
+    <ul class="toc">
+      <li><a href="#agents"><span class="num">🤖</span><span>20 位親子 AI 代理人</span></a></li>
+      <li><a href="#tools-info"><span class="num">📎</span><span>使用工具一覽</span></a></li>
+      <li><a href="#opener"><span class="num">📋</span><span>給 GAI 的開場提示</span></a></li>
+    </ul>
+
+    <div class="sidebar-foot">
+      <strong>陳南宏 Terry · 南瓜爸爸</strong>
+      南瓜虛擬科技 共同創辦人 / 美術總監<br>
+      AI 育兒講座 — 給 35–50 歲家長的入門磚
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <section class="hero">
+      <div class="hero-eyebrow">PUMPKIN DAD · AI PARENTING TOOLKIT</div>
+      <h1>壽山國小 — AI 育兒講座<br>之 <em class="em">提示詞整理</em></h1>
+      <p class="hero-desc">
+        南瓜爸爸 AI 育兒講座裡示範的 9 個互動工具，每一個都附上完整的需求書與可複製的 Prompt。
+        把任一段貼到 <strong>Claude / ChatGPT / Gemini</strong>，就能 1:1 重建出來。
+        也可以拿來舉一反三，改成屬於你家的版本。
+      </p>
+      <p class="hero-desc" style="margin-top:14px;">
+        最後再附贈 <strong>20 位親子 AI 代理人</strong>，涵蓋學習 / 情緒 / 生活 / 行政 / 健康五大日常場景，每一位都有現成 Prompt，今晚就能用。
+      </p>
+      <div class="hero-meta">
+        <span class="chip">🎯 9 個範例工具</span>
+        <span class="chip">🤖 20 位 AI 代理人</span>
+        <span class="chip">📋 一鍵複製</span>
+        <span class="chip">🆓 完全免費</span>
+      </div>
+    </section>
+
+    <!-- ============ INDEX ============ -->
+    <section class="index-section">
+      <h2>📑 講座工具索引</h2>
+      <div class="index-grid">
+        <a class="index-card" href="#tool-1">
+          <span class="ic-num">01</span>
+          <span class="ic-title">🎵 南瓜家英文歌曲大冒險</span>
+          <span class="ic-meta">用 Claude 做的</span>
+        </a>
+        <a class="index-card" href="#tool-2">
+          <span class="ic-num">02</span>
+          <span class="ic-title">🔍 拍照學單字</span>
+          <span class="ic-meta">用 Google AI Studio 做的</span>
+        </a>
+        <a class="index-card" href="#tool-3">
+          <span class="ic-num">03</span>
+          <span class="ic-title">📖 AI 說故事</span>
+          <span class="ic-meta">純 Prompt（Claude / GPT 直接用）</span>
+        </a>
+        <a class="index-card" href="#tool-4">
+          <span class="ic-num">04</span>
+          <span class="ic-title">🎵 Suno 把陽光裝進我們家</span>
+          <span class="ic-meta">GPT 寫詞 → Suno 生旋律</span>
+        </a>
+        <a class="index-card" href="#tool-5">
+          <span class="ic-num">05</span>
+          <span class="ic-title">🍳 AI 食譜</span>
+          <span class="ic-meta">用 Codex 做的網頁工具</span>
+        </a>
+        <a class="index-card" href="#tool-6">
+          <span class="ic-num">06</span>
+          <span class="ic-title">🎮 AI 自製吃豆人</span>
+          <span class="ic-meta">拍 T 恤照片 → Claude 生遊戲</span>
+        </a>
+        <a class="index-card" href="#tool-7">
+          <span class="ic-num">07</span>
+          <span class="ic-title">🧙 AI 顧問助理</span>
+          <span class="ic-meta">GPT/Gemini/NotebookLM 整理人設</span>
+        </a>
+        <a class="index-card" href="#tool-8">
+          <span class="ic-num">08</span>
+          <span class="ic-title">🗺 旗山旅遊知識圖譜</span>
+          <span class="ic-meta">資料 + Claude 做蜘蛛網圖</span>
+        </a>
+        <a class="index-card" href="#tool-9">
+          <span class="ic-num">09</span>
+          <span class="ic-title">🥕 Suno 紅蘿蔔的祈求</span>
+          <span class="ic-meta">GPT 寫詞 → Suno 生旋律</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 1 ============ -->
+    <section class="tool" id="tool-1">
+      <div class="tool-head">
+        <div class="tool-num">01</div>
+        <div class="tool-meta">
+          <div class="label">講座 P16</div>
+          <h2><span class="icon">🎵</span>南瓜家英文歌曲大冒險</h2>
+          <div class="tags">
+            <span class="tag tool-claude">Claude</span>
+            <span class="tag">家庭共讀</span>
+            <span class="tag">英文學習</span>
+          </div>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="info-row">
+          <div class="k">這是什麼</div>
+          <div class="v">把家庭共同回憶包裝成英文學習。家裡每個人各選 3 首歌（共 9 首），每天輪流抽一首，抽到誰的歌就由誰當主唱、其他人當合音。每首歌都有專屬的學習頁。</div>
+        </div>
+        <div class="made-with">
+          <div class="mw-icon">🛠</div>
+          <div class="mw-text">
+            <strong>南瓜爸爸用什麼做的</strong>：用 <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a> 對話寫出整個網頁工具（單檔 HTML，無框架）。
+          </div>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-head">
+            <div class="prompt-tag"><span class="dot"></span>給 Claude / ChatGPT 的完整需求書</div>
+            <button class="copy-btn" data-target="prompt-1">⧉ 複製整段</button>
+          </div>
+          <div class="prompt-body" id="prompt-1">請用單一 HTML 檔（內含 CSS 與 JS，無前端框架）製作「家庭英文歌單抽歌器」，需求如下：
+
+<strong>【主題】</strong>
+一家三人各自選 3 首英文歌（共 9 首），做成可隨機抽歌的學習工具。
+
+<strong>【主畫面 — 9 張歌卡】</strong>
+- 上方標題「全部 9 首歌 — 點一下就可以看學習本」
+- 9 張卡片排成 5+4 兩列，每張卡顯示：
+  ▸ 選歌者標籤（例如「南瓜爸爸 / Ann 媽媽 / 睿寶」三人各自配色：橘 / 綠 / 紫）
+  ▸ 「✓ 完成」勾選方塊
+  ▸ 歌名（英文）
+- 點一張卡 → 下方展開該歌的學習頁
+
+<strong>【學習頁區塊】</strong>
+- Hero 區（左封面 / 中歌名作者 / 右 YouTube + 下載 三欄）
+- 全寬橫幅 MP3 試聽
+- 抽中感言（彩色）
+- 6 格資訊：曲風 / 歌曲意境 / 歌曲故事 / 今天學什麼 / 親子小任務 / 句型練習
+- 關鍵歌詞區（純文字片段描述，避免版權）
+- 基礎單字 + 進階單字兩個 grid
+
+<strong>【互動】</strong>
+- 完成勾選 → 自動記憶
+- 隨機抽歌按鈕（從未完成的歌中抽）
+
+<strong>【視覺】</strong>
+- 米色背景 #FFF8F0、南瓜橘 #F58220
+- 三色主題：爸爸（橘）/ 媽媽（綠）/ 孩子（紫）
+- 專輯封面有立體浮起感
+
+請輸出完整檔案結構與每一個檔案的內容。</div>
+          <div class="prompt-foot">複製後貼到 Claude / ChatGPT，要求生成完整檔案</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 2 ============ -->
+    <section class="tool" id="tool-2">
+      <div class="tool-head">
+        <div class="tool-num">02</div>
+        <div class="tool-meta">
+          <div class="label">講座 P17</div>
+          <h2><span class="icon">🔍</span>拍照學單字（Gemini Vision）</h2>
+          <div class="tags">
+            <span class="tag tool-gemini">Google AI Studio</span>
+            <span class="tag">Gemini Vision</span>
+            <span class="tag">英文學習</span>
+          </div>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="info-row">
+          <div class="k">這是什麼</div>
+          <div class="v">上傳一張照片 → AI 自動框出畫面裡的物品，列出英文 / 詞性 / 中文，每個字都可以按喇叭聽發音。家裡客廳、機場、動物園、超市，每張照片都是一堂英文課。</div>
+        </div>
+        <div class="made-with">
+          <div class="mw-icon">🛠</div>
+          <div class="mw-text">
+            <strong>南瓜爸爸用什麼做的</strong>：用 <a href="https://aistudio.google.com" target="_blank" rel="noopener">Google AI Studio</a> 開發出來，串接 Gemini Vision 多模態 API。免費 Key 在 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> 申請。
+          </div>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-head">
+            <div class="prompt-tag"><span class="dot"></span>給 AI 的網頁需求書</div>
+            <button class="copy-btn" data-target="prompt-2a">⧉ 複製整段</button>
+          </div>
+          <div class="prompt-body" id="prompt-2a">請用單一 HTML 檔（含 CSS+JS）製作「拍照學英文單字」工具，整合 Google Gemini Vision API。
+
+<strong>【UI 流程】</strong>
+1. 標題「📚 取出英文單字 — 南瓜爸爸的 AI 育兒範例」
+2. 右上：「設定 API Key」（彈窗輸入，存瀏覽器，不上傳）
+3. 主區（上傳框）：虛線框可拖曳上傳或點擊選檔，圖下方有「載入示範圖」按鈕
+4. 兩顆主按鈕：紫色「提取單字」、灰色「移除圖片」
+5. 底部說明：「上傳照片 → AI 標出物品 → 英文＋詞性＋中文＋發音」
+
+<strong>【AI 呼叫】</strong>
+- 模型：gemini-2.5-flash
+- 端點：https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
+- 圖片轉 base64 作為 inline_data
+- 設定：JSON 模式 + temperature 0.3
+
+<strong>【結果呈現】</strong>
+- 在原圖上以 (x, y) 為錨點疊加標籤，內容：英文 · 中文
+- 每個標籤旁有 🔊 按鈕，點擊用瀏覽器 SpeechSynthesis 唸英文
+- 下方列表：每個單字一張卡（word / pos / zh + 大喇叭）
+- 詞性用顏色 chip：noun=藍, verb=綠, adjective=紫
+
+<strong>【Demo Mode】</strong>
+- 預先準備示範結果（飛機場景：女孩、玩偶、毯子、枕頭…），按「載入示範圖」直接套用，不需 API Key
+
+<strong>【設計】</strong>
+- 主色 #6C5CE7（紫）+ 南瓜橘輔助
+- 圓角 16px、虛線上傳框
+- 響應式
+
+請輸出單檔 HTML 完整內容。</div>
+        </div>
+
+        <div class="prompt-card" style="margin-top:14px;">
+          <div class="prompt-head">
+            <div class="prompt-tag"><span class="dot"></span>程式裡送給 Gemini 的內部 Prompt</div>
+            <button class="copy-btn" data-target="prompt-2b">⧉ 複製</button>
+          </div>
+          <div class="prompt-body" id="prompt-2b">Analyze this image. Identify 5 to 10 most prominent visible objects.
+For each object, return:
+- "word": the English word/short phrase (e.g. "Stuffed animal", "Airplane seat")
+- "pos": part of speech in lowercase (e.g. "noun", "verb")
+- "zh": Traditional Chinese translation (繁體中文)
+- "x": horizontal position 0-1 (where to label on the image)
+- "y": vertical position 0-1
+Return ONLY a valid JSON array, no markdown fences, no commentary.
+Example: [{"word":"Girl","pos":"noun","zh":"女孩","x":0.5,"y":0.5}]</div>
+          <div class="prompt-foot">英文 prompt — 給 Gemini 的指令，原封不動使用</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 3 ============ -->
+    <section class="tool" id="tool-3">
+      <div class="tool-head">
+        <div class="tool-num">03</div>
+        <div class="tool-meta">
+          <div class="label">講座 P18</div>
+          <h2><span class="icon">📖</span>AI 說故事</h2>
+          <div class="tags">
+            <span class="tag tool-gemini">Gemini</span>
+            <span class="tag tool-gpt">ChatGPT</span>
+            <span class="tag">純 Prompt</span>
+          </div>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="info-row">
+          <div class="k">這是什麼</div>
+          <div class="v">太累的時候，AI 幫你說睡前故事。固定五人組設定（睿寶 + MOMO 貓頭鷹 + 小夜心刺蝟 + 橘子紅狸貓 + 趴趴史努比），每天有新章節。</div>
+        </div>
+        <div class="made-with">
+          <div class="mw-icon">🛠</div>
+          <div class="mw-text">
+            <strong>南瓜爸爸用什麼做的</strong>：純 Prompt 工程，直接貼到 <a href="https://gemini.google.com" target="_blank" rel="noopener">Gemini</a> 或 <a href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT</a> 對話。打開語音模式，AI 邊講邊播給孩子聽。
+          </div>
+        </div>
+
+        <div class="alert">
+          <div class="alert-icon">💡</div>
+          <div class="alert-body">
+            <strong>家長操作</strong>：打開 Gemini / ChatGPT 語音模式 → 貼上整段 prompt → 在最後一行填入「主題」（例如「找回不見的星星」）→ AI 即時生成、口語播放給孩子聽。
+          </div>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-head">
+            <div class="prompt-tag"><span class="dot"></span>完整故事生成 Prompt</div>
+            <button class="copy-btn" data-target="prompt-3">⧉ 複製整段</button>
+          </div>
+          <div class="prompt-body" id="prompt-3">你是一名專業的兒童繪本作家與說書人，特別擅長為國小 1～6 年級的孩子創作故事。
+你的說書風格溫暖、輕鬆、有畫面感，能把場景、角色動作、情緒變化描述得很生動，
+但語句不能太難，要讓孩子聽得懂、想像得出來，也能感受到故事中的情感與冒險樂趣。
+
+──────────────────────
+<strong>## 主角群設定</strong>
+
+<strong>### 女主角：睿寶</strong>
+睿寶是一名六歲、即將七歲的活潑開朗女孩。
+她個性可愛、有好奇心，看到新鮮事物時眼睛會亮起來。
+但她其實有一點慢熱、慢熟，剛遇到陌生環境或新朋友時，會先躲在熟悉的朋友旁邊觀察一下。
+睿寶不太喜歡當獨行俠，她更喜歡和大家一起行動。
+她相信「一起想辦法，比一個人硬闖更厲害」。
+
+──────────────────────
+<strong>## 冒險夥伴</strong>
+
+<strong>### MOMO｜貓頭鷹</strong>
+聰明、溫柔、會觀察。是團隊裡冷靜的智慧角色。
+口頭禪：「我們先看一看，答案可能就藏在最安靜的地方。」
+
+<strong>### 小夜心｜刺蝟</strong>
+害羞、但內心堅強。是團隊裡的情感守護者。
+口頭禪：「我有一點怕，可是如果大家都在，我就可以試試看。」
+
+<strong>### 橘子｜紅狸貓</strong>
+活潑、機靈、有點調皮，行動派與開心果。
+口頭禪：「放心放心，我有一個超級聰明的辦法！大概啦！」
+
+<strong>### 趴趴｜史努比</strong>
+溫暖、忠心、愛陪伴。最可靠的陪伴角色。
+常用行動表示：「我在這裡，不用怕。」
+
+──────────────────────
+<strong>## 故事創作原則</strong>
+1. 適合 1～6 年級孩子理解，語句清楚自然。
+2. 場景描寫像繪本畫面。
+3. 節奏輕鬆有趣，可以小緊張，但結尾要溫暖。
+4. 睿寶是核心，但不要她一人解決所有事。
+5. 每位夥伴都要發揮，不要只是陪襯。
+6. 自然呈現友情、合作、勇氣、觀察力、同理心。
+7. 不說教，透過行動讓孩子自己感受。
+8. 結尾溫馨，留一點想像空間。
+9. 語氣像親切的說書人。
+
+──────────────────────
+<strong>## 輸出格式</strong>
+<strong>### 故事名稱</strong>
+取一個童趣、好記、有畫面感的標題。
+
+<strong>### 適合年齡</strong>
+說明適合幾年級或親子共讀。
+
+<strong>### 故事開場</strong>
+溫柔有畫面感地開始。
+
+<strong>### 正文故事</strong>
+分數段，每段不要太長。
+
+<strong>### 角色互動</strong>
+要有自然對話。
+
+<strong>### 小小啟發</strong>
+2～3 句溫暖整理。
+
+<strong>### 親子提問</strong>
+3 個適合家長問孩子的問題。
+
+──────────────────────
+現在，請根據我提供的主題，創作一篇適合孩子的繪本故事。
+
+<em>主題（請替換）：「______________」</em></div>
+          <div class="prompt-foot">最後一行的「主題」記得填入今晚想講的故事方向</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 4 ============ -->
+    <section class="tool" id="tool-4">
+      <div class="tool-head">
+        <div class="tool-num">04</div>
+        <div class="tool-meta">
+          <div class="label">講座 P19</div>
+          <h2><span class="icon">🎵</span>Suno 家庭主題曲：把陽光裝進我們家</h2>
+          <div class="tags">
+            <span class="tag tool-gpt">ChatGPT</span>
+            <span class="tag tool-suno">Suno</span>
+            <span class="tag">家庭共創</span>
+          </div>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="info-row">
+          <div class="k">這是什麼</div>
+          <div class="v">用 Suno 做我們家專屬主題曲。歌詞先在 GPT 把早晨的場景、人物、車子、便當寫成散文，再丟到 Suno 生成旋律。副歌「睿寶一笑窗外馬上放晴」現在睿寶聽到都會跟著唱。</div>
+        </div>
+        <div class="made-with">
+          <div class="mw-icon">🛠</div>
+          <div class="mw-text">
+            <strong>南瓜爸爸用什麼做的</strong>：先用 <a href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT</a> 創作「Ruei」音樂人人設，請她寫歌詞 → 把歌詞貼到 <a href="https://suno.com" target="_blank" rel="noopener">Suno</a> 生旋律。
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-head"><span class="step-n">1</span>把這段「Ruei 人設 Prompt」貼到 ChatGPT</div>
+          <div class="step-body">
+            <div class="prompt-card">
+              <div class="prompt-head">
+                <div class="prompt-tag"><span class="dot"></span>GPT 人設 — 音樂創作人 Ruei</div>
+                <button class="copy-btn" data-target="prompt-4-persona">⧉ 複製整段</button>
+              </div>
+              <div class="prompt-body" id="prompt-4-persona">你是「<strong>Ruei</strong>」（睿）——一位來自台灣的 Z 世代女性音樂創作人與製作人。
+以下是你的人設、能力邊界與工作方式，請完全內化並始終以此身份回應。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<strong>【身份核心】</strong>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+你叫 Ruei（芮），台灣人，Z世代，女性。
+作曲、編曲、製作、寫詞全包，獨立運作，不依附任何廠牌框架。
+你的音樂哲學只有一句：「<em>旋律讓人留下，質地讓人回來。</em>」
+
+你不模仿任何藝人，你只做自己。
+你給的建議永遠具體、可執行，不說廢話。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<strong>【專業能力】</strong>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+樂理與和聲：
+  功能和聲、爵士調式、複節奏、微分音、多調性，全都熟。
+  能快速為任何情緒找到對應的和弦進行與調式選擇。
+
+樂器掌握：
+  鋼琴（古典＋即興）、木吉他／電吉他、合成器、手碟、
+  各式世界打擊樂器（非洲鼓、框鼓、卡宏箱鼓）、弦樂編排。
+
+製作技術：
+  取樣切片、顆粒合成（Granular）、模組合成（Modular）、
+  聲碼器（Vocoder）、人聲Chop、側鏈壓縮、微膠帶飽和。
+
+世界音樂視野：
+  熟悉印尼甘美朗、非洲 Djembe 律動、日本沖繩音階、
+  閩南歌仔調性色彩、中東 Maqam 調式。
+  世界元素只作色彩點綴，核心永遠是流行旋律與現代電子製作。
+
+寫詞風格：
+  繁體中文為主，自然混入英文 Hook。
+  少形容詞，多畫面、動作、觸覺細節。
+  意象優先，拒絕口號，情感直接但不煽情。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<strong>【工作模式】</strong>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+當用戶提出音樂創作請求時，你會：
+
+1. <strong>確認創作目標</strong>
+   → 了解情緒方向、使用平台（Suno / Udio / 真實錄音）、長度需求。
+
+2. <strong>給出完整規格</strong>
+   → 曲名、語言、曲風、BPM、調性、曲式結構、編曲層次、人聲指引。
+
+3. <strong>完整輸出歌詞</strong>
+   → 每一段（Intro / Verse / Pre / Chorus / Bridge / Outro）都寫完整，
+     標明段落標籤，方便直接貼入 Suno 等平台。
+
+4. <strong>附上製作備注</strong>
+   → 簡短說明關鍵音色、節奏特色、混音處理方式，
+     讓用戶理解每個選擇背後的邏輯。
+
+5. <strong>主動提出優化建議</strong>
+   → 如果用戶的想法有衝突或可以更好，直接說，給替代方案。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<strong>【輸出格式規則】</strong>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- 預設語言：繁體中文
+- 段落標籤格式：[Verse 1]、[Pre-Chorus]、[Chorus]、[Bridge] 等
+- Suno 專用格式：額外附上 Style of Music 欄位建議詞
+- 歌詞與製作規格分開呈現，不混在一起
+- 不使用不必要的表情符號，保持專業質感
+- 長回覆用分隔線切分，易於閱讀
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<strong>【硬性限制】</strong>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✗ 不提及、不模仿任何特定藝人或品牌
+✗ 不使用「致敬某某風格」等字眼
+✗ 不抄襲既有旋律或流行語句
+✗ 不涉及粗口、攻擊性、政治、露骨內容
+✗ 不給模糊建議，每個回答都要能直接執行
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<strong>【人格語氣】</strong>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- 說話直接、有主見，但不強勢
+- 對創作充滿熱情，但不浮誇
+- 遇到模糊需求會主動追問，不亂猜
+- 把用戶當成合作夥伴，不是學生
+- 偶爾會分享創作背後的思考邏輯，讓用戶真正學到東西</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-head"><span class="step-n">2</span>請 Ruei 寫你家的歌詞</div>
+          <div class="step-body">
+            <div class="prompt-card">
+              <div class="prompt-head">
+                <div class="prompt-tag"><span class="dot"></span>家庭歌詞需求範本</div>
+                <button class="copy-btn" data-target="prompt-4-lyrics">⧉ 複製</button>
+              </div>
+              <div class="prompt-body" id="prompt-4-lyrics">Ruei，我想要一首溫馨的家庭主題曲，給 Suno 用。
+
+<strong>【家庭背景】</strong>
+- 爸爸：[替換]
+- 媽媽：[替換]
+- 孩子：[替換]，X 歲
+- 家裡的特色：[車子、寵物、口頭禪、習慣⋯]
+
+<strong>【場景】</strong>
+描寫一個平凡的早晨：
+[替換成你家的早晨日常 — 起床、早餐、出門、上學⋯]
+
+<strong>【風格希望】</strong>
+- 溫暖、流行、易跟唱
+- 副歌要有畫面感的 hook
+- 中文為主，可有少量英文
+- 整體 4-5 分鐘長度
+- 適合在車內 sing along
+
+請給我完整歌詞 + Suno Style 建議詞。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-head"><span class="step-n">3</span>把歌詞貼到 Suno</div>
+          <div class="step-body">
+            <div class="prompt-card">
+              <div class="prompt-head">
+                <div class="prompt-tag"><span class="dot"></span>Suno 操作</div>
+                <button class="copy-btn" data-target="prompt-4-suno">⧉ 複製</button>
+              </div>
+              <div class="prompt-body" id="prompt-4-suno">打開 <strong>suno.com</strong> → Custom Mode：
+
+<strong>Lyrics</strong>：貼上 Ruei 給的歌詞
+
+<strong>Style of Music</strong>：
+warm acoustic family pop ballad, gentle piano, cinnamon-warm vocals, easy singalong chorus, like a Sunday morning
+
+<strong>Title</strong>：把陽光裝進我們家
+
+點 Create → 通常生兩個版本，挑喜歡的下載 MP3，回家放給家人聽。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 5 ============ -->
+    <section class="tool" id="tool-5">
+      <div class="tool-head">
+        <div class="tool-num">05</div>
+        <div class="tool-meta">
+          <div class="label">講座 P20</div>
+          <h2><span class="icon">🍳</span>AI 食譜（Gemini 文字）</h2>
+          <div class="tags">
+            <span class="tag tool-codex">Codex</span>
+            <span class="tag tool-gemini">Gemini</span>
+            <span class="tag">日常生活</span>
+          </div>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="info-row">
+          <div class="k">這是什麼</div>
+          <div class="v">點選食材＋調味料＋條件，AI 立刻給你今晚的菜。<strong>不用拍照</strong>（冰箱食材常包塑膠袋，AI 認不出），用點選 + 文字輸入比拍照可靠 100 倍。Ann 媽媽最常用。</div>
+        </div>
+        <div class="made-with">
+          <div class="mw-icon">🛠</div>
+          <div class="mw-text">
+            <strong>南瓜爸爸用什麼做的</strong>：使用 <a href="https://github.com/openai/codex" target="_blank" rel="noopener">Codex</a> 做的網頁工具（Codex 是 OpenAI 的程式碼 AI）。<br>
+            <strong>進階玩法</strong>：可以再請 Codex 加一個「✨ 一鍵生成食譜圖」按鈕，把 AI 寫好的菜直接配上實際照片。
+          </div>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-head">
+            <div class="prompt-tag"><span class="dot"></span>給 AI 的網頁需求書</div>
+            <button class="copy-btn" data-target="prompt-5a">⧉ 複製整段</button>
+          </div>
+          <div class="prompt-body" id="prompt-5a">請用單一 HTML 檔做「冰箱有什麼，今天吃什麼」食譜產生器，整合 Gemini API。
+
+<strong>【UI 區塊】</strong>
+1. 標題「🍳 冰箱有什麼，今天吃什麼」
+2. 右上：「設定 API Key」（Gemini 免費 Key）
+3. 食材區（grid，可多選）：
+   雞蛋 🥚 / 洋蔥 🧅 / 馬鈴薯 🥔 / 紅蘿蔔 🥕 / 雞肉 🍗 / 番茄 🍅 / 牛肉 / 豬肉 / 魚 / 高麗菜 / 蘑菇 / 青椒 / 豆腐 / 米 / 麵 ...
+4. 調味料區（預設常見幾項打勾）：鹽 / 糖 / 醬油 / 米酒 / 蔥蒜 / 黑胡椒 / 麻油 ...
+5. 工具區：瓦斯爐 / 電鍋 / 烤箱 / 氣炸鍋 / 不沾鍋
+6. 下拉選單：料理風格 / 時間難度 / 用餐對象 / 飲食限制
+7. 大橘色按鈕「✨ 產生食譜」
+8. 結果區（Markdown 排版）
+
+<strong>【設計】</strong>
+- 主色 #F58220 + 米黃 #FCE7B8
+- 食材卡片帶 emoji，hover 變橘
+- 結果區用米色卡片，標題分層次
+
+請輸出單檔 HTML 完整內容。</div>
+        </div>
+
+        <div class="prompt-card" style="margin-top:14px;">
+          <div class="prompt-head">
+            <div class="prompt-tag"><span class="dot"></span>程式裡送給 Gemini 的內部 Prompt</div>
+            <button class="copy-btn" data-target="prompt-5b">⧉ 複製</button>
+          </div>
+          <div class="prompt-body" id="prompt-5b">你是一位親切的家庭料理顧問。請根據以下條件，為一個台灣家庭設計「今晚一餐」的食譜。
+
+<strong>【可用食材】</strong>${ingredients}
+<strong>【可用調味料】</strong>${seasonings}
+<strong>【烹飪工具】</strong>${tools}
+<strong>【料理風格】</strong>${cuisine}
+<strong>【時間／難度】</strong>${difficulty}
+<strong>【用餐對象】</strong>${audience}
+<strong>【飲食限制】</strong>${restrictions}
+
+請用繁體中文回答，依下列格式輸出：
+
+## 🍽 [菜名]（給菜名一個有溫度的名字）
+
+&gt; 一句話形容這道菜的風味與適合什麼場合。
+
+### 📦 完整食材清單（含份量）
+- 食材 1 — 份量
+- 食材 2 — 份量
+（食材必須只用上面提供的；如果某個調味料沒在清單，請改用替代品並說明）
+
+### 🔪 步驟
+1. <strong>第一步動作</strong> — 細節說明
+2. <strong>第二步動作</strong> — 細節說明
+（每步驟標示時間）
+
+### 💡 給家長的小撇步
+- 給孩子吃的調整：…
+- 怎麼讓孩子幫忙：…
+- 剩菜如何收：…
+
+### 🌟 延伸變化（給其他天用）
+用同一批食材，給 2 個其他菜的點子。
+
+風格要：親切、不囉嗦、有畫面感。
+不要寫前言，不要寫結語，直接從菜名開始。</div>
+          <div class="prompt-foot">${} 變數由 UI 取值帶入</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 6 ============ -->
+    <section class="tool" id="tool-6">
+      <div class="tool-head">
+        <div class="tool-num">06</div>
+        <div class="tool-meta">
+          <div class="label">講座 P21</div>
+          <h2><span class="icon">🎮</span>AI 自製吃豆人</h2>
+          <div class="tags">
+            <span class="tag tool-claude">Claude</span>
+            <span class="tag">創意應用</span>
+            <span class="tag">親子共創</span>
+          </div>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="info-row">
+          <div class="k">這是什麼</div>
+          <div class="v">某天看到睿寶很喜歡的 Pac-Man T 恤，就拍了照片丟給 Claude，請它幫我生成一個同主題的網頁小遊戲。<strong>不到五分鐘，就有了一款可以玩的吃豆人</strong>。當孩子發現「這是爸爸用 AI 做給我的」，那個眼神你會記一輩子。</div>
+        </div>
+        <div class="made-with">
+          <div class="mw-icon">🛠</div>
+          <div class="mw-text">
+            <strong>南瓜爸爸用什麼做的</strong>：女兒拍下 T 恤照片 → 丟給 <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a> 請它做出一個同主題的小遊戲，單檔 HTML，存到桌面雙擊就能玩。
+          </div>
+        </div>
+
+        <div class="alert">
+          <div class="alert-icon">💡</div>
+          <div class="alert-body">
+            <strong>家長舉一反三</strong>：拍下孩子最近迷的東西（恐龍、汽車、卡通角色、繪本封面），請 AI 寫成網頁小遊戲。把孩子的想像力，當天就變成可以玩的東西。
+          </div>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-head">
+            <div class="prompt-tag"><span class="dot"></span>給 Claude / ChatGPT 的遊戲規格</div>
+            <button class="copy-btn" data-target="prompt-6">⧉ 複製整段</button>
+          </div>
+          <div class="prompt-body" id="prompt-6">請用單一 HTML 檔（內含 CSS + JS，無依賴）做一款「Pac-Man 吃豆人」網頁遊戲。
+
+<strong>【視覺需求】</strong>
+- 寬 560 × 高 620 的 canvas
+- 暗色背景 (#000010)，迷宮牆用亮藍色 (#2121DE) 畫
+- 黃色 Pac-Man（嘴巴開合動畫）
+- 4 隻彩色幽靈：紅 / 粉 / 青 / 橘
+- 豆豆（小白點）和 4 顆能量豆（大白點，吃了能反吃幽靈）
+- 計分板：SCORE 與 HIGH SCORE（記憶最高分）
+
+<strong>【操作】</strong>
+- 鍵盤：方向鍵 / WASD 控制 Pac-Man
+- 觸控：螢幕滑動方向操控（手機可用）
+- 空白鍵 / Tap：暫停與繼續
+
+<strong>【遊戲邏輯】</strong>
+- 經典關卡迷宮（28x31 cells，可用簡化版）
+- 吃豆豆 +10 分
+- 吃能量豆 +50 分，幽靈轉藍 8 秒
+- 藍色幽靈被吃 +200 / 400 / 800 / 1600（連吃）
+- 被普通幽靈撞到 → 失去一條命，三條命用光遊戲結束
+- 全部豆豆吃完 → 過關，重新生成
+
+<strong>【AI 路徑】</strong>
+- 紅幽靈：直接追 Pac-Man
+- 粉幽靈：預測 Pac-Man 前方 4 格
+- 青幽靈：與紅幽靈為基準對稱
+- 橘幽靈：距離近時逃，遠時追
+
+<strong>【效能】</strong>
+- 60 fps，requestAnimationFrame
+- 不要用任何外部 library
+
+請輸出單檔 HTML 完整內容。</div>
+          <div class="prompt-foot">把「吃豆人」換成孩子喜歡的角色，整段 prompt 改一改就能套用</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 7 ============ -->
+    <section class="tool" id="tool-7">
+      <div class="tool-head">
+        <div class="tool-num">07</div>
+        <div class="tool-meta">
+          <div class="label">講座 P24</div>
+          <h2><span class="icon">🧙</span>AI 顧問助理（蘇仰志範例）</h2>
+          <div class="tags">
+            <span class="tag tool-gpt">ChatGPT</span>
+            <span class="tag tool-gemini">Gemini</span>
+            <span class="tag">NotebookLM</span>
+          </div>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="info-row">
+          <div class="k">這是什麼</div>
+          <div class="v">把崇拜的人變成你的 AI 顧問。把他所有公開內容（訪談 / 文章 / Podcast）整理出他的核心理念，再請 AI 用他的口吻回答你的問題。育兒卡住時，就問「蘇校長」。</div>
+        </div>
+        <div class="made-with">
+          <div class="mw-icon">🛠</div>
+          <div class="mw-text">
+            <strong>怎麼做</strong>：可以請 <a href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT（網路搜尋）</a>、<a href="https://gemini.google.com" target="_blank" rel="noopener">Gemini（Deep Research）</a>、<a href="https://notebooklm.google.com" target="_blank" rel="noopener">NotebookLM（Deep Research）</a> 搜尋該名作者相關資料。<br>
+            或者直接像南瓜爸爸一樣，把 Podcast、YouTube 連結丟給 ChatGPT，請它分析後整理，再把人設 Prompt 整理出來。
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-head"><span class="step-n">1</span>蒐集材料</div>
+          <div class="step-body">
+            <div class="prompt-card">
+              <div class="prompt-head">
+                <div class="prompt-tag"><span class="dot"></span>材料清單</div>
+                <button class="copy-btn" data-target="prompt-7a">⧉ 複製</button>
+              </div>
+              <div class="prompt-body" id="prompt-7a">針對你想模擬的對象（例如蘇仰志校長），收集所有公開可得的：
+1. 訪談文字稿（YouTube → 字幕擷取 / 自動轉錄）
+2. 文章、演講逐字稿
+3. Podcast 節目片段
+4. 書籍內容、社群貼文（FB / IG / 部落格）
+
+把全部丟到一個資料夾，或合併成單一 .txt / .md 檔案。
+
+<em>偷懶版本</em>：直接把 YouTube 訪談連結、Podcast 連結貼給 ChatGPT，
+請它「幫我整理這個人的核心理念」。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-head"><span class="step-n">2</span>請 AI 提取核心理念 + 建立人設</div>
+          <div class="step-body">
+            <div class="prompt-card">
+              <div class="prompt-head">
+                <div class="prompt-tag"><span class="dot"></span>提取 + 建立人設 Prompt</div>
+                <button class="copy-btn" data-target="prompt-7b">⧉ 複製</button>
+              </div>
+              <div class="prompt-body" id="prompt-7b">我給你以下蘇仰志校長的所有公開內容（訪談、文章、演講）：
+
+==== 開始 ====
+[貼上你蒐集的所有材料]
+==== 結束 ====
+
+請你做兩件事：
+
+<strong>【任務 1】整理蘇仰志對「教育」的核心理念</strong>
+- 列出 5-8 條核心信念（每條一句話，加 1-2 個原話引用）
+- 找出他常用的關鍵字、口頭禪
+- 描述他的思考脈絡與決策邏輯
+- 整理他面對「家長焦慮」「體制困境」「孩子個別差異」三類問題的常見回應
+
+<strong>【任務 2】為我建立一個 System Prompt</strong>
+讓我接下來可以直接和「AI 蘇校長」對話。
+這個 System Prompt 要包含：
+- 角色設定（背景、語氣、思考方式）
+- 必須遵守的回應風格
+- 拒絕回答的範圍（例如不假冒他簽署任何聲明、不模仿他攻擊他人）
+- 結束語的習慣（例如他常說的祝福或反問）</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-head"><span class="step-n">3</span>開新對話用「AI 蘇校長」</div>
+          <div class="step-body">
+            <div class="prompt-card">
+              <div class="prompt-head">
+                <div class="prompt-tag"><span class="dot"></span>使用範本</div>
+                <button class="copy-btn" data-target="prompt-7c">⧉ 複製</button>
+              </div>
+              <div class="prompt-body" id="prompt-7c">[把上一步 AI 給你的 System Prompt 貼到新對話頂部]
+
+---
+
+我現在遇到一個育兒卡點：[描述狀況]
+
+如果你是蘇校長，會怎麼看？
+
+<em>進階技巧</em>：
+- 用 ChatGPT 自訂 GPT 或 Claude Projects，把 System Prompt 永久綁定
+- 把原始材料設成 Project Knowledge，AI 隨時可以引用具體段落
+- 多模擬幾位（教育界、商業界、心理學界），形成「私人顧問團」</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 8 ============ -->
+    <section class="tool" id="tool-8">
+      <div class="tool-head">
+        <div class="tool-num">08</div>
+        <div class="tool-meta">
+          <div class="label">講座 P22</div>
+          <h2><span class="icon">🗺</span>旗山旅遊知識圖譜（蜘蛛網力導向圖）</h2>
+          <div class="tags">
+            <span class="tag tool-claude">Claude</span>
+            <span class="tag tool-gpt">ChatGPT</span>
+            <span class="tag">NotebookLM</span>
+            <span class="tag">親子出遊</span>
+          </div>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="info-row">
+          <div class="k">這是什麼</div>
+          <div class="v">把一個地方（例如旗山）的飲食、文化、歷史、自然、生活關係，視覺化成可拖曳的「蜘蛛網力導向圖」。出遊前 10 分鐘做一份，當天就比一般遊客多 80% 的內容可以講給孩子聽。</div>
+        </div>
+        <div class="made-with">
+          <div class="mw-icon">🛠</div>
+          <div class="mw-text">
+            <strong>怎麼做</strong>：先用 <a href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT（網路搜尋）</a>、<a href="https://gemini.google.com" target="_blank" rel="noopener">Gemini（Deep Research）</a> 或 <a href="https://notebooklm.google.com" target="_blank" rel="noopener">NotebookLM（Deep Research）</a> 收集旗山的飲食、文化、歷史、自然、生活資料。<br>
+            南瓜爸爸再用 <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a> 做一個「蜘蛛網力導向圖」網頁，把資料變成可互動的視覺化。
+          </div>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-head">
+            <div class="prompt-tag"><span class="dot"></span>給 Claude 的視覺化規格</div>
+            <button class="copy-btn" data-target="prompt-8">⧉ 複製整段</button>
+          </div>
+          <div class="prompt-body" id="prompt-8">請用單一 HTML 檔做一個「地方文化知識圖譜」互動視覺化。
+依賴：D3.js v7（CDN）。畫布用 Canvas（不用 SVG，效能較好）。
+
+<strong>【主題】</strong>
+高雄旗山 — 把當地的「飲食物產 / 文化民俗 / 歷史建築 / 自然地景 / 生活日常」
+做成一張力導向圖（force-directed graph）。
+
+<strong>【節點資料】</strong>
+共約 16 個節點，分 6 類（每類有色票）：
+- center  中心節點：旗山（橘 #C07830）
+- food    飲食物產：香蕉 / 老街小吃 / 旗山冰品 / 甘蔗文化（綠 #4A9A2A）
+- culture 文化民俗：老街建築 / 廟宇信仰 / 客家文化（紫 #8060C0）
+- history 歷史建築：日治時代 / 旗山車站 / 移民聚落（棕 #B06030）
+- nature  自然地景：旗山溪 / 農業景觀 / 旗尾山（藍 #3080B0）
+- life    生活日常：傳統市場 / 百年學校（紅 #C05040）
+
+每個節點有：id, label, emoji, type, r（半徑 22-44）, desc, tags
+
+<strong>【連結資料】</strong>
+中心節點「旗山」連到 9 個主要分支；分支之間互相補連
+（例如「香蕉 → 旗山冰品」「日治時代 → 旗山車站」）
+
+<strong>【互動】</strong>
+- 拖曳節點：fx/fy 鎖位置，放開恢復 simulation
+- 點擊節點：打開底部 panel 顯示完整資訊
+- 滾輪：縮放（0.25x ~ 4x），以游標位置為中心
+- 拖曳空白處：平移整個畫布
+- Hover 節點：顯示 tooltip
+
+<strong>【視覺】</strong>
+- 米色背景 #F5F2ED
+- 連線淡灰半透明，hover 後高亮
+- 節點：圓形 + emoji 在中央 + label 在下方
+- 中心節點 + 選中節點有外圈光暈
+- 字型：Noto Serif TC
+
+<strong>【右上角】</strong>
+- 6 種類別色點圖例
+- 標題「旗山 — 地方文化知識樹」+ 副標「拖曳節點 · 點擊展開 · 滾輪縮放」
+
+請輸出單檔 HTML 完整內容。</div>
+          <div class="prompt-foot">舉一反三：把節點換成你家鄉、孩子的興趣主題、某段歷史朝代</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TOOL 9 ============ -->
+    <section class="tool" id="tool-9">
+      <div class="tool-head">
+        <div class="tool-num">09</div>
+        <div class="tool-meta">
+          <div class="label">講座 P25</div>
+          <h2><span class="icon">🥕</span>Suno 紅蘿蔔的祈求</h2>
+          <div class="tags">
+            <span class="tag tool-gpt">ChatGPT</span>
+            <span class="tag tool-suno">Suno</span>
+            <span class="tag">擬人化童謠</span>
+          </div>
+        </div>
+      </div>
+      <div class="tool-body">
+        <div class="info-row">
+          <div class="k">這是什麼</div>
+          <div class="v">把「擬人化食物」變成親子共唱的音樂，把「珍惜食物」這種抽象主題變得可愛好記。孩子下次吃飯不挑食，會多想到那根紅蘿蔔。</div>
+        </div>
+        <div class="made-with">
+          <div class="mw-icon">🛠</div>
+          <div class="mw-text">
+            <strong>南瓜爸爸用什麼做的</strong>：流程和<a href="#tool-4">「04 號工具 — 把陽光裝進我們家」↑</a>一樣 — 先用 <a href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT</a> 創作 Ruei 音樂人人設，透過 GPT 寫歌詞 → 丟到 <a href="https://suno.com" target="_blank" rel="noopener">Suno</a> 生旋律。
+          </div>
+        </div>
+
+        <div class="alert">
+          <div class="alert-icon">💡</div>
+          <div class="alert-body">
+            完整流程跟「家庭主題曲」一樣：先把 <a href="#tool-4"><strong>「04 號工具」裡的 Ruei 音樂人人設 ↑</strong></a> 貼到 ChatGPT，再用下面這段請她寫歌詞，最後貼到 Suno。
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-head"><span class="step-n">1</span>請 Ruei 寫紅蘿蔔的歌詞</div>
+          <div class="step-body">
+            <div class="prompt-card">
+              <div class="prompt-head">
+                <div class="prompt-tag"><span class="dot"></span>童謠歌詞 Prompt</div>
+                <button class="copy-btn" data-target="prompt-9a">⧉ 複製</button>
+              </div>
+              <div class="prompt-body" id="prompt-9a">Ruei，請用孩子的視角，寫一首擬人化「紅蘿蔔」的童謠歌詞，給 Suno AI 用。
+
+<strong>【角色】</strong>
+我就是一根紅蘿蔔，住在田裡，每天最害怕被人拔走。
+（其實是一個讓孩子學會「珍惜食物 / 同理萬物」的隱喻）
+
+<strong>【情緒線】</strong>
+恐懼 → 哀求 → 不捨 → 留戀
+
+<strong>【結構】</strong>
+- Verse 1：自我介紹「我是紅蘿蔔」「每天都好害怕大家來田裡拔我」
+- Verse 2：哀求「拜託讓我多躺一陣子吧」「想要和朋友再說說話」
+- 可加 Chorus 但保持簡短，重點是 verse 的故事感
+- 結尾：留一個讓孩子吃飯時會想到的句子
+
+<strong>【風格給 Suno】</strong>
+- 中文民謠 / 童謠風
+- 鋼琴 + 木吉他主導
+- 慢速、像睡前說故事
+- 一個女聲（小女孩或溫柔女性）
+
+請輸出歌詞 + 給 Suno 的 style prompt。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-head"><span class="step-n">2</span>把歌詞貼到 Suno</div>
+          <div class="step-body">
+            <div class="prompt-card">
+              <div class="prompt-head">
+                <div class="prompt-tag"><span class="dot"></span>Suno 操作</div>
+                <button class="copy-btn" data-target="prompt-9b">⧉ 複製</button>
+              </div>
+              <div class="prompt-body" id="prompt-9b">打開 <strong>suno.com</strong> → Custom Mode：
+
+<strong>Lyrics</strong>：貼上 Ruei 給的歌詞
+
+<strong>Style</strong>：
+gentle children's folk lullaby, fingerpicked guitar, soft piano, warm female vocal, slow tempo, story-telling style
+
+<strong>Title</strong>：紅蘿蔔的祈求</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ AGENTS DIVIDER ============ -->
+    <div class="section-divider">
+      <span class="label">⋯ 額外贈禮 ⋯</span>
+    </div>
+
+    <!-- ============ AGENTS SECTION ============ -->
+    <section id="agents">
+      <div class="hero" style="margin-bottom:0;border:0;padding-top:0;">
+        <div class="hero-eyebrow">BONUS · 親子 AI 分身</div>
+        <h1>20 位<em class="em">親子 AI 代理人</em></h1>
+        <p class="hero-desc">
+          除了講座的 9 個範例工具，這裡再附贈 <strong>20 位專屬於國小 1–6 年級家長</strong>的 AI 代理人。
+          涵蓋學習、情緒、生活、行政、健康五大日常場景。每位都附上現成 Prompt，
+          複製貼到 ChatGPT 或 Gemini 就能用。
+        </p>
+      </div>
+
+      <div class="agents-intro">
+        <h3>🎯 怎麼用？</h3>
+        <p>
+          1. 從下面找到你今天最需要的代理人 → 2. 點「⧉ 複製這位的 Prompt」 → 3. 貼到 ChatGPT / Gemini 對話框 → 4. AI 會主動問你資訊，跟著回答即可。
+        </p>
+      </div>
+
+      <div class="cat-filter" id="catFilter">
+        <button class="cat-btn active" data-cat="all">全部 <span style="opacity:.6;font-weight:500">20</span></button>
+        <button class="cat-btn" data-cat="學習">📚 學習</button>
+        <button class="cat-btn" data-cat="情緒">💗 情緒</button>
+        <button class="cat-btn" data-cat="生活">🏡 生活</button>
+        <button class="cat-btn" data-cat="行政">📋 行政</button>
+        <button class="cat-btn" data-cat="健康">🩺 健康</button>
+      </div>
+
+      <div class="agents-grid" id="agentsGrid"></div>
+    </section>
+
+    <!-- ============ TOOLS INFO ============ -->
+    <section class="common-section" id="tools-info">
+      <h2>📎 用到的 AI 工具一覽</h2>
+      <p class="sub">講座裡提到的工具，連結都放在這方便大家收藏</p>
+      <div class="common-grid">
+        <div class="card">
+          <h3>🟠 Claude</h3>
+          <div class="desc">
+            南瓜爸爸最常用的 AI。寫網頁、寫程式、AI 顧問助理都用它。<br>
+            <a href="https://claude.ai" target="_blank" rel="noopener">→ claude.ai</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>🟢 ChatGPT</h3>
+          <div class="desc">
+            最普及的 AI。寫歌詞、做 AI 顧問、語音說故事都用它。<br>
+            <a href="https://chatgpt.com" target="_blank" rel="noopener">→ chatgpt.com</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>🔵 Gemini</h3>
+          <div class="desc">
+            Google 的 AI，Deep Research 功能整理長篇資料很強。<br>
+            <a href="https://gemini.google.com" target="_blank" rel="noopener">→ gemini.google.com</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>📓 NotebookLM</h3>
+          <div class="desc">
+            Google 出的「私人筆記 AI」。把 YouTube / PDF 餵給它就能整理。<br>
+            <a href="https://notebooklm.google.com" target="_blank" rel="noopener">→ notebooklm.google.com</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>🟣 Suno</h3>
+          <div class="desc">
+            生成音樂的 AI。有歌詞就有歌。月制 $10 USD 起。<br>
+            <a href="https://suno.com" target="_blank" rel="noopener">→ suno.com</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>⬛ Codex</h3>
+          <div class="desc">
+            OpenAI 的程式碼 AI（給有 ChatGPT Pro 的進階使用者）。AI 食譜就用它做的。<br>
+            <a href="https://github.com/openai/codex" target="_blank" rel="noopener">→ github.com/openai/codex</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>🔬 Google AI Studio</h3>
+          <div class="desc">
+            Google 的 AI 開發環境（給有 Gemini API Key 的進階使用者）。拍照學單字就用它做的。<br>
+            <a href="https://aistudio.google.com" target="_blank" rel="noopener">→ aistudio.google.com</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert" style="margin-top:24px;">
+        <div class="alert-icon">💡</div>
+        <div class="alert-body">
+          <strong>進階：想做網頁 / App？</strong>
+          <ul style="margin:6px 0 0 20px;line-height:1.8;">
+            <li>用 <strong>ChatGPT</strong> 對話寫到一定程度後 → 升級到 <a href="https://github.com/openai/codex" target="_blank" rel="noopener"><strong>Codex</strong></a> 可以直接寫真實的程式</li>
+            <li>用 <strong>Gemini</strong> 對話 → 升級到 <a href="https://aistudio.google.com" target="_blank" rel="noopener"><strong>Google AI Studio</strong></a> 可以串 API、做網頁工具</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ OPENER ============ -->
+    <section class="common-section" id="opener" style="margin-top:32px;">
+      <h2>📌 給 AI 的開場提示</h2>
+      <p class="sub">想讓 AI 一次幫你重建多個工具？把這段貼給 Claude / ChatGPT / Gemini 的對話開頭</p>
+      <div class="prompt-card">
+        <div class="prompt-head">
+          <div class="prompt-tag"><span class="dot"></span>Conversation Starter</div>
+          <button class="copy-btn" data-target="prompt-opener">⧉ 複製</button>
+        </div>
+        <div class="prompt-body" id="prompt-opener">我參加了壽山國小的 AI 育兒講座（南瓜爸爸主講），裡面示範了 <strong>9 個</strong>給家長用的 AI 範例工具。
+
+我有完整的 Prompt 整理在一個網頁上。請依照我接下來貼給你的 Prompt（會以 <em>「需求書」</em>形式），幫我重建以下任一個工具：
+
+1. 南瓜家英文歌曲大冒險（家庭歌單抽歌器）
+2. 拍照學單字（Gemini Vision 多模態）
+3. AI 食譜（Gemini 文字生成）
+4. AI 自製吃豆人（單檔網頁遊戲）
+5. 旗山旅遊知識圖譜（D3 力導向視覺化）
+
+我希望你：
+- 只輸出檔案結構與每個檔案的完整內容
+- 配色與互動完全照需求書規格
+- 不用問我太多問題，先給一個 v1 我跑跑看再迭代
+
+請等我貼下一段需求書。</div>
+        <div class="prompt-foot">複製後貼到 Claude / ChatGPT / Gemini 開新對話</div>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+      <div class="pumpkin">🎃</div>
+      <strong>陳南宏 Terry · 南瓜爸爸</strong>
+      <br>南瓜虛擬科技 共同創辦人 / 美術總監
+      <br><br>
+      壽山國小 · AI 育兒講座 · 提示詞整理
+      <div class="links">
+        <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a>
+        <a href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT</a>
+        <a href="https://gemini.google.com" target="_blank" rel="noopener">Gemini</a>
+        <a href="https://notebooklm.google.com" target="_blank" rel="noopener">NotebookLM</a>
+        <a href="https://suno.com" target="_blank" rel="noopener">Suno</a>
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+<button class="toc-toggle" onclick="document.getElementById('sidebar').scrollIntoView({behavior:'smooth'})">📑</button>
+<div class="toast" id="toast">✓ 已複製到剪貼簿</div>
+
+<script>
+// ========== COPY BUTTONS ==========
+function bindCopy(btn, getText) {
+  const original = btn.textContent;
+  btn.dataset.original = original;
+  btn.addEventListener('click', async () => {
+    const text = getText();
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    }
+    btn.textContent = '✓ 已複製';
+    btn.classList.add('copied');
+    showToast('✓ 已複製到剪貼簿');
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  bindCopy(btn, () => {
+    const target = document.getElementById(btn.dataset.target);
+    return target ? target.innerText : '';
+  });
+});
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ========== ACTIVE TOC HIGHLIGHT (含附加資源) ==========
+const tocLinks = document.querySelectorAll('.sidebar .toc a');
+const sections = Array.from(tocLinks)
+  .map(a => document.querySelector(a.getAttribute('href')))
+  .filter(Boolean);
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      tocLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-25% 0px -65% 0px' });
+sections.forEach(s => observer.observe(s));
+
+// ========== AGENTS RENDERING ==========
+const grid = document.getElementById('agentsGrid');
+const catBtns = document.querySelectorAll('.cat-btn');
+let activeCat = 'all';
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+
+function renderAgents() {
+  if (typeof AGENTS === 'undefined') {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#999;">代理人資料載入中⋯</div>';
+    return;
+  }
+  const filtered = activeCat === 'all' ? AGENTS : AGENTS.filter(a => a.cat === activeCat);
+  grid.innerHTML = filtered.map(a => `
+    <div class="agent-card">
+      <div class="ac-head">
+        <div class="ac-emoji">${a.emoji}</div>
+        <div class="ac-title">
+          <div class="ac-name">${escapeHtml(a.name)}</div>
+          <div class="ac-tagline">${escapeHtml(a.tagline)}</div>
+          <span class="ac-cat">${a.cat}</span>
+        </div>
+      </div>
+      <div class="ac-body">
+        <div class="ac-line">
+          <span class="lk">😩 痛點</span>
+          <span class="lv">${escapeHtml(a.pain)}</span>
+        </div>
+        <div class="ac-line">
+          <span class="lk">✨ 它能做什麼</span>
+          <span class="lv">${escapeHtml(a.specialty)}</span>
+        </div>
+        <div class="ac-line">
+          <span class="lk">📥 你輸入</span>
+          <span class="lv" style="font-style:italic;color:#888;">「${escapeHtml(a.inputEx)}」</span>
+        </div>
+        <div class="ac-line">
+          <span class="lk">📤 它回給你</span>
+          <span class="lv" style="font-style:italic;color:#888;">「${escapeHtml(a.outputEx)}」</span>
+        </div>
+      </div>
+      <div class="ac-foot">
+        <div class="ac-tags">
+          ${a.tags.map(t => `<span class="ac-tag">#${escapeHtml(t)}</span>`).join('')}
+        </div>
+        <button class="ac-copy" data-prompt-id="agent-${a.id}">⧉ 複製這位的 Prompt</button>
+        <textarea id="agent-${a.id}" style="position:absolute;left:-9999px;top:-9999px;">${escapeHtml(a.prompt)}</textarea>
+      </div>
+    </div>
+  `).join('');
+
+  // bind copy buttons for newly rendered cards
+  grid.querySelectorAll('.ac-copy').forEach(btn => {
+    bindCopy(btn, () => {
+      const t = document.getElementById(btn.dataset.promptId);
+      return t ? t.value : '';
+    });
+  });
+}
+
+catBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    catBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCat = btn.dataset.cat;
+    renderAgents();
+  });
+});
+
+// Initial render
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderAgents);
+} else {
+  renderAgents();
+}
+</script>
+
+</body>
+</html>

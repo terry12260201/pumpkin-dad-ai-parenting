@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<title>Way Back Into Love — 南瓜家學習本</title>
+<style>
+  @page { size: A4; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+    background: #fff9ef; color: #2a1805;
+    padding: 10px; max-width: 210mm; margin: 0 auto; line-height: 1.5;
+  }
+  ruby { ruby-position: inter-character; ruby-align: center; margin-right: 3px; }
+  rt { font-size: 0.55em; color: #8a3a2a; font-weight: 400; letter-spacing: 0;
+       font-family: "Noto Sans TC", "PingFang TC", sans-serif; }
+  .lyric-zh, .col-box p, .hero-subtitle { line-height: 2.1; }
+  .w-zh { line-height: 2.0; }
+
+  .hero {
+    display: flex; align-items: stretch; gap: 14px;
+    background: linear-gradient(135deg, #ffb347 0%, #ff7a59 55%, #e25d7c 100%);
+    border-radius: 16px; padding: 14px;
+    color: #fff; box-shadow: 0 4px 0 #cf4c3a;
+    margin-bottom: 12px;
+  }
+  .cover-box {
+    width: 110px; height: 110px; border-radius: 12px; overflow: hidden;
+    flex-shrink: 0; border: 3px solid #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,.3);
+    background: rgba(0,0,0,.1);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cover-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cover-placeholder {
+    font-size: 10px; text-align: center; padding: 8px;
+    color: rgba(255,255,255,.9); line-height: 1.4;
+  }
+  .hero-meta { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+  .hero-title { font-size: 22px; font-weight: 900; letter-spacing: .02em; line-height: 1.1; }
+  .hero-subtitle { font-size: 13px; opacity: .95; margin-top: 4px; }
+  .hero-artist { font-size: 14px; margin-top: 6px; opacity: .95; }
+  .owner-pill {
+    display: inline-block; background: #fff; color: #cf4c3a;
+    padding: 3px 12px; border-radius: 12px;
+    font-size: 12px; font-weight: 700; margin-top: 6px;
+  }
+
+  .info-card {
+    background: #fff; border: 2px solid #ffd8c5; border-radius: 12px;
+    padding: 10px 14px; margin-bottom: 10px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 14px;
+  }
+  .info-row { font-size: 12px; }
+  .info-label { color: #cf4c3a; font-weight: 700; font-size: 11px; display: block; }
+  .info-value { color: #2a1805; font-weight: 600; }
+
+  .sh {
+    font-size: 15px; font-weight: 900; color: #cf4c3a;
+    margin: 12px 0 6px; padding: 4px 10px;
+    background: linear-gradient(90deg, #fff4ec 0%, transparent 100%);
+    border-left: 4px solid #cf4c3a; border-radius: 4px;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .col-box {
+    background: #fff; border: 2px solid #ffd8c5; border-radius: 12px;
+    padding: 10px 12px;
+  }
+  .col-box .ct { font-size: 13px; font-weight: 900; color: #cf4c3a; margin-bottom: 4px; }
+  .col-box p { font-size: 12.5px; color: #3d1f08; }
+
+  .lyric-block {
+    background: #fff4ec; border-left: 5px solid #cf4c3a; border-radius: 10px;
+    padding: 10px 14px; margin-bottom: 6px;
+  }
+  .lyric-label {
+    display: inline-block;
+    margin-bottom: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.78);
+    color: #cf4c3a;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .lyric-label-zh {
+    margin-top: 8px;
+    margin-bottom: 2px;
+    background: rgba(61,31,8,0.08);
+    color: #6b5b4a;
+    text-transform: none;
+  }
+  .lyric-en {
+    font-size: 14px; font-weight: 700; color: #cf4c3a; line-height: 1.5;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+  }
+  .lyric-zh { font-size: 12.5px; color: #3d1f08; margin-top: 3px; }
+
+  .full-lyrics { margin-top: 4px; }
+  .full-lyric-block {
+    background: #fff;
+    border: 2px solid #ffd8c5;
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+  }
+  .full-lyric-line {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #2a1805;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+  }
+
+  .word-section-label {
+    font-size: 11px; font-weight: 700; color: #cf4c3a;
+    margin: 8px 0 4px; padding-left: 4px;
+    letter-spacing: .05em;
+  }
+  .word-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;
+  }
+  .word-card {
+    background: #fff; border: 1px solid #ffd8c5; border-radius: 8px;
+    padding: 5px 8px 6px;
+  }
+  .word-card.basic    { border-left: 4px solid #cf4c3a; background: #fff; }
+  .word-card.advanced { border-left: 4px solid #cf4c3a; background: #fff4ec; }
+  .word-card .row1 {
+    display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+  }
+  .w-en { font-weight: 800; color: #cf4c3a; font-size: 13px;
+          font-family: 'Comic Sans MS', 'Arial', sans-serif; }
+  .w-type { font-size: 9.5px; color: #fff; background: #cf4c3a; padding: 1px 5px; border-radius: 4px; font-weight: 700; }
+  .w-ph { font-size: 9.5px; color: #888; }
+  .w-zh { font-size: 11.5px; color: #3d1f08; margin-top: 2px; }
+  .w-ex { font-size: 10px; color: #5a3a1a; font-style: italic; margin-top: 2px; line-height: 1.35; }
+
+  .mission {
+    background: linear-gradient(135deg, #fff4ec 0%, #ffd8c5 100%);
+    border-radius: 12px; padding: 10px 14px; margin-top: 10px;
+    font-size: 12.5px; color: #3d1f08; line-height: 1.7;
+  }
+  .mission .t { font-weight: 900; color: #cf4c3a; }
+
+  @media print { body { background: #fff; padding: 0; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="cover-box">
+    <img src="file:///Users/chennanhong/Desktop/AI%20%E8%82%B2%E5%85%92/%E8%8B%B1%E6%96%87%E6%AD%8C%E6%9B%B2/Way%20Back%20Into%20Love.jpg" alt="Way Back Into Love cover"
+      onerror="this.style.display='none';this.parentNode.innerHTML='<div class=&quot;cover-placeholder&quot;>封面圖<br>Way Back Into Love</div>'">
+  </div>
+  <div class="hero-meta">
+    <div>
+      <div class="hero-title">Way Back Into Love</div>
+      <div class="hero-subtitle"><ruby>回<rt>ㄏㄨㄟˊ</rt></ruby><ruby>到<rt>ㄉㄠˋ</rt></ruby><ruby>愛<rt>ㄞˋ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>路<rt>ㄌㄨˋ</rt></ruby></div>
+      <div class="hero-artist">— Hugh Grant &amp; Haley Bennett</div>
+    </div>
+    <div><span class="owner-pill">南瓜爸爸選的歌</span></div>
+  </div>
+</div>
+
+<div class="info-card">
+  <div class="info-row"><span class="info-label">創作人</span><span class="info-value">Adam Schlesinger</span></div>
+  <div class="info-row"><span class="info-label">發行年份</span><span class="info-value">2007 年</span></div>
+  <div class="info-row"><span class="info-label">收錄專輯</span><span class="info-value">Music and Lyrics 電影原聲帶</span></div>
+  <div class="info-row"><span class="info-label">演唱者</span><span class="info-value">Hugh Grant &amp; Haley Bennett</span></div>
+</div>
+
+<div class="two-col">
+  <div class="col-box">
+    <div class="ct">🎼 曲風</div>
+    <p><ruby>流<rt>ㄌㄧㄡˊ</rt></ruby><ruby>行<rt>ㄒㄧㄥˊ</rt></ruby><ruby>抒<rt>ㄕㄨ</rt></ruby><ruby>情<rt>ㄑㄧㄥˊ</rt></ruby>(Pop Ballad)。<ruby>鋼<rt>ㄍㄤ</rt></ruby><ruby>琴<rt>ㄑㄧㄣˊ</rt></ruby><ruby>輕<rt>ㄑㄧㄥ</rt></ruby><ruby>輕<rt>˙ㄑㄧㄥ</rt></ruby><ruby>帶<rt>ㄉㄞˋ</rt></ruby><ruby>路<rt>ㄌㄨˋ</rt></ruby>，<ruby>男<rt>ㄋㄢˊ</rt></ruby><ruby>女<rt>ㄋㄩˇ</rt></ruby><ruby>合<rt>ㄏㄜˊ</rt></ruby><ruby>唱<rt>ㄔㄤˋ</rt></ruby>，<ruby>溫<rt>ㄨㄣ</rt></ruby><ruby>柔<rt>ㄖㄡˊ</rt></ruby><ruby>又<rt>ㄧㄡˋ</rt></ruby><ruby>甜<rt>ㄊㄧㄢˊ</rt></ruby><ruby>蜜<rt>ㄇㄧˋ</rt></ruby>。</p>
+  </div>
+  <div class="col-box">
+    <div class="ct">💡 歌曲意境</div>
+    <p><ruby>主<rt>ㄓㄨˇ</rt></ruby><ruby>角<rt>ㄐㄩㄝˊ</rt></ruby><ruby>心<rt>ㄒㄧㄣ</rt></ruby><ruby>裡<rt>ㄌㄧˇ</rt></ruby><ruby>受<rt>ㄕㄡˋ</rt></ruby><ruby>過<rt>ㄍㄨㄛˋ</rt></ruby><ruby>傷<rt>ㄕㄤ</rt></ruby>，<ruby>不<rt>ㄅㄨˋ</rt></ruby><ruby>敢<rt>ㄍㄢˇ</rt></ruby><ruby>再<rt>ㄗㄞˋ</rt></ruby><ruby>愛<rt>ㄞˋ</rt></ruby>。<ruby>這<rt>ㄓㄜˋ</rt></ruby><ruby>首<rt>ㄕㄡˇ</rt></ruby><ruby>歌<rt>ㄍㄜ</rt></ruby><ruby>說<rt>ㄕㄨㄛ</rt></ruby>：「<ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>想<rt>ㄒㄧㄤˇ</rt></ruby><ruby>找<rt>ㄓㄠˇ</rt></ruby><ruby>到<rt>ㄉㄠˋ</rt></ruby><ruby>回<rt>ㄏㄨㄟˊ</rt></ruby><ruby>到<rt>ㄉㄠˋ</rt></ruby><ruby>愛<rt>ㄞˋ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>路<rt>ㄌㄨˋ</rt></ruby>！」</p>
+  </div>
+</div>
+
+<div class="sh">🎵 英文歌詞重點片段（英文原句 + 中文注音）</div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">I've been lonely for so long.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>已<rt>ㄧˇ</rt></ruby><ruby>經<rt>ㄐㄧㄥ</rt></ruby><ruby>孤<rt>ㄍㄨ</rt></ruby><ruby>單<rt>ㄉㄢ</rt></ruby><ruby>了<rt>˙ㄌㄜ</rt></ruby><ruby>好<rt>ㄏㄠˇ</rt></ruby><ruby>久<rt>ㄐㄧㄡˇ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">I've been watching but the stars refuse to shine.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>一<rt>ㄧˋ</rt></ruby><ruby>直<rt>ㄓˊ</rt></ruby><ruby>看<rt>ㄎㄢˋ</rt></ruby><ruby>著<rt>˙ㄓㄜ</rt></ruby>，<ruby>但<rt>ㄉㄢˋ</rt></ruby><ruby>星<rt>ㄒㄧㄥ</rt></ruby><ruby>星<rt>˙ㄒㄧㄥ</rt></ruby><ruby>不<rt>ㄅㄨˋ</rt></ruby><ruby>肯<rt>ㄎㄣˇ</rt></ruby><ruby>發<rt>ㄈㄚ</rt></ruby><ruby>光<rt>ㄍㄨㄤ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">All I wanna do is find a way back into love.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>只<rt>ㄓˇ</rt></ruby><ruby>想<rt>ㄒㄧㄤˇ</rt></ruby><ruby>找<rt>ㄓㄠˇ</rt></ruby><ruby>到<rt>ㄉㄠˋ</rt></ruby><ruby>一<rt>ㄧˋ</rt></ruby><ruby>條<rt>ㄊㄧㄠˊ</rt></ruby><ruby>回<rt>ㄏㄨㄟˊ</rt></ruby><ruby>到<rt>ㄉㄠˋ</rt></ruby><ruby>愛<rt>ㄞˋ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>路<rt>ㄌㄨˋ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">And if I open my heart again...</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>如<rt>ㄖㄨˊ</rt></ruby><ruby>果<rt>ㄍㄨㄛˇ</rt></ruby><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>再<rt>ㄗㄞˋ</rt></ruby><ruby>次<rt>ㄘˋ</rt></ruby><ruby>打<rt>ㄉㄚˇ</rt></ruby><ruby>開<rt>ㄎㄞ</rt></ruby><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby><ruby>心<rt>ㄒㄧㄣ</rt></ruby>……</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">I hope that you'll be there for me in the end.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>希<rt>ㄒㄧ</rt></ruby><ruby>望<rt>ㄨㄤˋ</rt></ruby><ruby>你<rt>ㄋㄧˇ</rt></ruby><ruby>最<rt>ㄗㄨㄟˋ</rt></ruby><ruby>後<rt>ㄏㄡˋ</rt></ruby><ruby>會<rt>ㄏㄨㄟˋ</rt></ruby><ruby>在<rt>ㄗㄞˋ</rt></ruby><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>身<rt>ㄕㄣ</rt></ruby><ruby>旁<rt>ㄆㄤˊ</rt></ruby>。</div>
+    </div>
+
+<div class="sh">🎤 完整英文歌詞</div>
+<div class="full-lyrics">
+  <div class="full-lyric-block"><div class="full-lyric-line">I've been living with a shadow overhead</div><div class="full-lyric-line">I've been sleeping with a cloud above my bed</div><div class="full-lyric-line">I've been lonely for so long</div><div class="full-lyric-line">Trapped in the past, I just can't seem to move on</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">I've been hiding all my hopes and dreams away</div><div class="full-lyric-line">Just in case I ever need them again someday</div><div class="full-lyric-line">I've been setting aside time</div><div class="full-lyric-line">To clear a little space in the corners of my mind</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">All I want to do is find a way back into love</div><div class="full-lyric-line">I can't make it through without a way back into love</div><div class="full-lyric-line">Oh oh oh</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">I've been watching but the stars refuse to shine</div><div class="full-lyric-line">I've been searching but I just don't see the signs</div><div class="full-lyric-line">I know that it's out there</div><div class="full-lyric-line">There's got to be something for my soul somewhere</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">I've been looking for someone to shed some light</div><div class="full-lyric-line">Not somebody just to get me through the night</div><div class="full-lyric-line">I could use some direction</div><div class="full-lyric-line">And I'm open to your suggestions</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">All I want to do is find a way back into love</div><div class="full-lyric-line">I can't make it through without a way back into love</div><div class="full-lyric-line">And if I open my heart again</div><div class="full-lyric-line">I guess I'm hoping you'll be there for me in the end</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">There are moments when I don't know if it's real</div><div class="full-lyric-line">Or if anybody feels the way I feel</div><div class="full-lyric-line">I need inspiration</div><div class="full-lyric-line">Not just another negotiation</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">All I want to do is find a way back into love</div><div class="full-lyric-line">I can't make it through without a way back into love</div><div class="full-lyric-line">And if I open my heart to you</div><div class="full-lyric-line">I'm hoping you'll show me what to do</div><div class="full-lyric-line">And if you help me to start again</div><div class="full-lyric-line">You know that I'll be there for you in the end</div></div>
+</div>
+
+<div class="sh">📚 精選單字 20 個（基礎 12 + 進階 8）</div>
+
+<div class="word-section-label">🟡 基礎 12 個 — 睿寶一定要會</div>
+<div class="word-grid">
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">love</span><span class="w-type">名詞</span><span class="w-ph">/lʌv/</span></div>
+    <div class="w-zh"><ruby>愛<rt>ㄞˋ</rt></ruby></div>
+    <div class="w-ex">I love you.（我愛你）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">star</span><span class="w-type">名詞</span><span class="w-ph">/stɑːr/</span></div>
+    <div class="w-zh"><ruby>星<rt>ㄒㄧㄥ</rt></ruby><ruby>星<rt>˙ㄒㄧㄥ</rt></ruby></div>
+    <div class="w-ex">Shining star.（閃亮的星星）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">cloud</span><span class="w-type">名詞</span><span class="w-ph">/klaʊd/</span></div>
+    <div class="w-zh"><ruby>雲<rt>ㄩㄣˊ</rt></ruby></div>
+    <div class="w-ex">A big cloud.（一朵大雲）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">heart</span><span class="w-type">名詞</span><span class="w-ph">/hɑːrt/</span></div>
+    <div class="w-zh"><ruby>心<rt>ㄒㄧㄣ</rt></ruby></div>
+    <div class="w-ex">Open my heart.（打開我的心）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">dream</span><span class="w-type">名詞</span><span class="w-ph">/driːm/</span></div>
+    <div class="w-zh"><ruby>夢<rt>ㄇㄥˋ</rt></ruby><ruby>想<rt>ㄒㄧㄤˇ</rt></ruby></div>
+    <div class="w-ex">My dream.（我的夢想）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">back</span><span class="w-type">副詞</span><span class="w-ph">/bæk/</span></div>
+    <div class="w-zh"><ruby>回<rt>ㄏㄨㄟˊ</rt></ruby><ruby>來<rt>ㄌㄞˊ</rt></ruby></div>
+    <div class="w-ex">Come back.（回來）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">open</span><span class="w-type">動詞</span><span class="w-ph">/ˈoʊpən/</span></div>
+    <div class="w-zh"><ruby>打<rt>ㄉㄚˇ</rt></ruby><ruby>開<rt>ㄎㄞ</rt></ruby></div>
+    <div class="w-ex">Open the door.（打開門）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">hope</span><span class="w-type">名詞</span><span class="w-ph">/hoʊp/</span></div>
+    <div class="w-zh"><ruby>希<rt>ㄒㄧ</rt></ruby><ruby>望<rt>ㄨㄤˋ</rt></ruby></div>
+    <div class="w-ex">I hope so.（我希望如此）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">night</span><span class="w-type">名詞</span><span class="w-ph">/naɪt/</span></div>
+    <div class="w-zh"><ruby>夜<rt>ㄧㄝˋ</rt></ruby><ruby>晚<rt>ㄨㄢˇ</rt></ruby></div>
+    <div class="w-ex">Good night.（晚安）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">again</span><span class="w-type">副詞</span><span class="w-ph">/əˈɡen/</span></div>
+    <div class="w-zh"><ruby>再<rt>ㄗㄞˋ</rt></ruby><ruby>一<rt>ㄧˊ</rt></ruby><ruby>次<rt>ㄘˋ</rt></ruby></div>
+    <div class="w-ex">Try again.（再試一次）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">shadow</span><span class="w-type">名詞</span><span class="w-ph">/ˈʃædoʊ/</span></div>
+    <div class="w-zh"><ruby>影<rt>ㄧㄥˇ</rt></ruby><ruby>子<rt>˙ㄗ</rt></ruby></div>
+    <div class="w-ex">My shadow.（我的影子）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">find</span><span class="w-type">動詞</span><span class="w-ph">/faɪnd/</span></div>
+    <div class="w-zh"><ruby>找<rt>ㄓㄠˇ</rt></ruby><ruby>到<rt>ㄉㄠˋ</rt></ruby></div>
+    <div class="w-ex">Find a way.（找到一條路）</div>
+  </div>
+</div>
+
+<div class="word-section-label">🟠 進階 8 個 — 爸媽一起學</div>
+<div class="word-grid">
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">lonely</span><span class="w-type">形容詞</span><span class="w-ph">/ˈloʊnli/</span></div>
+    <div class="w-zh"><ruby>寂<rt>ㄐㄧˊ</rt></ruby><ruby>寞<rt>ㄇㄛˋ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby></div>
+    <div class="w-ex">I feel lonely.（我覺得寂寞）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">searching</span><span class="w-type">動詞</span><span class="w-ph">/ˈsɜːrtʃɪŋ/</span></div>
+    <div class="w-zh"><ruby>搜<rt>ㄙㄡ</rt></ruby><ruby>尋<rt>ㄒㄩㄣˊ</rt></ruby><ruby>中<rt>ㄓㄨㄥ</rt></ruby></div>
+    <div class="w-ex">I'm searching for you.（我在找你）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">direction</span><span class="w-type">名詞</span><span class="w-ph">/dɪˈrekʃən/</span></div>
+    <div class="w-zh"><ruby>方<rt>ㄈㄤ</rt></ruby><ruby>向<rt>ㄒㄧㄤˋ</rt></ruby></div>
+    <div class="w-ex">Which direction?（哪個方向？）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">inspiration</span><span class="w-type">名詞</span><span class="w-ph">/ˌɪnspəˈreɪʃən/</span></div>
+    <div class="w-zh"><ruby>靈<rt>ㄌㄧㄥˊ</rt></ruby><ruby>感<rt>ㄍㄢˇ</rt></ruby></div>
+    <div class="w-ex">You are my inspiration.（你是我的靈感）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">moment</span><span class="w-type">名詞</span><span class="w-ph">/ˈmoʊmənt/</span></div>
+    <div class="w-zh"><ruby>時<rt>ㄕˊ</rt></ruby><ruby>刻<rt>ㄎㄜˋ</rt></ruby></div>
+    <div class="w-ex">A special moment.（一個特別的時刻）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">trapped</span><span class="w-type">形容詞</span><span class="w-ph">/træpt/</span></div>
+    <div class="w-zh"><ruby>困<rt>ㄎㄨㄣˋ</rt></ruby><ruby>住<rt>ㄓㄨˋ</rt></ruby><ruby>的<rt>˙ㄉㄜ</rt></ruby></div>
+    <div class="w-ex">Trapped in the past.（困在過去）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">hiding</span><span class="w-type">動詞</span><span class="w-ph">/ˈhaɪdɪŋ/</span></div>
+    <div class="w-zh"><ruby>躲<rt>ㄉㄨㄛˇ</rt></ruby><ruby>藏<rt>ㄘㄤˊ</rt></ruby></div>
+    <div class="w-ex">Hiding my feelings.（藏起感受）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">soul</span><span class="w-type">名詞</span><span class="w-ph">/soʊl/</span></div>
+    <div class="w-zh"><ruby>靈<rt>ㄌㄧㄥˊ</rt></ruby><ruby>魂<rt>ㄏㄨㄣˊ</rt></ruby></div>
+    <div class="w-ex">Soul music.（靈魂樂）</div>
+  </div>
+</div>
+
+<div class="mission">
+  <span class="t">🎯 親子任務：</span>聽到 <b>love</b> 全家互相抱一下 🤗；聽到 <b>star</b> 雙手在頭上做閃亮星星 ✨；聽到 <b>way back into love</b> 副歌一起大聲跟唱！
+</div>
+
+</body>
+</html>

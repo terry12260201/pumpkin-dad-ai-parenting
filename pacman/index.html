@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<title>Pac-Man 小精靈</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: #000; color: #fff;
+    font-family: "Press Start 2P", "Courier New", monospace;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    user-select: none;
+  }
+  #wrap { text-align: center; }
+  #hud {
+    display: flex; justify-content: space-between;
+    width: 560px; margin: 8px auto;
+    font-size: 14px; letter-spacing: 2px;
+    color: #ffeb3b;
+  }
+  #hud .label { color: #fff; }
+  canvas {
+    background: #000;
+    image-rendering: pixelated;
+    border: 2px solid #2121de;
+    box-shadow: 0 0 20px #2121de77;
+  }
+  #msg {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px; color: #ffeb3b;
+    text-shadow: 0 0 10px #000, 0 0 6px #000;
+    pointer-events: none;
+    text-align: center;
+  }
+  #help {
+    margin-top: 8px; font-size: 11px; color: #888;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="hud">
+    <div><span class="label">SCORE</span> <span id="score">0</span></div>
+    <div><span class="label">HIGH</span> <span id="high">0</span></div>
+    <div><span class="label">LIVES</span> <span id="lives">♥♥♥</span></div>
+  </div>
+  <div style="position: relative; display: inline-block;">
+    <canvas id="game" width="560" height="620"></canvas>
+    <div id="msg"></div>
+  </div>
+  <div id="help">方向鍵 / WASD 移動 ・ Space 開始/暫停 ・ R 重新開始</div>
+</div>
+
+<script>
+"use strict";
+
+// ---------- 迷宮地圖 ----------
+// 28 cols x 31 rows  (經典 Pac-Man 布局)
+// # = 牆, . = 豆子, o = 能量豆, ' ' = 通道, - = 鬼門, T = 隧道空格(無豆)
+const MAZE = [
+  "############################",
+  "#............##............#",
+  "#.####.#####.##.#####.####.#",
+  "#o####.#####.##.#####.####o#",
+  "#.####.#####.##.#####.####.#",
+  "#..........................#",
+  "#.####.##.########.##.####.#",
+  "#.####.##.########.##.####.#",
+  "#......##....##....##......#",
+  "######.##### ## #####.######",
+  "######.##### ## #####.######",
+  "######.##          ##.######",
+  "######.## ###--### ##.######",
+  "######.## #      # ##.######",
+  "TTTTTT.   #      #   .TTTTTT",
+  "######.## #      # ##.######",
+  "######.## ######## ##.######",
+  "######.##          ##.######",
+  "######.## ######## ##.######",
+  "######.## ######## ##.######",
+  "#............##............#",
+  "#.####.#####.##.#####.####.#",
+  "#.####.#####.##.#####.####.#",
+  "#o..##.......P........##..o#",
+  "###.##.##.########.##.##.###",
+  "###.##.##.########.##.##.###",
+  "#......##....##....##......#",
+  "#.##########.##.##########.#",
+  "#.##########.##.##########.#",
+  "#..........................#",
+  "############################",
+];
+
+const COLS = 28;
+const ROWS = 31;
+const TILE = 20;                // 每格 20px
+const W = COLS * TILE;          // 560
+const H = ROWS * TILE;          // 620
+
+// ---------- 解析地圖 ----------
+// grid[y][x]: 'wall' | 'dot' | 'power' | 'empty' | 'door' | 'tunnel'
+let grid = [];
+let totalDots = 0;
+let pacStart = { x: 13, y: 23 };
+const ghostHome = { x: 13, y: 14 };  // 鬼屋中心(門上方)
+const ghostHouseSpawn = [
+  { x: 13, y: 14 }, // Blinky 起在門外
+  { x: 13, y: 15 }, // Pinky 在屋裡
+  { x: 11, y: 15 }, // Inky
+  { x: 15, y: 15 }, // Clyde
+];
+
+function parseMaze() {
+  grid = [];
+  totalDots = 0;
+  for (let y = 0; y < ROWS; y++) {
+    const row = [];
+    const line = MAZE[y];
+    for (let x = 0; x < COLS; x++) {
+      const ch = line[x] || ' ';
+      let cell = 'empty';
+      if (ch === '#') cell = 'wall';
+      else if (ch === '.') { cell = 'dot'; totalDots++; }
+      else if (ch === 'o') { cell = 'power'; totalDots++; }
+      else if (ch === '-') cell = 'door';
+      else if (ch === 'T') cell = 'tunnel';
+      else if (ch === 'P') { cell = 'empty'; pacStart = { x, y }; }
+      row.push(cell);
+    }
+    grid.push(row);
+  }
+}
+parseMaze();
+
+// ---------- 工具函式 ----------
+const DIRS = {
+  up:    { x: 0,  y: -1 },
+  down:  { x: 0,  y:  1 },
+  left:  { x: -1, y:  0 },
+  right: { x: 1,  y:  0 },
+};
+const DIR_NAMES = ['up', 'down', 'left', 'right'];
+const OPP = { up: 'down', down: 'up', left: 'right', right: 'left' };
+
+function isWallTile(tx, ty, allowDoor = false) {
+  if (ty < 0 || ty >= ROWS) return true;
+  // 隧道左右循環
+  if (tx < 0 || tx >= COLS) return false;
+  const c = grid[ty][tx];
+  if (c === 'wall') return true;
+  if (c === 'door' && !allowDoor) return true;
+  return false;
+}
+
+function wrapTileX(tx) {
+  if (tx < 0) return COLS - 1;
+  if (tx >= COLS) return 0;
+  return tx;
+}
+
+// 像素位置 -> tile 中心對齊判斷
+function atTileCenter(px, py) {
+  return ((px - TILE / 2) % TILE === 0) && ((py - TILE / 2) % TILE === 0);
+}
+function pixelToTile(px, py) {
+  return { x: Math.floor(px / TILE), y: Math.floor(py / TILE) };
+}
+function tileCenterPx(tx, ty) {
+  return { x: tx * TILE + TILE / 2, y: ty * TILE + TILE / 2 };
+}
+
+// ---------- 角色基底 ----------
+class Entity {
+  constructor(tx, ty, color) {
+    const p = tileCenterPx(tx, ty);
+    this.x = p.x; this.y = p.y;
+    this.dir = 'left';
+    this.next = 'left';
+    this.speed = 2;     // 像素/格
+    this.color = color;
+  }
+  tile() { return pixelToTile(this.x, this.y); }
+}
+
+// ---------- Pac-Man ----------
+class PacMan extends Entity {
+  constructor() {
+    super(pacStart.x, pacStart.y, '#ffeb3b');
+    this.dir = 'left'; this.next = 'left';
+    this.speed = 2;
+    this.mouth = 0;          // 動畫角度 0..1
+    this.mouthDir = 1;
+    this.alive = true;
+    this.deathTimer = 0;
+  }
+  reset() {
+    const p = tileCenterPx(pacStart.x, pacStart.y);
+    this.x = p.x; this.y = p.y;
+    this.dir = 'left'; this.next = 'left';
+    this.alive = true; this.deathTimer = 0;
+    this.mouth = 0;
+  }
+  update() {
+    if (!this.alive) {
+      this.deathTimer++;
+      return;
+    }
+    // 嘗試轉向：在格中心時若 next 不是牆才轉
+    const t = this.tile();
+    const cx = t.x * TILE + TILE / 2;
+    const cy = t.y * TILE + TILE / 2;
+
+    // 允許「逆向」立即生效（不需到中心）
+    if (this.next === OPP[this.dir]) {
+      this.dir = this.next;
+    }
+
+    if (Math.abs(this.x - cx) < 0.001 && Math.abs(this.y - cy) < 0.001) {
+      // 在中心：嘗試切換方向
+      const nd = DIRS[this.next];
+      const ahead = { x: t.x + nd.x, y: t.y + nd.y };
+      if (!isWallTile(ahead.x, ahead.y)) {
+        this.dir = this.next;
+      }
+      // 檢查目前方向是否能繼續走
+      const cd = DIRS[this.dir];
+      const nextTile = { x: t.x + cd.x, y: t.y + cd.y };
+      if (isWallTile(nextTile.x, nextTile.y)) {
+        // 撞牆停下
+        this.x = cx; this.y = cy;
+        return;
+      }
+    }
+    // 往 dir 移動
+    const d = DIRS[this.dir];
+    this.x += d.x * this.speed;
+    this.y += d.y * this.speed;
+    // 隧道穿越
+    if (this.x < -TILE / 2) this.x = W + TILE / 2 - 1;
+    if (this.x > W + TILE / 2) this.x = -TILE / 2 + 1;
+
+    // 嘴巴動畫
+    this.mouth += 0.12 * this.mouthDir;
+    if (this.mouth > 1) { this.mouth = 1; this.mouthDir = -1; }
+    if (this.mouth < 0) { this.mouth = 0; this.mouthDir = 1; }
+  }
+  draw(ctx) {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    let rot = 0;
+    if (this.dir === 'right') rot = 0;
+    else if (this.dir === 'down') rot = Math.PI / 2;
+    else if (this.dir === 'left') rot = Math.PI;
+    else if (this.dir === 'up') rot = -Math.PI / 2;
+    ctx.rotate(rot);
+
+    if (!this.alive) {
+      // 死亡動畫：嘴張大消失
+      const t = Math.min(this.deathTimer / 60, 1);
+      const open = 0.05 + t * Math.PI;
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, TILE * 0.45 * (1 - t * 0.3), open, Math.PI * 2 - open);
+      ctx.closePath();
+      ctx.fill();
+    } else {
+      const open = 0.05 + this.mouth * 0.55;
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, TILE * 0.45, open, Math.PI * 2 - open);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+
+// ---------- Ghost ----------
+class Ghost extends Entity {
+  constructor(name, color, scatterTile, spawnTile, releaseDelay) {
+    super(spawnTile.x, spawnTile.y, color);
+    this.name = name;
+    this.scatter = scatterTile;
+    this.spawnTile = spawnTile;
+    this.releaseDelay = releaseDelay;     // 出屋延遲(幀)
+    this.releaseTimer = 0;
+    this.state = (name === 'blinky') ? 'chase' : 'house'; // house, chase, scatter, frightened, eaten
+    this.dir = 'up';
+    this.speed = 1.8;
+    this.frightTimer = 0;
+  }
+  reset() {
+    const p = tileCenterPx(this.spawnTile.x, this.spawnTile.y);
+    this.x = p.x; this.y = p.y;
+    this.dir = 'up';
+    this.state = (this.name === 'blinky') ? 'chase' : 'house';
+    this.releaseTimer = 0;
+    this.frightTimer = 0;
+  }
+  setFrightened() {
+    if (this.state === 'eaten' || this.state === 'house') return;
+    this.state = 'frightened';
+    this.frightTimer = 60 * 7;        // 7 秒
+    this.dir = OPP[this.dir] || this.dir;
+  }
+  // 取得目標 tile
+  targetTile(pac, blinky) {
+    if (this.state === 'scatter') return this.scatter;
+    if (this.state === 'eaten') return { x: 13, y: 14 };
+    if (this.state === 'frightened') return null; // 隨機
+    // chase
+    const pt = pac.tile();
+    if (this.name === 'blinky') return pt;
+    if (this.name === 'pinky') {
+      const d = DIRS[pac.dir];
+      return { x: pt.x + d.x * 4, y: pt.y + d.y * 4 };
+    }
+    if (this.name === 'inky') {
+      const d = DIRS[pac.dir];
+      const ahead = { x: pt.x + d.x * 2, y: pt.y + d.y * 2 };
+      const bt = blinky.tile();
+      return { x: ahead.x + (ahead.x - bt.x), y: ahead.y + (ahead.y - bt.y) };
+    }
+    if (this.name === 'clyde') {
+      const dx = pt.x - this.tile().x, dy = pt.y - this.tile().y;
+      if (dx * dx + dy * dy > 64) return pt;
+      return this.scatter;
+    }
+    return pt;
+  }
+  // 在格中心選方向
+  chooseDir(pac, blinky) {
+    const t = this.tile();
+    const target = this.targetTile(pac, blinky);
+    let best = null, bestDist = Infinity;
+    const allowDoor = (this.state === 'eaten' || this.state === 'house');
+    const candidates = [];
+    for (const dn of DIR_NAMES) {
+      if (dn === OPP[this.dir]) continue;
+      const d = DIRS[dn];
+      const nx = wrapTileX(t.x + d.x), ny = t.y + d.y;
+      if (isWallTile(nx, ny, allowDoor)) continue;
+      // 鬼在這些 tile 不准向上 (Pac-Man 經典規則簡化版)
+      candidates.push(dn);
+    }
+    if (candidates.length === 0) {
+      // 強制反向
+      this.dir = OPP[this.dir];
+      return;
+    }
+    if (this.state === 'frightened') {
+      this.dir = candidates[Math.floor(Math.random() * candidates.length)];
+      return;
+    }
+    for (const dn of candidates) {
+      const d = DIRS[dn];
+      const nx = t.x + d.x, ny = t.y + d.y;
+      const dist = (nx - target.x) ** 2 + (ny - target.y) ** 2;
+      if (dist < bestDist) { bestDist = dist; best = dn; }
+    }
+    if (best) this.dir = best;
+  }
+  update(pac, blinky, globalMode) {
+    // 出屋邏輯
+    if (this.state === 'house') {
+      this.releaseTimer++;
+      // 屋內上下擺動
+      const center = tileCenterPx(this.spawnTile.x, this.spawnTile.y);
+      this.y += (this.dir === 'up' ? -1 : 1) * 0.5;
+      if (this.y > center.y + 6) this.dir = 'up';
+      if (this.y < center.y - 6) this.dir = 'down';
+      if (this.releaseTimer >= this.releaseDelay) {
+        // 走向門口
+        this.x = tileCenterPx(13, 14).x;
+        const door = tileCenterPx(13, 11).y;
+        this.y -= 1.2;
+        if (this.y <= door) {
+          this.y = door;
+          this.state = globalMode;
+          this.dir = (Math.random() < 0.5) ? 'left' : 'right';
+        }
+      }
+      return;
+    }
+
+    // eaten 抵達門口 -> 變回 house
+    if (this.state === 'eaten') {
+      const home = tileCenterPx(13, 14);
+      const dx = home.x - this.x, dy = home.y - this.y;
+      if (Math.abs(dx) < 2 && Math.abs(dy) < 2) {
+        this.x = home.x; this.y = home.y;
+        this.state = 'house';
+        this.releaseTimer = this.releaseDelay - 60;
+        return;
+      }
+    }
+
+    // frightened 計時
+    if (this.state === 'frightened') {
+      this.frightTimer--;
+      if (this.frightTimer <= 0) {
+        this.state = globalMode;
+      }
+    } else if (this.state === 'chase' || this.state === 'scatter') {
+      // 跟隨全域模式
+      this.state = globalMode;
+    }
+
+    // 在格中心做決策
+    const t = this.tile();
+    const cx = t.x * TILE + TILE / 2;
+    const cy = t.y * TILE + TILE / 2;
+    if (Math.abs(this.x - cx) < 1 && Math.abs(this.y - cy) < 1) {
+      this.x = cx; this.y = cy;
+      this.chooseDir(pac, blinky);
+    }
+    // 移動
+    let spd = this.speed;
+    if (this.state === 'frightened') spd = 1.2;
+    if (this.state === 'eaten') spd = 3.5;
+    // 隧道內慢速
+    if (grid[t.y] && grid[t.y][t.x] === 'tunnel') spd *= 0.5;
+
+    const d = DIRS[this.dir];
+    this.x += d.x * spd;
+    this.y += d.y * spd;
+    if (this.x < -TILE / 2) this.x = W + TILE / 2 - 1;
+    if (this.x > W + TILE / 2) this.x = -TILE / 2 + 1;
+  }
+  draw(ctx, flashFrame) {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    const r = TILE * 0.45;
+
+    // 身體顏色
+    let body = this.color;
+    if (this.state === 'frightened') {
+      const flash = (this.frightTimer < 120 && Math.floor(this.frightTimer / 10) % 2 === 0);
+      body = flash ? '#fff' : '#2121de';
+    }
+    if (this.state === 'eaten') body = null;
+
+    if (body) {
+      ctx.fillStyle = body;
+      ctx.beginPath();
+      ctx.arc(0, -2, r, Math.PI, 0);
+      ctx.lineTo(r, r * 0.7);
+      // 波浪底
+      const waves = 4;
+      const step = (2 * r) / waves;
+      for (let i = 0; i < waves; i++) {
+        const x0 = r - i * step;
+        ctx.lineTo(x0 - step / 2, r * 0.4);
+        ctx.lineTo(x0 - step, r * 0.7);
+      }
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // 眼睛
+    const eyeOff = (this.dir === 'left' ? -2 : this.dir === 'right' ? 2 : 0);
+    const eyeOffY = (this.dir === 'up' ? -2 : this.dir === 'down' ? 2 : 0);
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(-r * 0.4, -r * 0.1, r * 0.28, 0, Math.PI * 2);
+    ctx.arc(r * 0.4, -r * 0.1, r * 0.28, 0, Math.PI * 2);
+    ctx.fill();
+
+    if (this.state === 'frightened') {
+      // 害怕表情：嘴巴
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(-r * 0.5, -r * 0.15, r * 0.2, r * 0.2);
+      ctx.fillRect(r * 0.3, -r * 0.15, r * 0.2, r * 0.2);
+      ctx.strokeStyle = '#fff';
+      ctx.beginPath();
+      ctx.moveTo(-r * 0.6, r * 0.4);
+      ctx.lineTo(-r * 0.3, r * 0.2);
+      ctx.lineTo(0, r * 0.4);
+      ctx.lineTo(r * 0.3, r * 0.2);
+      ctx.lineTo(r * 0.6, r * 0.4);
+      ctx.stroke();
+    } else {
+      ctx.fillStyle = '#2121de';
+      ctx.beginPath();
+      ctx.arc(-r * 0.4 + eyeOff, -r * 0.1 + eyeOffY, r * 0.13, 0, Math.PI * 2);
+      ctx.arc(r * 0.4 + eyeOff, -r * 0.1 + eyeOffY, r * 0.13, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+
+// ---------- 遊戲控制 ----------
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const scoreEl = document.getElementById('score');
+const highEl = document.getElementById('high');
+const livesEl = document.getElementById('lives');
+const msgEl = document.getElementById('msg');
+
+let pac, ghosts;
+let score = 0;
+let high = +(localStorage.getItem('pacman_high') || 0);
+let lives = 3;
+let dotsLeft = 0;
+let state = 'ready';   // ready, playing, paused, dying, win, gameover
+let stateTimer = 0;
+let globalMode = 'scatter';
+let modeTimer = 0;
+let modePhase = 0;
+// 經典：scatter 7s, chase 20s, scatter 7s, chase 20s, scatter 5s, chase 20s, scatter 5s, chase ∞
+const MODE_TABLE = [
+  { mode: 'scatter', frames: 7 * 60 },
+  { mode: 'chase',   frames: 20 * 60 },
+  { mode: 'scatter', frames: 7 * 60 },
+  { mode: 'chase',   frames: 20 * 60 },
+  { mode: 'scatter', frames: 5 * 60 },
+  { mode: 'chase',   frames: 20 * 60 },
+  { mode: 'scatter', frames: 5 * 60 },
+  { mode: 'chase',   frames: Infinity },
+];
+let ghostStreak = 0;   // 一次能量豆內連續吃鬼計分倍率
+
+highEl.textContent = high;
+
+function newGame() {
+  parseMaze();
+  dotsLeft = totalDots;
+  score = 0;
+  lives = 3;
+  state = 'ready';
+  stateTimer = 90;
+  setupEntities();
+  msgEl.textContent = 'READY!';
+  updateHUD();
+}
+
+function setupEntities() {
+  pac = new PacMan();
+  ghosts = [
+    new Ghost('blinky', '#ff0000', { x: 25, y: 0 },  { x: 13, y: 11 }, 0),
+    new Ghost('pinky',  '#ffb8de', { x: 2,  y: 0 },  { x: 13, y: 14 }, 60 * 3),
+    new Ghost('inky',   '#00ffff', { x: 27, y: 30 }, { x: 11, y: 14 }, 60 * 7),
+    new Ghost('clyde',  '#ffb852', { x: 0,  y: 30 }, { x: 15, y: 14 }, 60 * 12),
+  ];
+  globalMode = 'scatter';
+  modeTimer = 0; modePhase = 0;
+  ghostStreak = 0;
+}
+
+function nextLevel() {
+  parseMaze();
+  dotsLeft = totalDots;
+  setupEntities();
+  state = 'ready';
+  stateTimer = 90;
+  msgEl.textContent = 'READY!';
+}
+
+function loseLife() {
+  lives--;
+  updateHUD();
+  if (lives <= 0) {
+    state = 'gameover';
+    msgEl.innerHTML = 'GAME OVER<br><span style="font-size:14px;color:#fff">Press R to restart</span>';
+    if (score > high) {
+      high = score;
+      localStorage.setItem('pacman_high', high);
+      highEl.textContent = high;
+    }
+  } else {
+    state = 'ready';
+    stateTimer = 90;
+    setupEntities();
+    msgEl.textContent = 'READY!';
+  }
+}
+
+function updateHUD() {
+  scoreEl.textContent = score;
+  livesEl.textContent = '♥'.repeat(Math.max(0, lives));
+  if (score > high) {
+    high = score;
+    highEl.textContent = high;
+    localStorage.setItem('pacman_high', high);
+  } else {
+    highEl.textContent = high;
+  }
+}
+
+// ---------- 輸入 ----------
+const keyMap = {
+  'ArrowUp': 'up', 'ArrowDown': 'down', 'ArrowLeft': 'left', 'ArrowRight': 'right',
+  'KeyW': 'up', 'KeyS': 'down', 'KeyA': 'left', 'KeyD': 'right',
+};
+window.addEventListener('keydown', (e) => {
+  if (keyMap[e.code]) {
+    if (pac) pac.next = keyMap[e.code];
+    e.preventDefault();
+  } else if (e.code === 'Space') {
+    if (state === 'playing') { state = 'paused'; msgEl.textContent = 'PAUSED'; }
+    else if (state === 'paused') { state = 'playing'; msgEl.textContent = ''; }
+    else if (state === 'ready') { /* 等倒數 */ }
+    e.preventDefault();
+  } else if (e.code === 'KeyR') {
+    newGame();
+  }
+});
+
+// ---------- 模式切換 ----------
+function updateGlobalMode() {
+  if (modePhase >= MODE_TABLE.length) return;
+  const cur = MODE_TABLE[modePhase];
+  modeTimer++;
+  if (modeTimer >= cur.frames) {
+    modeTimer = 0;
+    modePhase++;
+    if (modePhase < MODE_TABLE.length) {
+      globalMode = MODE_TABLE[modePhase].mode;
+      // 切換時鬼立刻反向（除非 frightened/eaten/house）
+      for (const g of ghosts) {
+        if (g.state === 'chase' || g.state === 'scatter') {
+          g.dir = OPP[g.dir] || g.dir;
+        }
+      }
+    }
+  } else {
+    globalMode = cur.mode;
+  }
+}
+
+// ---------- 碰撞 / 邏輯 ----------
+function eatDots() {
+  const t = pac.tile();
+  if (t.x < 0 || t.x >= COLS || t.y < 0 || t.y >= ROWS) return;
+  const c = grid[t.y][t.x];
+  if (c === 'dot') {
+    grid[t.y][t.x] = 'empty';
+    dotsLeft--;
+    score += 10;
+    updateHUD();
+  } else if (c === 'power') {
+    grid[t.y][t.x] = 'empty';
+    dotsLeft--;
+    score += 50;
+    ghostStreak = 0;
+    for (const g of ghosts) g.setFrightened();
+    updateHUD();
+  }
+  if (dotsLeft <= 0) {
+    state = 'win';
+    stateTimer = 120;
+    msgEl.textContent = 'YOU WIN!';
+  }
+}
+
+function checkGhostCollision() {
+  for (const g of ghosts) {
+    const dx = g.x - pac.x, dy = g.y - pac.y;
+    if (dx * dx + dy * dy < (TILE * 0.6) ** 2) {
+      if (g.state === 'frightened') {
+        g.state = 'eaten';
+        const pts = 200 * Math.pow(2, ghostStreak);
+        score += pts;
+        ghostStreak++;
+        updateHUD();
+      } else if (g.state === 'eaten' || g.state === 'house') {
+        // 不傷害
+      } else {
+        // 死亡
+        pac.alive = false;
+        state = 'dying';
+        stateTimer = 90;
+      }
+    }
+  }
+}
+
+// ---------- 繪製 ----------
+function drawMaze() {
+  // 牆壁
+  ctx.lineWidth = 2;
+  for (let y = 0; y < ROWS; y++) {
+    for (let x = 0; x < COLS; x++) {
+      const c = grid[y][x];
+      if (c === 'wall') {
+        ctx.fillStyle = '#000';
+        ctx.fillRect(x * TILE, y * TILE, TILE, TILE);
+        // 邊框：用相鄰判斷只畫外緣
+        ctx.strokeStyle = '#2121de';
+        // 上邊
+        if (y === 0 || grid[y-1][x] !== 'wall') {
+          ctx.beginPath();
+          ctx.moveTo(x*TILE, y*TILE+1);
+          ctx.lineTo(x*TILE+TILE, y*TILE+1);
+          ctx.stroke();
+        }
+        if (y === ROWS-1 || grid[y+1][x] !== 'wall') {
+          ctx.beginPath();
+          ctx.moveTo(x*TILE, y*TILE+TILE-1);
+          ctx.lineTo(x*TILE+TILE, y*TILE+TILE-1);
+          ctx.stroke();
+        }
+        if (x === 0 || grid[y][x-1] !== 'wall') {
+          ctx.beginPath();
+          ctx.moveTo(x*TILE+1, y*TILE);
+          ctx.lineTo(x*TILE+1, y*TILE+TILE);
+          ctx.stroke();
+        }
+        if (x === COLS-1 || grid[y][x+1] !== 'wall') {
+          ctx.beginPath();
+          ctx.moveTo(x*TILE+TILE-1, y*TILE);
+          ctx.lineTo(x*TILE+TILE-1, y*TILE+TILE);
+          ctx.stroke();
+        }
+      } else if (c === 'door') {
+        ctx.fillStyle = '#ffb8de';
+        ctx.fillRect(x * TILE, y * TILE + TILE/2 - 2, TILE, 4);
+      } else if (c === 'dot') {
+        ctx.fillStyle = '#ffd9a8';
+        ctx.beginPath();
+        ctx.arc(x*TILE+TILE/2, y*TILE+TILE/2, 2, 0, Math.PI*2);
+        ctx.fill();
+      } else if (c === 'power') {
+        const blink = (Math.floor(performance.now() / 200) % 2 === 0);
+        if (blink) {
+          ctx.fillStyle = '#ffd9a8';
+          ctx.beginPath();
+          ctx.arc(x*TILE+TILE/2, y*TILE+TILE/2, 6, 0, Math.PI*2);
+          ctx.fill();
+        }
+      }
+    }
+  }
+}
+
+function frame() {
+  // 邏輯
+  if (state === 'ready') {
+    stateTimer--;
+    if (stateTimer <= 0) {
+      state = 'playing';
+      msgEl.textContent = '';
+    }
+  } else if (state === 'playing') {
+    updateGlobalMode();
+    pac.update();
+    eatDots();
+    if (dotsLeft > 0) {
+      const blinky = ghosts[0];
+      for (const g of ghosts) g.update(pac, blinky, globalMode);
+      checkGhostCollision();
+    }
+  } else if (state === 'dying') {
+    pac.update();
+    stateTimer--;
+    if (stateTimer <= 0) loseLife();
+  } else if (state === 'win') {
+    stateTimer--;
+    if (stateTimer <= 0) nextLevel();
+  } else if (state === 'paused') {
+    // 不更新
+  }
+
+  // 繪製
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+  drawMaze();
+
+  if (state !== 'dying') {
+    for (const g of ghosts) g.draw(ctx);
+  }
+  pac.draw(ctx);
+
+  requestAnimationFrame(frame);
+}
+
+newGame();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

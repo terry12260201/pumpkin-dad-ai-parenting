@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<title>Zoo — 南瓜家學習本</title>
+<style>
+  @page { size: A4; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+    background: #faf7ff; color: #2a1805;
+    padding: 10px; max-width: 210mm; margin: 0 auto; line-height: 1.5;
+  }
+  ruby { ruby-position: inter-character; ruby-align: center; margin-right: 3px; }
+  rt { font-size: 0.55em; color: #5a3bd4; font-weight: 400; letter-spacing: 0;
+       font-family: "Noto Sans TC", "PingFang TC", sans-serif; }
+  .lyric-zh, .col-box p, .hero-subtitle { line-height: 2.1; }
+  .w-zh { line-height: 2.0; }
+
+  .hero {
+    display: flex; align-items: stretch; gap: 14px;
+    background: linear-gradient(135deg, #a991ff 0%, #7b5cff 55%, #5a3bd4 100%);
+    border-radius: 16px; padding: 14px;
+    color: #fff; box-shadow: 0 4px 0 #5a3bd4;
+    margin-bottom: 12px;
+  }
+  .cover-box {
+    width: 110px; height: 110px; border-radius: 12px; overflow: hidden;
+    flex-shrink: 0; border: 3px solid #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,.3);
+    background: rgba(0,0,0,.1);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cover-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cover-placeholder {
+    font-size: 10px; text-align: center; padding: 8px;
+    color: rgba(255,255,255,.9); line-height: 1.4;
+  }
+  .hero-meta { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+  .hero-title { font-size: 22px; font-weight: 900; letter-spacing: .02em; line-height: 1.1; }
+  .hero-subtitle { font-size: 13px; opacity: .95; margin-top: 4px; }
+  .hero-artist { font-size: 14px; margin-top: 6px; opacity: .95; }
+  .owner-pill {
+    display: inline-block; background: #fff; color: #5a3bd4;
+    padding: 3px 12px; border-radius: 12px;
+    font-size: 12px; font-weight: 700; margin-top: 6px;
+  }
+
+  .info-card {
+    background: #fff; border: 2px solid #c4b3ff; border-radius: 12px;
+    padding: 10px 14px; margin-bottom: 10px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 14px;
+  }
+  .info-row { font-size: 12px; }
+  .info-label { color: #5a3bd4; font-weight: 700; font-size: 11px; display: block; }
+  .info-value { color: #2a1805; font-weight: 600; }
+
+  .sh {
+    font-size: 15px; font-weight: 900; color: #5a3bd4;
+    margin: 12px 0 6px; padding: 4px 10px;
+    background: linear-gradient(90deg, #f0ecff 0%, transparent 100%);
+    border-left: 4px solid #5a3bd4; border-radius: 4px;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .col-box {
+    background: #fff; border: 2px solid #c4b3ff; border-radius: 12px;
+    padding: 10px 12px;
+  }
+  .col-box .ct { font-size: 13px; font-weight: 900; color: #5a3bd4; margin-bottom: 4px; }
+  .col-box p { font-size: 12.5px; color: #3d1f08; }
+
+  .lyric-block {
+    background: #f0ecff; border-left: 5px solid #5a3bd4; border-radius: 10px;
+    padding: 10px 14px; margin-bottom: 6px;
+  }
+  .lyric-label {
+    display: inline-block;
+    margin-bottom: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.78);
+    color: #5a3bd4;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .lyric-label-zh {
+    margin-top: 8px;
+    margin-bottom: 2px;
+    background: rgba(61,31,8,0.08);
+    color: #6b5b4a;
+    text-transform: none;
+  }
+  .lyric-en {
+    font-size: 14px; font-weight: 700; color: #5a3bd4; line-height: 1.5;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+  }
+  .lyric-zh { font-size: 12.5px; color: #3d1f08; margin-top: 3px; }
+
+  .full-lyrics { margin-top: 4px; }
+  .full-lyric-block {
+    background: #fff;
+    border: 2px solid #c4b3ff;
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+  }
+  .full-lyric-line {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #2a1805;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+  }
+
+  .word-section-label {
+    font-size: 11px; font-weight: 700; color: #5a3bd4;
+    margin: 8px 0 4px; padding-left: 4px;
+    letter-spacing: .05em;
+  }
+  .word-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;
+  }
+  .word-card {
+    background: #fff; border: 1px solid #c4b3ff; border-radius: 8px;
+    padding: 5px 8px 6px;
+  }
+  .word-card.basic    { border-left: 4px solid #5a3bd4; background: #fff; }
+  .word-card.advanced { border-left: 4px solid #5a3bd4; background: #f0ecff; }
+  .word-card .row1 {
+    display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+  }
+  .w-en { font-weight: 800; color: #5a3bd4; font-size: 13px;
+          font-family: 'Comic Sans MS', 'Arial', sans-serif; }
+  .w-type { font-size: 9.5px; color: #fff; background: #5a3bd4; padding: 1px 5px; border-radius: 4px; font-weight: 700; }
+  .w-ph { font-size: 9.5px; color: #888; }
+  .w-zh { font-size: 11.5px; color: #3d1f08; margin-top: 2px; }
+  .w-ex { font-size: 10px; color: #5a3a1a; font-style: italic; margin-top: 2px; line-height: 1.35; }
+
+  .mission {
+    background: linear-gradient(135deg, #f0ecff 0%, #d0c2ff 100%);
+    border-radius: 12px; padding: 10px 14px; margin-top: 10px;
+    font-size: 12.5px; color: #3d1f08; line-height: 1.7;
+  }
+  .mission .t { font-weight: 900; color: #5a3bd4; }
+
+  @media print { body { background: #fff; padding: 0; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="cover-box">
+    <img src="file:///Users/chennanhong/Desktop/AI%20%E8%82%B2%E5%85%92/%E8%8B%B1%E6%96%87%E6%AD%8C%E6%9B%B2/ZOO.jpg" alt="Zoo cover"
+      onerror="this.style.display='none';this.parentNode.innerHTML='<div class=&quot;cover-placeholder&quot;>封面圖<br>Zoo</div>'">
+  </div>
+  <div class="hero-meta">
+    <div>
+      <div class="hero-title">Zoo</div>
+      <div class="hero-subtitle"><ruby>動<rt>ㄉㄨㄥˋ</rt></ruby><ruby>物<rt>ㄨˋ</rt></ruby><ruby>園<rt>ㄩㄢˊ</rt></ruby></div>
+      <div class="hero-artist">— Shakira</div>
+    </div>
+    <div><span class="owner-pill">睿寶選的歌</span></div>
+  </div>
+</div>
+
+<div class="info-card">
+  <div class="info-row"><span class="info-label">創作人</span><span class="info-value">Shakira</span></div>
+  <div class="info-row"><span class="info-label">發行年份</span><span class="info-value">2024 年</span></div>
+  <div class="info-row"><span class="info-label">收錄專輯</span><span class="info-value">Las Mujeres Ya No Lloran</span></div>
+  <div class="info-row"><span class="info-label">演唱者</span><span class="info-value">Shakira</span></div>
+</div>
+
+<div class="two-col">
+  <div class="col-box">
+    <div class="ct">🎼 曲風</div>
+    <p><ruby>舞<rt>ㄨˇ</rt></ruby><ruby>曲<rt>ㄑㄩˇ</rt></ruby><ruby>流<rt>ㄌㄧㄡˊ</rt></ruby><ruby>行<rt>ㄒㄧㄥˊ</rt></ruby>(Dance Pop)。<ruby>節<rt>ㄐㄧㄝˊ</rt></ruby><ruby>奏<rt>ㄗㄡˋ</rt></ruby><ruby>超<rt>ㄔㄠ</rt></ruby><ruby>有<rt>ㄧㄡˇ</rt></ruby><ruby>力<rt>ㄌㄧˋ</rt></ruby>，<ruby>聽<rt>ㄊㄧㄥ</rt></ruby><ruby>了<rt>˙ㄌㄜ</rt></ruby><ruby>會<rt>ㄏㄨㄟˋ</rt></ruby><ruby>想<rt>ㄒㄧㄤˇ</rt></ruby><ruby>跳<rt>ㄊㄧㄠˋ</rt></ruby><ruby>舞<rt>ㄨˇ</rt></ruby>。</p>
+  </div>
+  <div class="col-box">
+    <div class="ct">💡 歌曲意境</div>
+    <p><ruby>這<rt>ㄓㄜˋ</rt></ruby><ruby>首<rt>ㄕㄡˇ</rt></ruby><ruby>歌<rt>ㄍㄜ</rt></ruby><ruby>像<rt>ㄒㄧㄤˋ</rt></ruby><ruby>在<rt>ㄗㄞˋ</rt></ruby><ruby>開<rt>ㄎㄞ</rt></ruby><ruby>一<rt>ㄧˋ</rt></ruby><ruby>場<rt>ㄔㄤˇ</rt></ruby><ruby>動<rt>ㄉㄨㄥˋ</rt></ruby><ruby>物<rt>ㄨˋ</rt></ruby><ruby>派<rt>ㄆㄞˋ</rt></ruby><ruby>對<rt>ㄉㄨㄟˋ</rt></ruby>。<ruby>很<rt>ㄏㄣˇ</rt></ruby><ruby>熱<rt>ㄖㄜˋ</rt></ruby><ruby>鬧<rt>ㄋㄠˋ</rt></ruby>，<ruby>也<rt>ㄧㄝˇ</rt></ruby><ruby>很<rt>ㄏㄣˇ</rt></ruby><ruby>適<rt>ㄕˋ</rt></ruby><ruby>合<rt>ㄏㄜˊ</rt></ruby><ruby>讓<rt>ㄖㄤˋ</rt></ruby><ruby>孩<rt>ㄏㄞˊ</rt></ruby><ruby>子<rt>˙ㄗ</rt></ruby><ruby>邊<rt>ㄅㄧㄢ</rt></ruby><ruby>唱<rt>ㄔㄤˋ</rt></ruby><ruby>邊<rt>˙ㄅㄧㄢ</rt></ruby><ruby>動<rt>ㄉㄨㄥˋ</rt></ruby>。</p>
+  </div>
+</div>
+
+<div class="sh">🎵 英文歌詞重點片段（英文原句 + 中文注音）</div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">Come on, get on up.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>來<rt>ㄌㄞˊ</rt></ruby><ruby>吧<rt>˙ㄅㄚ</rt></ruby>，<ruby>起<rt>ㄑㄧˇ</rt></ruby><ruby>身<rt>ㄕㄣ</rt></ruby><ruby>嗨<rt>ㄏㄞ</rt></ruby><ruby>起<rt>ㄑㄧˇ</rt></ruby><ruby>來<rt>˙ㄌㄞ</rt></ruby>！</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">We are wild, we cannot be tamed.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>我<rt>ㄨㄛˇ</rt></ruby><ruby>們<rt>˙ㄇㄣ</rt></ruby><ruby>很<rt>ㄏㄣˇ</rt></ruby><ruby>狂<rt>ㄎㄨㄤˊ</rt></ruby><ruby>野<rt>ㄧㄝˇ</rt></ruby>，<ruby>沒<rt>ㄇㄟˊ</rt></ruby><ruby>辦<rt>ㄅㄢˋ</rt></ruby><ruby>法<rt>ㄈㄚˇ</rt></ruby><ruby>被<rt>ㄅㄟˋ</rt></ruby><ruby>馴<rt>ㄒㄩㄣˋ</rt></ruby><ruby>服<rt>ㄈㄨˊ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">Turning the floor into a zoo.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>把<rt>ㄅㄚˇ</rt></ruby><ruby>地<rt>ㄉㄧˋ</rt></ruby><ruby>板<rt>ㄅㄢˇ</rt></ruby><ruby>變<rt>ㄅㄧㄢˋ</rt></ruby><ruby>成<rt>ㄔㄥˊ</rt></ruby><ruby>動<rt>ㄉㄨㄥˋ</rt></ruby><ruby>物<rt>ㄨˋ</rt></ruby><ruby>園<rt>ㄩㄢˊ</rt></ruby>。</div>
+    </div>
+<div class="lyric-block">
+      <div class="lyric-label">English Lyrics</div>
+      <div class="lyric-en">Don't let this moment fade away.</div>
+      <div class="lyric-label lyric-label-zh">中文注音</div>
+      <div class="lyric-zh"><ruby>別<rt>ㄅㄧㄝˊ</rt></ruby><ruby>讓<rt>ㄖㄤˋ</rt></ruby><ruby>這<rt>ㄓㄜˋ</rt></ruby><ruby>一<rt>ㄧˋ</rt></ruby><ruby>刻<rt>ㄎㄜˋ</rt></ruby><ruby>消<rt>ㄒㄧㄠ</rt></ruby><ruby>失<rt>ㄕ</rt></ruby>。</div>
+    </div>
+
+<div class="sh">🎤 完整英文歌詞</div>
+<div class="full-lyrics">
+  <div class="full-lyric-block"><div class="full-lyric-line">Come on, get on up</div><div class="full-lyric-line">We're wild and we can't be tamed</div><div class="full-lyric-line">And we're turnin' the floor into</div><div class="full-lyric-line">A zoo, ooh, ooh</div><div class="full-lyric-line">Hop-ah, hop-ah, hop-ah, hop-ah, ah</div><div class="full-lyric-line">Hop-ah, hop-ah, oh</div><div class="full-lyric-line">Hop-ah, hop-ah, hop-ah, hop-ah, ah</div><div class="full-lyric-line">Hop-ah, hop-ah, oh</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">We live in a crazy world, caught up in a rat race</div><div class="full-lyric-line">Concrete jungle life is sometimes a mad place</div><div class="full-lyric-line">It's you and me together at the end of a wild day</div><div class="full-lyric-line">Don't keep it all bottled up, and release your energy</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Hey, oh-ayy, only reason we are here is to celebrate</div><div class="full-lyric-line">In a place where anyone can be anything</div><div class="full-lyric-line">Hold on to this moment, don't let it fade away</div><div class="full-lyric-line">Baby, keep the music playin'</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Come on, get on up</div><div class="full-lyric-line">We're wild and we can't be tamed</div><div class="full-lyric-line">And we're turnin' the floor into</div><div class="full-lyric-line">A zoo, ooh, ooh</div><div class="full-lyric-line">Come on, keep it up</div><div class="full-lyric-line">It's fun if you're down to play</div><div class="full-lyric-line">And we're turnin' the floor into</div><div class="full-lyric-line">A zoo, ooh, ooh</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Hop-ah, hop-ah, hop-ah, hop-ah, ah</div><div class="full-lyric-line">Hop-ah, hop-ah, oh</div><div class="full-lyric-line">Hop-ah, hop-ah, hop-ah, hop-ah, ah (A zoo, ooh, ooh)</div><div class="full-lyric-line">Hop-ah, hop-ah, oh</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">We live in a heated time, no chance to cool down</div><div class="full-lyric-line">Continuously confined, and what do we do now?</div><div class="full-lyric-line">It's all about finding love, sometimes hard to come by</div><div class="full-lyric-line">But when it comes to us, it's always a good time</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Hey, oh-ayy, only reason we are here is to celebrate</div><div class="full-lyric-line">In a place where anyone can be anything</div><div class="full-lyric-line">Hold on to this moment, don't let it fade away</div><div class="full-lyric-line">Baby, keep the music playin'</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Come on, get on up</div><div class="full-lyric-line">We're wild and we can't be tamed</div><div class="full-lyric-line">And we're turnin' the floor into</div><div class="full-lyric-line">A zoo, ooh, ooh</div><div class="full-lyric-line">Come on, keep it up</div><div class="full-lyric-line">It's fun if you're down to play</div><div class="full-lyric-line">And we're turnin' the floor into</div><div class="full-lyric-line">A zoo, ooh, ooh</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Hop-ah, hop-ah, hop-ah, hop-ah, ah (A zoo, ooh, ooh)</div><div class="full-lyric-line">Hop-ah, hop-ah, oh</div><div class="full-lyric-line">Hop-ah, hop-ah, hop-ah, hop-ah, ah (A zoo, ooh, ooh)</div><div class="full-lyric-line">Hop-ah, hop-ah, oh</div><div class="full-lyric-line">Hop-ah, hop-ah, hop-ah, hop-ah, ah (A zoo, ooh, ooh)</div><div class="full-lyric-line">Hop-ah, hop-ah, oh</div><div class="full-lyric-line">Hop-ah, hop-ah, hop-ah, hop-ah, ah (A zoo, ooh, ooh)</div><div class="full-lyric-line">Hop-ah, hop-ah, oh</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">I'll take you higher, I'll take you higher</div><div class="full-lyric-line">We can't be tamed, baby, I'll take you higher</div><div class="full-lyric-line">I'll take you higher, I'll take you higher</div><div class="full-lyric-line">And we can't be tamed, baby, I'll take you higher</div><div class="full-lyric-line">Es una fiesta que sube como la espuma</div><div class="full-lyric-line">Yo por ti iré hasta la luna de ida y vuelta</div><div class="full-lyric-line">Es una fiesta que sube como la espuma</div><div class="full-lyric-line">Yo por ti iré hasta la luna de ida y vuelta</div></div>
+<div class="full-lyric-block"><div class="full-lyric-line">Come on, get on up</div><div class="full-lyric-line">We're wild and we can't be tamed</div><div class="full-lyric-line">And we're turnin' the floor into</div><div class="full-lyric-line">A zoo, ooh, ooh</div><div class="full-lyric-line">Come on, keep it up</div><div class="full-lyric-line">It's fun if you're down to play</div><div class="full-lyric-line">And we're turnin' the floor into</div><div class="full-lyric-line">A zoo, ooh, ooh</div><div class="full-lyric-line">Come on, get on up</div><div class="full-lyric-line">We're wild and we can't be tamed</div><div class="full-lyric-line">And we're turnin' the floor into</div><div class="full-lyric-line">A zoo, ooh, ooh</div><div class="full-lyric-line">Come on, keep it up</div><div class="full-lyric-line">It's fun if you're down to play</div><div class="full-lyric-line">And we're turnin' the floor into</div><div class="full-lyric-line">A zoo, ooh, ooh</div></div>
+</div>
+
+<div class="sh">📚 精選單字 20 個（基礎 12 + 進階 8）</div>
+
+<div class="word-section-label">🟡 基礎 12 個 — 睿寶一定要會</div>
+<div class="word-grid">
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">zoo</span><span class="w-type">名詞</span><span class="w-ph">/zuː/</span></div>
+    <div class="w-zh"><ruby>動<rt>ㄉㄨㄥˋ</rt></ruby><ruby>物<rt>ㄨˋ</rt></ruby><ruby>園<rt>ㄩㄢˊ</rt></ruby></div>
+    <div class="w-ex">Go to the zoo.（去動物園）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">wild</span><span class="w-type">形容詞</span><span class="w-ph">/waɪld/</span></div>
+    <div class="w-zh"><ruby>狂<rt>ㄎㄨㄤˊ</rt></ruby><ruby>野<rt>ㄧㄝˇ</rt></ruby></div>
+    <div class="w-ex">Wild animal.（野生動物）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">dance</span><span class="w-type">動詞</span><span class="w-ph">/dæns/</span></div>
+    <div class="w-zh"><ruby>跳<rt>ㄊㄧㄠˋ</rt></ruby><ruby>舞<rt>ㄨˇ</rt></ruby></div>
+    <div class="w-ex">Let's dance.（我們來跳舞）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">party</span><span class="w-type">名詞</span><span class="w-ph">/ˈpɑːrti/</span></div>
+    <div class="w-zh"><ruby>派<rt>ㄆㄞˋ</rt></ruby><ruby>對<rt>ㄉㄨㄟˋ</rt></ruby></div>
+    <div class="w-ex">Big party.（大派對）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">city</span><span class="w-type">名詞</span><span class="w-ph">/ˈsɪti/</span></div>
+    <div class="w-zh"><ruby>城<rt>ㄔㄥˊ</rt></ruby><ruby>市<rt>ㄕˋ</rt></ruby></div>
+    <div class="w-ex">Big city.（大城市）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">jump</span><span class="w-type">動詞</span><span class="w-ph">/dʒʌmp/</span></div>
+    <div class="w-zh"><ruby>跳<rt>ㄊㄧㄠˋ</rt></ruby></div>
+    <div class="w-ex">Jump high.（跳得高）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">free</span><span class="w-type">形容詞</span><span class="w-ph">/friː/</span></div>
+    <div class="w-zh"><ruby>自<rt>ㄗˋ</rt></ruby><ruby>由<rt>ㄧㄡˊ</rt></ruby></div>
+    <div class="w-ex">Feel free.（感到自由）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">run</span><span class="w-type">動詞</span><span class="w-ph">/rʌn/</span></div>
+    <div class="w-zh"><ruby>奔<rt>ㄅㄣ</rt></ruby><ruby>跑<rt>ㄆㄠˇ</rt></ruby></div>
+    <div class="w-ex">Run fast.（跑得快）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">floor</span><span class="w-type">名詞</span><span class="w-ph">/flɔːr/</span></div>
+    <div class="w-zh"><ruby>地<rt>ㄉㄧˋ</rt></ruby><ruby>板<rt>ㄅㄢˇ</rt></ruby></div>
+    <div class="w-ex">Wooden floor.（木地板）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">loud</span><span class="w-type">形容詞</span><span class="w-ph">/laʊd/</span></div>
+    <div class="w-zh"><ruby>大<rt>ㄉㄚˋ</rt></ruby><ruby>聲<rt>ㄕㄥ</rt></ruby></div>
+    <div class="w-ex">Too loud.（太大聲）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">high</span><span class="w-type">形容詞</span><span class="w-ph">/haɪ/</span></div>
+    <div class="w-zh"><ruby>高<rt>ㄍㄠ</rt></ruby></div>
+    <div class="w-ex">Higher.（更高）</div>
+  </div>
+<div class="word-card basic">
+    <div class="row1"><span class="w-en">fade</span><span class="w-type">動詞</span><span class="w-ph">/feɪd/</span></div>
+    <div class="w-zh"><ruby>消<rt>ㄒㄧㄠ</rt></ruby><ruby>失<rt>ㄕ</rt></ruby></div>
+    <div class="w-ex">Don't fade.（別消失）</div>
+  </div>
+</div>
+
+<div class="word-section-label">🟠 進階 8 個 — 爸媽一起學</div>
+<div class="word-grid">
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">tamed</span><span class="w-type">動詞</span><span class="w-ph">/teɪmd/</span></div>
+    <div class="w-zh"><ruby>被<rt>ㄅㄟˋ</rt></ruby><ruby>馴<rt>ㄒㄩㄣˋ</rt></ruby><ruby>服<rt>ㄈㄨˊ</rt></ruby></div>
+    <div class="w-ex">Can't be tamed.（無法馴服）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">concrete</span><span class="w-type">名詞</span><span class="w-ph">/ˈkɑːnkriːt/</span></div>
+    <div class="w-zh"><ruby>水<rt>ㄕㄨㄟˇ</rt></ruby><ruby>泥<rt>ㄋㄧˊ</rt></ruby></div>
+    <div class="w-ex">Concrete jungle.（水泥叢林）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">jungle</span><span class="w-type">名詞</span><span class="w-ph">/ˈdʒʌŋɡl/</span></div>
+    <div class="w-zh"><ruby>叢<rt>ㄘㄨㄥˊ</rt></ruby><ruby>林<rt>ㄌㄧㄣˊ</rt></ruby></div>
+    <div class="w-ex">Deep jungle.（深叢林）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">release</span><span class="w-type">動詞</span><span class="w-ph">/rɪˈliːs/</span></div>
+    <div class="w-zh"><ruby>釋<rt>ㄕˋ</rt></ruby><ruby>放<rt>ㄈㄤˋ</rt></ruby></div>
+    <div class="w-ex">Release energy.（釋放能量）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">energy</span><span class="w-type">名詞</span><span class="w-ph">/ˈenərdʒi/</span></div>
+    <div class="w-zh"><ruby>能<rt>ㄋㄥˊ</rt></ruby><ruby>量<rt>ㄌㄧㄤˋ</rt></ruby></div>
+    <div class="w-ex">Good energy.（好能量）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">celebrate</span><span class="w-type">動詞</span><span class="w-ph">/ˈseləbreɪt/</span></div>
+    <div class="w-zh"><ruby>慶<rt>ㄑㄧㄥˋ</rt></ruby><ruby>祝<rt>ㄓㄨˋ</rt></ruby></div>
+    <div class="w-ex">Let's celebrate.（我們慶祝）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">moment</span><span class="w-type">名詞</span><span class="w-ph">/ˈmoʊmənt/</span></div>
+    <div class="w-zh"><ruby>瞬<rt>ㄕㄨㄣˋ</rt></ruby><ruby>間<rt>ㄐㄧㄢ</rt></ruby></div>
+    <div class="w-ex">This moment.（這一刻）</div>
+  </div>
+<div class="word-card advanced">
+    <div class="row1"><span class="w-en">fiesta</span><span class="w-type">名詞</span><span class="w-ph">/fiˈestə/</span></div>
+    <div class="w-zh"><ruby>派<rt>ㄆㄞˋ</rt></ruby><ruby>對<rt>ㄉㄨㄟˋ</rt></ruby></div>
+    <div class="w-ex">Big fiesta.（大派對）</div>
+  </div>
+</div>
+
+<div class="mission">
+  <span class="t">🎯 親子任務：</span>聽到 <b>zoo</b> 做出自己喜歡的動物 🦁；聽到 <b>dance</b> 全家站起來搖擺；副歌 <b>come on get on up</b> 用力跳！
+</div>
+
+</body>
+</html>
